@@ -1,0 +1,8 @@
+languages:
+  Java:
+    type: programming
+    color: "#b07219"
+    extensions:
+      - ".java"
+    aliases:
+      - java
