@@ -1,6 +1,23 @@
+# Line endings
 /mvnw text eol=lf
 *.cmd text eol=crlf
+
+# Explicitly set Java as primary language
 *.java linguist-language=Java
-*.html linguist-language=HTML 
-*.css linguist-language=CSS
-*.js linguist-language=JavaScript
+*.java linguist-detectable=true
+
+# Ignore all non-Java files from language statistics
+*.html linguist-vendored
+*.css linguist-vendored
+*.js linguist-vendored
+*.xml linguist-vendored
+*.yml linguist-vendored
+*.properties linguist-vendored
+*.sql linguist-vendored
+*.json linguist-vendored
+*.md linguist-documentation
+
+# Mark specific directories as vendored (ignored)
+src/main/resources/static/* linguist-vendored
+src/main/resources/templates/* linguist-vendored
+src/main/resources/database/* linguist-vendored
