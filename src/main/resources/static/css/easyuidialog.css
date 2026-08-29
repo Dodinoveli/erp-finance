@@ -1,0 +1,249 @@
+/* =====================================================
+   DEFINISI VARIABEL WARNA (Kunci Utama)
+   ===================================================== */
+:root {
+    --modal-bg: #ffffff;
+    --modal-header-bg: #26466B;
+    --modal-header-text: #ffffff;
+    --modal-footer-bg: #f5f5f5;
+    --modal-border: #95B8E7;
+    --label-color: #555;
+    --input-bg: #ffffff;
+    --input-border: #bdbdbd;
+    --input-text: #333;
+}
+
+/* =====================================================
+   BASE FONTS
+   ===================================================== */
+button {
+    cursor: pointer;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    transition: all 0.2s ease;
+}
+
+/* =====================================================
+   AIR DATEPICKER (EASYUI STYLE)
+   ===================================================== */
+.air-datepicker {
+    z-index: 99999 !important;
+}
+
+.air-datepicker.dark-theme {
+    --adp-background-color: #ffffff;
+    --adp-color: #333333;
+    --adp-color-secondary: #999999;
+    --adp-accent-color: #007bff;
+    --adp-background-color-hover: #eaf2ff;
+    --adp-border-color: #95b8e7;
+    --adp-cell-background-color-selected: #007bff;
+    
+    border: 1px solid var(--modal-border);
+    border-radius: 0px; /* JeasyUI Style: Kotak tajam */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    font-family: "Segoe UI", sans-serif;
+}
+
+.air-datepicker.dark-theme .air-datepicker-nav {
+    background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+    border-bottom: 1px solid #95b8e7;
+}
+
+.air-datepicker.dark-theme .air-datepicker-nav--title i {
+    color: #0e2d5f;
+}
+
+.air-datepicker.dark-theme .air-datepicker-body--day-name {
+    color: #0e2d5f; /* Navy agar profesional */
+    font-weight: bold;
+}
+
+/* =====================================================
+   OVERLAY (Backdrop JeasyUI Mask)
+   ===================================================== */
+.erp-overlay {
+    position: fixed;
+    inset: 0;
+    background: #ccc;
+    opacity: 0;
+    z-index: 9997;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.erp-overlay.active {
+    pointer-events: auto;
+    opacity: 0.4; /* Opacity standar mask EasyUI */
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* =====================================================
+   POPUP WINDOW (JEASYUI DIALOG STYLE)
+   ===================================================== */
+.erp-popup {
+    position: fixed;
+    top: 5% !important;
+    left: calc(50% - 375px);
+    width: 750px;
+    background: var(--modal-bg);
+    border: 1px solid var(--modal-border);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    z-index: 9998;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* =====================================================
+   HEADER (JEASYUI BLUE PANEL)
+   ===================================================== */
+.erp-header {
+    height: 38px;
+    padding: 0 12px;
+    display: flex;
+    /* PENTING: Tombol Mac di kiri, Judul di kanan agar rapi */
+    flex-direction: row-reverse; 
+    justify-content: space-between;
+    align-items: center;
+text-align: center;
+    color: var(--modal-header-text);
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: move;
+    user-select: none;
+
+    background: var(--modal-header-bg); /* Navy solid */
+}
+
+/* Hapus simbol prompt terminal */
+.erp-header::before {
+    content: none;
+}
+
+/* =====================================================
+   WINDOW ACTIONS (Mac Style Icons)
+   ===================================================== */
+.window-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.window-actions button {
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: none !important;
+    border-radius: 50%;
+    font-size: 0;
+}
+
+.window-actions button:nth-child(1) { background: #febc2e; } /* minimize */
+.window-actions button:nth-child(2) { background: #28c840; } /* maximize */
+.window-actions button:last-child { background: #ff5f57; }   /* close */
+
+/* =====================================================
+   BODY (White Content Area)
+   ===================================================== */
+.erp-body {
+    padding: 20px;
+    background: var(--modal-bg);
+    color: var(--input-text);
+    font-size: 13px;
+}
+
+/* =====================================================
+   FORM ROW (Alignment Rapi)
+   ===================================================== */
+.form-row {
+    display: grid;
+   /* 100px | 0.6 bagian | Sisa ruang (1 bagian penuh) */
+grid-template-columns: 100px 0.6fr 1fr; /* Lebar label konsisten */
+    gap: 5px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.form-row label {
+    font-size: 12px;
+    color: var(--label-color);
+    font-weight: 600;
+    text-transform: none;
+}
+
+/* Hapus simbol koding pada label */
+.form-row label::before {
+    content: none;
+}
+
+/* =====================================================
+   INPUT & SELECT (EasyUI Style)
+   ===================================================== */
+.form-row input,
+.form-row select,
+.form-row textarea {
+    background: var(--input-bg) !important;
+    border: 1px solid var(--input-border) !important;
+    color: var(--input-text) !important;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-family: sans-serif;
+    outline: none;
+    border-radius: 2px;
+    /* width: 350px; */
+}
+
+.form-row input:focus {
+    border-color: var(--modal-border) !important;
+    box-shadow: 0 0 4px rgba(149, 184, 231, 0.5);
+}
+
+/* =====================================================
+   FOOTER (Button Bar)
+   ===================================================== */
+.erp-footer {
+    padding: 10px 15px;
+    background: var(--modal-footer-bg);
+    border-top: 1px solid var(--modal-border);
+    text-align: right;
+}
+
+.erp-footer button {
+    padding: 5px 15px;
+    font-size: 12px;
+    text-transform: none;
+    border: 1px solid var(--input-border);
+    border-radius: 3px;
+    background: #ffffff;
+    color: #333;
+}
+
+.erp-footer button:hover {
+    background: #eaf2ff;
+    border-color: var(--modal-border);
+    color: #0e2d5f;
+}
+
+/* =====================================================
+   WINDOW STATES
+   ===================================================== */
+.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0;
+}
+
+.minimized {
+    height: 38px !important;
+    overflow: hidden;
+    top: auto !important;
+    bottom: 20px;
+    left: 20px !important;
+    width: 250px !important;
+    border-color: var(--modal-border);
+}

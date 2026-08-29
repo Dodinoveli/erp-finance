@@ -1,0 +1,122 @@
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" th:href="@{/css/dashboard.css}"> -->
+<aside class="sidebar" id="sidebar" th:fragment="sidebar">
+    <!-- <div class="logo"><i>K</i> Kawal Laba</div> -->
+    <!-- <div class="company">
+            <div class="clogo">MK</div>
+            <div><b>CV. Mega Kesuma</b><small>Administrator</small></div>
+        </div> -->
+
+    <!-- <div class="title">Workspace</div> -->
+    <ul class="menu">
+        <li><a class="link active" th:href="@{/dashboard}"><i class="bi bi-house"></i>Dashboard</a></li>
+    </ul>
+
+    <!-- <div class="title">Master Data</div> -->
+    <!-- <ul class="menu">
+        <li class="tree "><button class="link"><i class="bi bi-database"></i>Data Induk <span
+                    class="chev">›</span></button>
+            <div class="sub">
+                <a th:href="@{/perusahaan}">Perusahaan</a>
+                <a th:href="@{/client}">Customer/ Client</a>
+                <a th:href="@{/supplier}">Supplier/ Vendor</a>
+
+                <a href="#">Satuan</a>
+                <a href="#">Kategori</a>
+                <a href="#">COA /
+                    Akun</a><a href="#">Master Pajak</a> 
+            </div>
+        </li>
+    </ul> -->
+
+    <!-- <div class="title">Operasional</div> -->
+    <ul class="menu">
+        <!-- open buat buka menu otomatis -->
+        <li class="tree "><button class="link"><i class="bi bi-buildings-fill"></i>Proyek <span
+                    class="chev">›</span></button>
+            <div class="sub">
+                <a th:href="@{/client}">Client</a>
+                <a th:href="@{/supplier}">Supplier</a>
+                <a th:href="@{/project}">Daftar Proyek</a>
+                <a href="#">Biaya Proyek</a>
+                <a href="#">Invoice</a>
+                <!-- <a href="#">SPK /Kontrak</a>
+                <a href="#">Progress Pekerjaan</a>
+                
+                <a href="#">Kontrol Laba</a> -->
+            </div>
+        </li>
+        <!-- <li class="tree"><button class="link"><span class="ico">▤</span>Pengadaan <span class="chev">›</span></button>
+            <div class="sub">
+                <a href="#">Purchase Request</a><a href="#">Purchase Order</a><a href="#">Penerimaan Barang</a><a
+                    href="#">Invoice Supplier</a>
+            </div>
+        </li> -->
+        <!-- <li class="tree"><button class="link"><span class="ico">◫</span>Persediaan <span class="chev">›</span></button>
+            <div class="sub">
+                <a href="#">Gudang</a><a href="#">Stok</a><a href="#">Mutasi Stok</a><a href="#">Pengeluaran ke
+                    Proyek</a><a href="#">Penyesuaian Stok</a><a href="#">Batch / Expired</a>
+            </div>
+        </li> -->
+    </ul>
+
+    <ul class="menu">
+        <li class="tree ">
+            <button class="link"><i class="bi bi-cash-stack"></i> Transaksi
+                <span class="chev">›</span>
+            </button>
+            <div class="sub">
+                <a th:href="@{/client}">Invoice</a>
+                <a th:href="@{/supplier}">Pembelian</a>
+            </div>
+        </li>
+    </ul>
+
+    <!-- <div class="title">Keuangan</div> -->
+    <ul class="menu">
+        <li class="tree"><button class="link"><i class="bi bi-journals"></i>Keuangan <span
+                    class="chev">›</span></button>
+            <div class="sub">
+                <a th:href="@{/bankaccount}">Kas & Bank</a>
+                <a href="#">Penerimaan</a>
+                <a href="#">Pengeluaran</a>
+                <a href="#">Piutang</a>
+                <a href="#">Hutang</a>
+                <a href="#">Invoice Customer</a>
+            </div>
+        </li>
+        <li class="tree">
+            <button class="link"><i class="bi bi-journal-text"></i> Akuntansi <span class="chev">›</span></button>
+            <div class="sub">
+                <a href="#">Jurnal Umum</a>
+                <a href="#">Posting Jurnal</a>
+                <a href="#">Buku Besar</a>
+                <a href="#">Neraca Saldo</a>
+                <a href="#">Laba Rugi</a>
+                <a href="#">Neraca</a>
+                <a href="#">Tutup
+                    Buku</a>
+            </div>
+        </li>
+        <!-- <li class="tree"><button class="link"><span class="ico">%</span>Pajak <span class="chev">›</span></button>
+            <div class="sub">
+                <a href="#">PPN</a><a href="#">PPh</a><a href="#">Laporan Pajak</a><a href="#">Export e-Faktur</a>
+            </div>
+        </li> -->
+    </ul>
+
+    <!-- <div class="title">Laporan & Sistem</div> -->
+    <ul class="menu">
+        <li class="tree"><button class="link"><i class="bi bi-file-earmark-text"></i>Laporan <span
+                    class="chev">›</span></button>
+            <div class="sub">
+                <a href="#">Laporan Proyek</a><a href="#">Laporan Keuangan</a><a href="#">Arus Kas</a><a href="#">Laba
+                    per Proyek</a><a href="#">Laporan Pembelian</a><a href="#">Laporan Stok</a>
+            </div>
+        </li>
+        <li><a class="link" href="#"><i class="bi bi-gear"></i>Pengaturan</a></li>
+    </ul>
+</aside>
+
+<script th:src="@{/js/utility/dashboard.js}"></script>
+<script th:src="@{/js/utility/library.js}"></script>

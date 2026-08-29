@@ -1,0 +1,616 @@
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-baganakun-Content">
+  <style>
+    /* Container untuk merapikan isi konten di bawah tab */
+    .tab-content-container {
+      border: 0px solid #dee2e6;
+      border-top: none;
+      background: #f5f5f5;
+    }
+
+    /* #formSupplier,
+        #view-input-supplier {
+            height: 100%;
+            overflow: hidden;
+        } */
+
+    .container-fluid {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
+
+    /* Garis tipis pemisah */
+    .border-top {
+      border-top: 1px solid #eee !important;
+    }
+
+    /* untuk tombol export dll */
+    /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+    .dropdown-toggle::after {
+      vertical-align: middle;
+    }
+
+    /* Efek hover pada item dropdown */
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #2b7de9;
+    }
+
+    /* Memberikan warna ikon agar lebih informatif */
+    .dropdown-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .card-body-easyui {
+      padding: 15px !important;
+      border-radius: 0 0 4px 4px;
+    }
+  </style>
+  <ul class="nav nav-tabs custom-terminal-tabs" id="supplierTab">
+    <li class="nav-item">
+      <!-- <button class="nav-link text-light" id="btn-tab-list-supplier"
+        onclick="supplierModel.switchTabSupplier('view-list-supplier')">
+        <i class="fas fa-list me-1"></i>
+      </button> -->
+    </li>
+
+    <!-- <li class="nav-item">
+      <button
+        class="nav-link active"
+        id="btn-tab-input-supplier"
+        onclick="supplierModel.switchTabSupplier('view-input-supplier')"
+      >
+        <i class="fas fa-edit me-1" id="txtinput"></i>
+        <span id="text-label-supplier">Data Baru</span>
+      </button>
+    </li> -->
+
+    <li class="nav-item" id="li-tab-detail-supplier" style="display: none">
+      <button class="nav-link text-light" id="btn-tab-detail-supplier">
+        <i class="fas fa-id-card me-1"></i> Detail:
+        <span id="tab-label-supplier"></span>
+        <span class="ms-2 badge bg-danger" onclick="supplierModel.closeEdit(event)" style="cursor: pointer">×</span>
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content-container p-0">
+    <!-- <form id="formSupplier">
+      <div id="view-input-supplier" style="display: block">
+        <div class="container-fluid py-2">
+          <div class="row g-3">
+            <div class="col-md-12">
+              <div
+                class="card border-0 shadow-sm"
+                style="width: 100%; border-radius: 0px"
+              >
+                <div class="card-body card-body-easyui p-3">
+                  <div class="row">
+                    <input type="hidden" id="supplier_id" name="supplierId" />
+
+                    <div class="col-md-6 pe-md-4">
+                      <div class="accurate-form-group">
+                        <label>Kode</label>
+                        <input
+                          type="text"
+                          id="supplier_code"
+                          name="supplierCode"
+                          readonly
+                          class="form-control form-control-sm bg-light"
+                        />
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label
+                          >Nama Lengkap
+                          <span class="text-danger">*</span></label
+                        >
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_name"
+                            name="supplierName"
+                            class="form-control form-control-sm"
+                            placeholder=" PT Jaya Maju Bersama"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierName"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label
+                          >Tipe Pemasok
+                          <span class="text-danger">*</span></label
+                        >
+                        <div class="form-field">
+                          <select
+                            name="supplierType"
+                            id="supplier_type"
+                            class="form-control form-control-sm"
+                          >
+                            <option value="" disabled selected>
+                              --Pilih Tipe Pemasok ---
+                            </option>
+                            <option value="Material">Material</option>
+                            <option value="Service">Service</option>
+                            <option value="Equipment">Equipment</option>
+                            <option value="Subcontractor">Subcontractor</option>
+                          </select>
+                          <small
+                            class="text-danger"
+                            id="err-supplierType"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Npwp</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_npwp"
+                            name="supplierNpwp"
+                            class="form-control form-control-sm"
+                            placeholder="Nomor Pokok Wajib Pajak"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierNpwp"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Pkp</label>
+                        <div class="form-field">
+                          <select
+                            name="supplierPkp"
+                            id="supplier_pkp"
+                            class="form-control form-control-sm"
+                          >
+                            <option disabled selected>
+                              -- Pilih Status PKP --
+                            </option>
+                            <option value="true">Ya</option>
+                            <option value="false">Tidak</option>
+                          </select>
+                          <small
+                            class="text-danger"
+                            id="err-supplierPkp"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label style="padding-top: 5px">Alamat</label>
+                        <div class="form-field">
+                          <textarea
+                            id="supplier_address"
+                            name="supplierAddress"
+                            class="form-control form-control-sm"
+                            rows="3"
+                            placeholder="Contoh : Jl. Kuningan Persada Kavling 4, Setiabudi, Jakarta Selatan, 12950"
+                          ></textarea>
+                          <small
+                            class="text-danger"
+                            id="err-supplierAddress"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nama Kontak</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_contact_person"
+                            name="supplierContactPerson"
+                            class="form-control form-control-sm"
+                            placeholder="Syahrini"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierContactPerson"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Kontak</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_contact_phone"
+                            name="supplierContactPhone"
+                            class="form-control form-control-sm"
+                            placeholder="085269531161"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierContactPhone"
+                          ></small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 ps-md-4">
+                      <div class="accurate-form-group">
+                        <label>Kota</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_city"
+                            name="supplierCity"
+                            class="form-control form-control-sm"
+                            placeholder="Bandar Lampung"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierCity"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Provinsi</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_province"
+                            name="supplierProvince"
+                            class="form-control form-control-sm"
+                            placeholder="Lampung"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierProvince"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Kode Pos</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_postal_code"
+                            name="supplierPostalCode"
+                            class="form-control form-control-sm"
+                            placeholder="12345"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierPostalCode"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Negara</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_country"
+                            name="supplierCountry"
+                            class="form-control form-control-sm"
+                            placeholder="Indonesia"
+                          />
+                        </div>
+                        <small
+                          class="text-danger"
+                          id="err-supplierCountry"
+                        ></small>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Email</label>
+                        <div class="form-field">
+                          <input
+                            type="email"
+                            id="supplier_email"
+                            name="supplierEmail"
+                            class="form-control form-control-sm"
+                            placeholder="jayamajubersama@gmail.com"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierEmail"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nama Bank</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_bank_name"
+                            name="supplierBankName"
+                            class="form-control form-control-sm"
+                            placeholder="BNI"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierBankName"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>No. Rekening</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_bank_account_number"
+                            name="supplierBankAccountNumber"
+                            class="form-control form-control-sm"
+                            placeholder="0123456789"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierBankAccountNumber"
+                          ></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Pemilik Rekening</label>
+                        <div class="form-field">
+                          <input
+                            type="text"
+                            id="supplier_bank_account_name"
+                            name="supplierBankAccountName"
+                            class="form-control form-control-sm"
+                            placeholder="PT Jaya Maju Bersama"
+                          />
+                          <small
+                            class="text-danger"
+                            id="err-supplierBankAccountName"
+                          ></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+
+    <!-- <div class="p-2">
+                                <button type="submit" class="btn btn-primary"
+                                    style="--bs-btn-padding-y: .30rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    <i class="bi bi-floppy"></i> Simpan
+                                </button>
+
+                                <button type="button" class="btn btn-danger"
+                                    style="--bs-btn-padding-y: .30rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                    <i class="bi bi-x-circle"></i> Batal
+                                </button>
+                            </div> -->
+
+    <!-- <div class="card mt-1 shadow-sm border-0">
+                <div class="card-body text-center">
+                  <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-primary px-4">
+                      <i class="bi bi-floppy"></i> Simpan
+                    </button>
+                    <button type="reset" class="btn btn-danger px-4">
+                      <i class="bi bi-x-circle"></i> Batal
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form> -->
+
+    <div id="view-list-supplier" style="display: block; padding: 5px">
+      <!-- <h4 class="mb-1">Bagan Akun</h4> -->
+      <div class="toolbar-easyui">
+        <!-- <div class="btn-separator"></div> -->
+
+        <div class="row align-items-center mb-3">
+          <div class="col">
+            <p class="mb-0">Bagan Akun, Total: <span class="fw-bold">5</span> akun utama</p>
+          </div>
+          <div class="col text-end">
+            <button id="btn-tambah-supplier" class="btn btn-primary fw-bold btn-tambah">
+              <i class="fas fa-plus"></i> Tambah Akun
+            </button>
+          </div>
+        </div>
+        <!-- <button id="btn-refresh-supplier" class="btn-segarkan">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button> -->
+
+        <!-- <div class="dropdown d-inline-block" style="position: relative">
+          <button class="btn-excel dropdown-toggle" type="button" onclick="supplierModel.toggleExcelMenu(event)">
+            <i class="fas fa-file-excel me-1"></i> Export
+          </button>
+
+          <ul class="dropdown-menu shadow border" id="menu-excel-client" style="
+              display: none;
+              position: absolute !important;
+              left: 0;
+              top: 100%;
+              z-index: 99999 !important;
+              min-width: 180px;
+              background: white;
+              list-style: none;
+              padding: 5px 0;
+              margin: 0;
+            ">
+            <li>
+              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/export">
+                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
+                Excel
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/template">
+                <i class="fas fa-download me-2 text-info"></i> Download Template
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" style="margin: 5px 0" />
+            </li>
+            <li>
+              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="javascript:void(0)" onclick="
+                  document.getElementById('menu-excel-client').style.display =
+                    'none'
+                " data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="fas fa-file-upload me-2 text-warning"></i> Import
+                Excel
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <button class="btn-print"><i class="fas fa-print"></i> Print</button> -->
+
+        <!-- <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+          <div class="search-container-terminal me-2">
+            <input type="text" id="search-supplier-input" placeholder="Search..." class="input-hugo-terminal" />
+          </div>
+          <button id="btn-search-supplier" class="btn-cari">
+            <i class="fas fa-search"></i> Submit
+          </button>
+        </div> -->
+      </div>
+
+      <!-- <div class="container bg-white p-0 rounded shadow-sm">
+
+      </div> -->
+
+
+      <div id="tabel-coa"></div>
+
+      <!-- <div class="table-wrapper table-wrapper-supplier" id="supplier-wrapper">
+        <table id="supplier-table">
+          <thead>
+            <tr>
+              <th class="kolom-sticky-1 resizer">Kode</th>
+              <th class="kolom-sticky-2 resizer">Perusahaan</th>
+              <th class="kolom-sticky-3 resizer">Tipe Pemasok</th>
+              <th class="resizer" style="width: 150px">Npwp</th>
+              <th class="resizer" style="width: 150px">Nama Kontak</th>
+              <th class="resizer" style="width: 150px">Kontak</th>
+              <th class="resizer" style="width: 70px">Pkp</th>
+              <th class="resizer" style="width: 200px">Alamat</th>
+              <th class="resizer" style="width: 200px">Kota</th>
+              <th class="resizer" style="width: 200px">Propinsi</th>
+              <th class="resizer" style="width: 200px">Kode Pos</th>
+              <th class="resizer" style="width: 200px">Negara</th>
+              <th class="resizer" style="width: 150px">Email</th>
+              <th class="resizer" style="width: 80px">Status</th>
+              <th class="resizer" style="width: 100px">Bank</th>
+              <th class="resizer" style="width: 120px">Rekening</th>
+              <th class="resizer" style="width: 150px">Pemilik Rekening</th>
+            </tr>
+          </thead>
+          <tbody id="supplier-table-body"></tbody>
+        </table>
+      </div> -->
+
+    </div>
+  </div>
+
+  <script type="module" th:inline="javascript">
+    const supplierModel = {
+
+
+      init: function () {
+        // setTimeout(() => {
+        //   document.getElementById("search-supplier-input")?.focus();
+        // }, 100);
+        const wrapperId = document.getElementById("supplier-wrapper");
+        // const keyword = document.getElementById("search-supplier-input").value;
+        // this.loadMore("", true);
+        // this.initDropdownListener();
+        // this.bindEvents();
+        // this.initScroll(wrapperId, keyword); // 🔥 pasang di sini
+        // this.switchTabSupplier("view-list-supplier");
+        // this.bersih();
+        // this.generateCode();
+        this.loadBaganAkun()
+      },
+
+      loadBaganAkun: async function () {
+        try {
+
+          const response = await api.get(`/api/v1/coa/tree`);
+          let dataFormatPohon;
+          if (response.status === "success") {
+            dataFormatPohon = response.data;
+          }
+          //const result = await response.json();
+          // Ini adalah List<CoaResponse> kamu
+
+          // 3. Inisialisasi Tabulator (Sangat Mudah!)
+          var table = new Tabulator("#tabel-coa", {
+            data: dataFormatPohon,
+            dataTree: true,               // AKTIFKAN FITUR POHON (Buka-Tutup)
+            dataTreeChildField: "children", // Beritahu Tabulator kalau anaknya bernama "children"
+            dataTreeStartExpanded: false,  // Awal dibuka, set false supaya rapi (tertutup dulu)
+            layout: "fitColumns",         // Lebar kolom otomatis pas dengan layar
+
+            // Atur Kolom Tabelnya di sini
+            columns: [
+              { title: "Kode", field: "coaCode", width: 120, headerSort: false },
+              {
+                title: "Akun", field: "name", responsive: 0, headerSort: false, formatter: function (cell) {
+                  // Trik agar akun Header otomatis tercetak Tebal (Bold) seperti di Balaka
+                  const rowData = cell.getRow().getData();
+                  if (rowData.isHeader || rowData.header) {
+                    return `<strong>${cell.getValue()}</strong> <span class="badge bg-primary-subtle text-primary ms-1" style="font-size: 10px;">Header</span>`;
+                  }
+                  return cell.getValue();
+                }
+              },
+              {
+                title: "Kategori",
+                field: "accountCategory",
+                width: 120, headerSort: false,
+                formatter: function (cell) {
+                  const tipe = cell.getValue();
+                  let badgeClass = "bg-secondary-subtle text-secondary";
+
+                  if (tipe === "ASSET" || tipe === "Aset") {
+                    badgeClass = "bg-primary-subtle text-primary"; // Biru
+                  } else if (tipe === "LIABILITY") {
+                    badgeClass = "bg-danger-subtle text-danger"; // Merah
+                  } else if (tipe === "EQUITY") {
+                    badgeClass = "bg-warning-subtle text-warning"; // Kuning/Oranye
+                  } else if (tipe === "INCOME") {
+                    badgeClass = "bg-success-subtle text-success"; // Hijau
+                  } else if (tipe === "EXPENSE") {
+                    badgeClass = "bg-info-subtle text-info"; // Biru Muda / Toska
+                  }
+
+                  // Kembalikan tag HTML dengan class warna yang sudah dinamis
+                  return `<span class="badge ${badgeClass}">${tipe}</span>`;
+
+                  // Bungkus tipe akun pakai badge biar berwarna
+                  //return `<span class="badge bg-secondary-subtle text-secondary">${cell.getValue()}</span>`;
+                }
+              },
+              { title: "Saldo Normal", field: "normalBalance", width: 180, headerSort: false }
+            ]
+          });
+
+        } catch (error) {
+          console.error("Gagal memuat data:", error);
+        }
+      }
+
+    };
+
+
+    // window.supplierModel = supplierModel;
+    window.supplierModel = supplierModel;
+    supplierModel.init();
+  </script>
+</div>

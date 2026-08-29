@@ -1,0 +1,166 @@
+ :root{
+          --sidebar-open: 200px;
+          --sidebar-collapsed: 70px;
+          --primary-blue: #2196f3;
+          --light-blue: #e3f2fd;
+          --bg: #f8fbff;
+        }
+
+        html,body{height:100%; background:var(--bg); font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial;}
+
+        /* SIDEBAR */
+        #sidebar{
+          width: var(--sidebar-open);
+          position: fixed;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          background: var(--light-blue);
+          padding: 5px;
+          box-shadow: 2px 0 6px rgba(0,0,0,0.06);
+          transition: width .25s ease;
+          z-index: 1040;
+          overflow: auto;
+        }
+        #sidebar.collapsed{ width: var(--sidebar-collapsed); }
+
+        .sidebar-header{
+          display:flex;
+          align-items:center;
+          gap:5px;
+          justify-content:space-between;
+          padding:5px 5px;
+        }
+        .brand{
+          display:flex;
+          align-items:center;
+          gap:8px;
+          color: #0d47a1;
+          font-weight:700;
+        }
+        .toggle-btn{
+          width:38px;height:38px;border-radius:50%;
+          background:var(--primary-blue); color:#fff; border:none;
+          display:flex; align-items:center; justify-content:center;
+          box-shadow:0 4px 10px rgba(0,0,0,0.12);
+          cursor:pointer;
+        }
+
+        /* nav */
+        .nav .nav-link{
+          display:flex;
+          align-items:center;
+          gap:5px;
+          color:#0d47a1;
+          padding:4px 4px;
+          border-radius:8px;
+          margin:2px 2px;
+          transition:background .15s;
+          text-decoration:none;
+        }
+       .nav .nav-link:hover {
+  background-color: #bbdefb !important;  /* biru muda lebih jelas */
+  color: #0d47a1 !important;
+}
+
+        .link-icon{
+          min-width:24px;
+          text-align:center;
+          font-size:1.1rem;
+          display:inline-flex;
+          align-items:center;
+          justify-content:center;
+        }
+        .link-text{ white-space:nowrap; transition: opacity .2s, width .2s; display:inline-block; }
+
+        /* hide text when collapsed */
+        #sidebar.collapsed .link-text{ opacity:0; width:0; pointer-events:none; }
+
+        /* inline sidebar submenu (when open) */
+        .sidebar-submenu{
+          display:none;
+          padding-left: 34px;
+          margin-top:4px;
+          transition: all .18s;
+        }
+        .sidebar-submenu.show{ display:block; }
+
+        .sidebar-submenu .nav-link{
+            padding-left:6px;
+            padding-right:6px;
+            font-size:.95rem;
+        }
+
+        /* floating submenu (when sidebar collapsed) */
+        #floatingMenu{
+          position:fixed;
+          display:none;
+          min-width:200px;
+          background:#fff;
+          border-radius:8px;
+          box-shadow:0 8px 28px rgba(13,71,161,0.08);
+          z-index:2060;
+          padding:8px 6px;
+          transition:opacity .18s, transform .18s;
+          opacity:0;
+          transform:translateY(-6px);
+        }
+        #floatingMenu.show{ display:block; opacity:1; transform:translateY(0); }
+
+        /* main content */
+        #main{
+          margin-left: var(--sidebar-open);
+          transition: margin-left .25s;
+          padding:5px;
+        }
+        #sidebar.collapsed ~ #main{ margin-left: var(--sidebar-collapsed); }
+
+        /* cards */
+        .dashboard-card{
+          border-radius:12px; background:#fff; box-shadow:0 6px 18px rgba(0,0,0,0.06);
+          padding:18px;
+          transition:transform .12s, box-shadow .12s;
+        }
+        .dashboard-card:hover{ transform:translateY(-4px); box-shadow:0 10px 30px rgba(0,0,0,0.08); }
+
+        /* responsive */
+        @media (max-width: 768px){
+          #sidebar{ transform: translateX(-100%); position:fixed; left:0; transition:transform .22s; }
+          #sidebar.open-mobile{ transform: translateX(0); }
+          #sidebar.collapsed{ width: var(--sidebar-open); } /* treat collapsed as full on mobile */
+          #main{ margin-left:0; }
+        }
+
+        /* ========== 🔧 TAMBAHAN PERBAIKAN ========== */
+
+        /* 1️⃣ Biar ikon tetap center dan nggak benjol pas collapsed */
+        #sidebar.collapsed .nav .nav-link {
+          justify-content: center;
+          padding: 10px 0;
+        }
+        #sidebar.collapsed .nav .link-icon {
+          margin: 0;
+          font-size: 1.3rem;
+        }
+        #sidebar.collapsed .brand { display: none; }
+
+        /* 2️⃣ Saat sidebar collapsed, link tetap bisa diklik untuk munculkan floating menu */
+        #sidebar.collapsed .nav .nav-link {
+          cursor: pointer;
+        }
+
+        /* 3️⃣ Biar floating menu nggak ketutup sidebar */
+        #floatingMenu {
+          pointer-events: auto;
+        }
+
+        /* 4️⃣ Animasi halus saat mouse hover ikon di mode collapsed */
+        #sidebar.collapsed .nav .nav-link:hover {
+          background-color: rgba(33,150,243,0.1);
+        }
+
+        /* 5️⃣ Fix shadow & posisi */
+        #sidebar.collapsed .nav .nav-link.active {
+          background-color: rgba(33,150,243,0.15);
+          border-radius: 10px;
+        }

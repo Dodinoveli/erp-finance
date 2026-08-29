@@ -1,0 +1,785 @@
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-Client-Content">
+    <style>
+        /* Container untuk merapikan isi konten di bawah tab */
+        .tab-content-container {
+            border: 0px solid #dee2e6;
+            border-top: none;
+            background: #f5f5f5;
+        }
+
+        /* #formClient,
+        #view-input-client {
+            height: 100%;
+            overflow: hidden;
+        } */
+
+        .container-fluid {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+
+        /* Garis tipis pemisah */
+        .border-top {
+            border-top: 1px solid #eee !important;
+        }
+
+        /* untuk tombol export dll */
+        /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+        .dropdown-toggle::after {
+            vertical-align: middle;
+        }
+
+        /* Efek hover pada item dropdown */
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #2b7de9;
+        }
+
+        /* Memberikan warna ikon agar lebih informatif */
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .card-body-easyui {
+            padding: 15px !important;
+            border-radius: 0 0 4px 4px;
+        }
+    </style>
+    <ul class="nav nav-tabs custom-terminal-tabs" id="clientTab">
+        <li class="nav-item">
+            <button class="nav-link text-light" id="btn-tab-list-client"
+                onclick="clientModel.switchTabClient('view-list-client')">
+                <i class="fas fa-list me-1"></i>
+            </button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link active" id="btn-tab-input-client"
+                onclick="clientModel.switchTabClient('view-input-client')">
+                <i class="fas fa-edit me-1" id="txtinput"></i>
+                <span id="text-label-client">Data Baru</span>
+            </button>
+        </li>
+
+        <li class="nav-item" id="li-tab-detail-client" style="display: none">
+            <button class="nav-link text-light" id="btn-tab-detail-client">
+                <i class="fas fa-id-card me-1"></i> Detail:
+                <span id="tab-label-client"></span>
+                <span class="ms-2 badge bg-danger" onclick="clientModel.closeEdit(event)"
+                    style="cursor: pointer">×</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content-container p-0">
+        <form id="formUnit">
+            <input type="hidden" id="unit_id" name="unitId" />
+
+            <div class="container-fluid py-2">
+                <div class="row g-3">
+
+                    <div class="col-md-12">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-3">
+
+                                <div class="row">
+
+                                    <!-- LEFT -->
+                                    <div class="col-md-12 pe-md-4">
+
+                                        <!-- <div class="accurate-form-group">
+                                            <label>Kode Satuan <span class="text-danger">*</span></label>
+                                            <input type="text" id="unit_code" name="unitCode"
+                                                class="form-control form-control-sm"
+                                                placeholder="Contoh: PCS, KG, LTR" />
+                                        </div> -->
+
+                                        <div class="accurate-form-group">
+                                            <label>Nama Satuan <span class="text-danger">*</span></label>
+                                            <input type="text" id="name" name="name"
+                                                class="form-control form-control-sm" placeholder="Contoh: Kilogram" />
+                                        </div>
+
+                                        <div class="accurate-form-group">
+                                            <label>Simbol</label>
+                                            <input type="text" id="symbol" name="symbol"
+                                                class="form-control form-control-sm" placeholder="Contoh: kg, pcs, L" />
+                                        </div>
+
+
+
+                                    </div>
+
+                                    <!-- RIGHT -->
+                                    <!-- <div class="col-md-6 ps-md-4">
+
+                                        <div class="form-check mt-3">
+                                            <input type="checkbox" id="is_active" name="isActive"
+                                                class="form-check-input" checked>
+                                            <label class="form-check-label">Aktif</label>
+                                        </div>
+
+                                        <div class="accurate-form-group mt-3">
+                                            <label>Preview</label>
+                                            <div class="form-control form-control-sm bg-light" id="preview_unit">
+                                                -
+                                            </div>
+                                        </div>
+
+                                    </div> -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BUTTON -->
+                        <div class="p-2">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="bi bi-floppy"></i> Simpan
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-circle"></i> Batal
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="view-list-client" style="display: none; padding: 5px">
+            <div class="toolbar-easyui">
+                <div class="btn-separator"></div>
+                <button id="btn-tambah-client" class="btn-tambah fw-bold">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="btn-refresh-client" class="btn-segarkan">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+
+                <div class="dropdown d-inline-block" style="position: relative">
+                    <button class="btn-excel dropdown-toggle" type="button"
+                        onclick="clientModel.toggleExcelMenu(event)">
+                        <i class="fas fa-file-excel me-1"></i>
+                    </button>
+
+                    <ul class="dropdown-menu shadow border" id="menu-excel-client" style="
+              display: none;
+              position: absolute !important;
+              left: 0;
+              top: 100%;
+              z-index: 99999 !important;
+              min-width: 180px;
+              background: white;
+              list-style: none;
+              padding: 5px 0;
+              margin: 0;
+            ">
+                        <li>
+                            <a class="dropdown-item p-2 d-block text-decoration-none text-dark"
+                                href="/api/v1/clients/export">
+                                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
+                                Excel
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-2 d-block text-decoration-none text-dark"
+                                href="/api/v1/clients/template">
+                                <i class="fas fa-download me-2 text-info"></i> Download Template
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" style="margin: 5px 0" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-2 d-block text-decoration-none text-dark"
+                                href="javascript:void(0)" onclick="
+                  document.getElementById('menu-excel-client').style.display =
+                    'none'
+                " data-bs-toggle="modal" data-bs-target="#importModal">
+                                <i class="fas fa-file-upload me-2 text-warning"></i> Import
+                                Excel
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn-print"><i class="fas fa-print"></i></button>
+
+                <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+                    <div class="search-container-terminal me-2">
+                        <input type="text" id="search-client-input" placeholder="Search client..."
+                            class="input-hugo-terminal" />
+                    </div>
+                    <button id="btn-search-client" class="btn-cari">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrapper table-wrapper-client" id="client-wrapper">
+                <table id="client-table">
+                    <thead>
+                        <tr>
+                            <th class="kolom-sticky-1 resizer">Kode</th>
+                            <th class="kolom-sticky-2 resizer">Perusahaan</th>
+                            <th class="kolom-sticky-3 resizer">Npwp</th>
+                            <th class="resizer" style="width: 150px">Nama Kontak</th>
+                            <th class="resizer" style="width: 100px">Telepon</th>
+                            <th class="resizer" style="width: 150px">Email</th>
+                            <th class="resizer" style="width: 100px">Bank</th>
+                            <th class="resizer" style="width: 120px">Rekening</th>
+                            <th class="resizer" style="width: 150px">Pemilik Rekening</th>
+                            <th class="resizer" style="width: 250px">Alamat</th>
+                            <th class="resizer">Dibuat</th>
+                            <th class="resizer">Update</th>
+                        </tr>
+                    </thead>
+                    <tbody id="client-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" th:inline="javascript">
+        const clientModel = {
+            cursorCreatedAt: null,
+            cursorId: null,
+            hasNext: true,
+            loading: false,
+            limit: 15,
+            resizableInit: false,
+            allData: [],
+
+            init: function () {
+                const wrapperId = document.getElementById("client-wrapper");
+                const keyword = document.getElementById("search-client-input").value;
+                this.loadMore("", true);
+                this.initDropdownListener();
+                this.bindEvents();
+                this.initScroll(wrapperId, keyword); // 🔥 pasang di sini
+                this.switchTabClient("view-list-client");
+                // this.bersih();
+                this.generateCode();
+            },
+
+            initScroll: function (wrapper, keyword) {
+                //const wrapper = document.querySelector(wrapperId);
+                let lastScrollTop = 0; // Untuk mendeteksi arah scroll
+
+                wrapper.addEventListener("scroll", () => {
+                    const scrollTop = wrapper.scrollTop;
+                    const isScrollingDown = scrollTop > lastScrollTop; // Cek arah bawah
+                    lastScrollTop = scrollTop;
+
+                    const nearBottom =
+                        scrollTop + wrapper.clientHeight >= wrapper.scrollHeight - 50;
+
+                    // ✅ SYARAT: Harus scroll ke bawah, sedang tidak loading, dan masih ada data selanjutnya
+                    if (isScrollingDown && nearBottom && !this.loading && this.hasNext) {
+                        console.log("Memuat data selanjutnya...");
+
+                        this.loadMore(keyword);
+                    }
+                });
+            },
+
+            bersih: function () {
+                // const form = document.getElementById("formClient");
+                // const target = document.getElementById("client_code");
+                // const val = target.value;
+                // form.reset();
+                // target.value = val;
+            },
+
+            bindEvents: function () {
+                const self = this;
+
+                // 1. Ambil semua elemen
+                const searchInput = document.getElementById("search-client-input");
+                const btnTambah = document.getElementById("btn-tambah-client");
+                const btnSearch = document.getElementById("btn-search-client");
+                const btnRefresh = document.getElementById("btn-refresh-client");
+                const btnBatal = document.getElementById("btn-batal-client");
+                const form = document.getElementById("formClient");
+
+                // 2. Gunakan Optional Chaining atau IF check agar script tidak mati jika ada elemen yang null
+                if (btnSearch && searchInput) {
+                    btnSearch.onclick = () => {
+                        const keyword = searchInput.value.trim();
+                        if (!keyword) {
+                            showToast("error", "Input pencarian masih kosong");
+                            return;
+                        }
+                        this.loadMore(keyword, true);
+                        // alert("cokk")
+                    };
+                }
+
+                if (btnRefresh && searchInput) {
+                    btnRefresh.onclick = () => {
+                        searchInput.value = "";
+                        this.loadMore("", true);
+                    };
+                }
+
+                if (btnTambah) {
+                    btnTambah.onclick = () => {
+                        this.switchTabClient("view-input-client");
+                    };
+                }
+
+                if (searchInput) {
+                    searchInput.onkeyup = (e) => {
+                        if (e.key === "Enter") {
+                            this.loadMore(searchInput.value.trim(), 0);
+                        }
+                    };
+                }
+
+                if (btnBatal) {
+                    btnBatal.onclick = () => {
+                        form.reset();
+                        this.generateCode();
+                        this.switchTabClient("list");
+                        document.getElementById("btn-hapus").style.display = "none";
+                        const label = document.getElementById("text-label-client");
+                        if (label) label.textContent = "Data Baru";
+                    };
+                }
+
+                // 3. Pasang Listener Form (Pastikan ini dijalankan)
+                if (form) {
+                    console.log("Form Client ditemukan, memasang event listener...");
+                    form.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        console.log("Submit terdeteksi!");
+                        //alert("yess");
+                        self.createClients(this);
+                    });
+                } else {
+                    console.warn("Elemen #formClient tidak ditemukan di DOM saat init!");
+                }
+
+                const tbody = document.getElementById("client-table-body");
+                tbody.addEventListener("dblclick", (e) => {
+                    const tr = e.target.closest("tr.clickable-row");
+                    if (!tr) return;
+
+                    const index = tr.dataset.index;
+                    const row = this.allData[index];
+
+                    // this.switchTabClient('view-input-client', row);
+                    // document.getElementById('text-label-client').textContent = 'Perbaharui Data';
+
+                    if (row) {
+                        this.switchTabClient("view-input-client", row);
+                        document.getElementById("text-label-client").textContent =
+                            "Perbaharui Data";
+                    }
+                });
+            },
+
+            generateCode: async function () {
+                try {
+                    const json = await api.get(`/api/v1/clients/generatecode`);
+                    if (json.status === "success")
+                        document.getElementById("client_code").value = json.data.clientCode;
+                } catch (e) { }
+            },
+
+            loadMore: async function (keyword = "", reset = false) {
+                if (this.loading) return;
+                if (!this.hasNext && !reset) return;
+                const tbody = document.getElementById("client-table-body");
+                const statusMsg = "";
+
+                if (reset) {
+                    this.cursorCreatedAt = null;
+                    this.cursorId = null;
+                    this.hasNext = true;
+                    tbody.innerHTML = "";
+                }
+
+                this.loading = true;
+                UI.showSkeleton("client-table-body", 11);
+
+                try {
+                    const params = new URLSearchParams({
+                        keyword: keyword,
+                        limit: this.limit,
+                    });
+
+                    if (this.cursorCreatedAt && this.cursorId) {
+                        params.append("lastCreatedAt", this.cursorCreatedAt);
+                        params.append("lastId", this.cursorId);
+                    }
+
+                    const [json] = await Promise.all([
+                        api.get(`/api/v1/clients?${params.toString()}`),
+                        new Promise((resolve) => setTimeout(resolve, 1000)),
+                    ]);
+
+                    if (json && json.status === "success") {
+                        const res = json.data;
+                        UI.hideSkeleton();
+
+                        // 🔥 GABUNGKAN DATA: Jika reset, buat baru. Jika scroll, tambah ke belakang.
+                        if (reset) {
+                            this.allData = res.data;
+                        } else {
+                            this.allData = [...this.allData, ...res.data];
+                        }
+
+                        // Kirim 'this.allData.length' untuk tahu posisi index awal batch ini
+                        const startIndex = reset
+                            ? 0
+                            : this.allData.length - res.data.length;
+                        this.renderTable(res.data, reset, startIndex);
+
+                        // 🔥 update cursor
+                        this.cursorCreatedAt = res.nextCreatedAt;
+                        this.cursorId = res.nextId;
+                        this.hasNext = res.hasNext;
+
+                        console.log(" cursorId =", this.cursorId);
+                        console.log(" hasNext =", this.hasNext);
+                    }
+                    document.getElementsByClassName('table-wrapper-client')[0].style.height = "80svh"
+                    // Mengatur tinggi tabel sebesar 60% dari tinggi layar monitor
+                    // document.getElementsByClassName('table-wrapper')[0].style.height = "90vh";
+                } catch (err) {
+                    tbody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error: ${err.message}</td></tr>`;
+                    UI.hideSkeleton();
+                } finally {
+                    this.loading = false;
+                    UI.hideSkeleton();
+                }
+            },
+
+            renderTable: function (data, isReset = false, startIndex = 0) {
+                const tbody = document.getElementById("client-table-body");
+
+                if (!data || data.length === 0) {
+                    if (isReset) {
+                        tbody.innerHTML =
+                            '<tr><td colspan="13" class="text-center py-3">No data available</td></tr>';
+                    }
+                    return;
+                }
+
+                if (isReset) {
+                    tbody.innerHTML = "";
+                }
+
+                let rowsHtml = "";
+                data.forEach((row, i) => {
+                    const globalIndex = startIndex + i;
+                    rowsHtml += `
+                    <tr class="clickable-row" data-index="${globalIndex}" id="row-client-${row.clientId}">
+                        <td class="kolom-sticky-1 text-center">${row.clientCode}</td>
+                        <td class="kolom-sticky-2 cell-wrap">${row.companyName}</td>
+                        <td class="kolom-sticky-3 cell-wrap">${row.taxId || "-"}</td>
+                        <td>${row.contactPerson || "-"}</td>
+                        <td>${row.phoneNumber || "-"}</td>
+                        <td>${row.email || "-"}</td>
+                        <td>${row.bankName || "-"}</td>
+                        <td>${row.accountNumber || "-"}</td>
+                        <td>${row.accountName || "-"}</td>
+                        <td class="col-text">${row.address || "-"}</td>
+                        <td>${row.createdAt || "-"}</td>
+                        <td>${row.updatedAt || "-"}</td>
+                   </tr>`;
+                });
+
+                tbody.insertAdjacentHTML("beforeend", rowsHtml);
+
+                if (!this.resizableInit) {
+                    this.makeColumnsResizable();
+                    this.resizableInit = true;
+                }
+            },
+
+            makeColumnsResizable: function () {
+                const table = document.getElementById("client-table");
+                const cols = table.querySelectorAll("th.resizer");
+
+                cols.forEach((th) => {
+                    let startX, startWidth;
+
+                    th.addEventListener("mousedown", (e) => {
+                        startX = e.pageX;
+                        startWidth = th.offsetWidth;
+
+                        const onMouseMove = (e) => {
+                            const newWidth = startWidth + (e.pageX - startX);
+                            th.style.width = newWidth + "px";
+                        };
+
+                        const onMouseUp = () => {
+                            document.removeEventListener("mousemove", onMouseMove);
+                            document.removeEventListener("mouseup", onMouseUp);
+                        };
+
+                        document.addEventListener("mousemove", onMouseMove);
+                        document.addEventListener("mouseup", onMouseUp);
+                    });
+                });
+            },
+
+            switchTabClient: function (type, row) {
+                // Element Konten
+                const viewInput = document.getElementById("view-input-client");
+                const viewList = document.getElementById("view-list-client");
+
+                // Element Tombol
+                const btnInput = document.getElementById("btn-tab-input-client");
+                const btnList = document.getElementById("btn-tab-list-client");
+
+                if (type === "view-input-client") {
+                    viewInput.style.display = "block";
+                    viewList.style.display = "none";
+
+                    btnInput.classList.add("active");
+                    btnInput.classList.remove("text-light");
+
+                    btnList.classList.remove("active");
+                    btnList.classList.add("text-light");
+
+                    this.rowData(row);
+                } else {
+                    viewInput.style.display = "none";
+                    viewList.style.display = "block";
+
+                    btnInput.classList.remove("active");
+                    btnInput.classList.add("text-light");
+
+                    btnList.classList.add("active");
+                    btnList.classList.remove("text-light");
+                    this.bersih();
+                    // this.loadMore('', true);
+                }
+            },
+
+            closeEdit: function (e) {
+                e.stopPropagation(); // Biar gak trigger click tabnya
+                document.getElementById("li-tab-detail-client").style.display = "none";
+                this.switchTabClient("view-list-client", "");
+            },
+
+            rowData: function (row) {
+                if (!row) {
+                    console.warn("Data row tidak ditemukan atau undefined");
+                    return;
+                }
+
+                // Mapping antara ID element HTML dan property dari data 'row'
+                const fields = {
+                    client_id: row.clientId,
+                    client_code: row.clientCode,
+                    company_name: row.companyName,
+                    tax_id: row.taxId,
+                    contact_person: row.contactPerson,
+                    phone_number: row.phoneNumber,
+                    email: row.email,
+                    account_name: row.accountName,
+                    account_number: row.accountNumber,
+                    bank_name: row.bankName,
+                    address: row.address,
+                };
+
+                // Isi secara otomatis dengan pengecekan safety
+                Object.keys(fields).forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        el.value = fields[id] || ""; // Jika data null, isi string kosong agar tidak muncul tulisan "undefined"
+                    }
+                });
+
+                // Tampilkan tombol hapus
+                const btnHapus = document.getElementById("btn-hapus");
+                if (btnHapus) {
+                    btnHapus.style.display = "block";
+                }
+            },
+
+            toggleExcelMenu: function (e) {
+                if (e) e.stopPropagation(); // Kunci utama agar menu tidak langsung tertutup saat tombol diklik
+                const menu = document.getElementById("menu-excel-client");
+                if (menu) {
+                    const isHidden =
+                        menu.style.display === "none" || menu.style.display === "";
+                    menu.style.display = isHidden ? "block" : "none";
+                }
+            },
+
+            // Fungsi tambahan: Tutup menu kalau user klik di luar menu
+            initDropdownListener: function () {
+                window.addEventListener("click", function () {
+                    const menu = document.getElementById("menu-excel-client");
+                    if (menu) {
+                        menu.style.display = "none";
+                    }
+                });
+            },
+
+            createClients: async function (formEl) {
+                const searchInput = document.getElementById("search-client-input");
+                const formData = new FormData(formEl);
+                const id = formData.get("clientId");
+                // 🔥 kalau backend butuh JSON
+                const payload = Object.fromEntries(formData.entries());
+
+                const msg = id ? "Updating data..." : "Saving data...";
+                UI.showSkeleton("client-table-body", 10);
+                try {
+                    const result = id
+                        ? await api.put(`/api/v1/clients/${id}`, payload, msg)
+                        : await api.post(`/api/v1/clients`, payload, msg);
+
+                    if (id) {
+                        // 1. Ambil data terbaru hasil return dari Backend (biasanya result.data berisi object yang baru diupdate)
+                        const updatedRow = result.data;
+
+                        // 2. Update Array local agar saat di-klik lagi datanya sudah yang baru
+                        const index = this.allData.findIndex(
+                            (item) => item.clientId === id,
+                        );
+                        if (index !== -1) {
+                            this.allData[index] = updatedRow;
+
+                            // 3. Update Baris Tabel secara langsung tanpa refresh
+                            this.updateRowUI(id, updatedRow);
+                        }
+                        document.getElementById("text-label-client").textContent =
+                            "Data Baru";
+                    } else {
+                        this.loadMore("", true);
+                    }
+                    // ✅ sukses
+                    showToast(
+                        "success",
+                        result.message ||
+                        (id ? "Data berhasil diupdate!" : "Berhasil disimpan"),
+                    );
+
+                    const clientIdEl = document.getElementById("client_id");
+                    if (clientIdEl) {
+                        clientIdEl.value = "";
+                    }
+
+                    formEl.reset();
+                    this.generateCode();
+                    this.switchTabClient("view-list-client", "");
+                    document.getElementById("btn-hapus").style.display = "none";
+                } catch (err) {
+                    showToast("error", err.message);
+                    UI.hideSkeleton();
+                } finally {
+                    UI.hideSkeleton();
+                }
+            },
+
+            updateRowUI: function (id, data) {
+                const tr = document.getElementById(`row-client-${id}`);
+                if (!tr) return;
+
+                // Update kolom-kolomnya (sesuaikan urutan <td> kamu)
+                const cells = tr.cells;
+                cells[0].textContent = data.clientCode;
+                cells[1].textContent = data.companyName;
+                cells[2].textContent = data.taxId || "-";
+                cells[3].textContent = data.contactPerson || "-";
+                cells[4].textContent = data.phoneNumber || "-";
+                cells[5].textContent = data.email || "-";
+                cells[6].textContent = data.bankName || "-";
+                cells[7].textContent = data.accountNumber || "-";
+                cells[8].textContent = data.accountName || "-";
+                cells[9].textContent = data.address || "-";
+                // updatedAt dsb...
+
+                // 2. 🔥 SOLUSI HIGHLIGHT: Targetkan semua TD di dalam baris ini
+                const allCells = tr.querySelectorAll("td");
+
+                allCells.forEach((td) => {
+                    td.style.transition = "background-color 1s ease"; // Animasi halus
+                    td.style.backgroundColor = "#e8f5e9"; // Kuning highlight
+                });
+
+                // 3. Kembalikan ke warna semula setelah 1.5 detik
+                setTimeout(() => {
+                    allCells.forEach((td) => {
+                        td.style.backgroundColor = ""; // Reset (kembali ke CSS asli)
+                    });
+                }, 1500);
+            },
+
+            delete: function () {
+                const id = document.getElementById("client_id").value;
+                if (!id) {
+                    showToast("warning", "Pilih data yang akan dihapus terlebih dahulu");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Konfirmasi Hapus",
+                    text: "Apakah Anda yakin ingin menghapus data ini? setuju atau batalkan.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0092DC", // Biru EasyUI
+                    cancelButtonColor: "#e57373",
+                    confirmButtonText: "Ya, Hapus!",
+                    cancelButtonText: "Batal",
+                    // Agar kotak seperti EasyUI
+                    customClass: {
+                        popup: "border-easyui-blue",
+                        cancelButton: "btn-swal-cancel",
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Panggil fungsi delete data milikmu
+                        this.deleteData(id);
+                        // showLoading("Proses penghapusan dijalankan...");
+                    } else {
+                        console.log("Penghapusan dibatalkan.");
+                    }
+                });
+            },
+
+            deleteData: async function (id) {
+                const payload = {
+                    status: "0",
+                };
+
+                try {
+                    const rst = await api.put(
+                        `/api/v1/clients/updatestatus/${id}`,
+                        payload,
+                        "Menghapus data...",
+                    );
+
+                    showToast("success", rst.message);
+                    const clientIdEl = document.getElementById("client_id");
+                    if (clientIdEl) {
+                        clientIdEl.value = "";
+                    }
+                    const form = document.getElementById("formClient");
+                    form.reset();
+                    this.generateCode();
+                    this.switchTabClient("view-list-client", "");
+                    this.loadMore("", true);
+
+                    const btn = document.getElementById("btn-hapus");
+                    if (btn) btn.style.display = "none";
+                } catch (error) {
+                    showToast("error", error.message);
+                }
+            },
+        };
+
+        // window.clientModel = clientModel;
+        window.clientModel = clientModel;
+        clientModel.init();
+    </script>
+</div>

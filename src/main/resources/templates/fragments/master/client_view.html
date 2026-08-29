@@ -1,0 +1,1075 @@
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-Client-Content">
+  <style>
+    /* Container untuk merapikan isi konten di bawah tab */
+    .tab-content-container {
+      border: 0px solid #dee2e6;
+      border-top: none;
+      background: #f5f5f5;
+    }
+
+    /* #formClient,
+        #view-input-client {
+            height: 100%;
+            overflow: hidden;
+        } */
+
+    .container-fluid {
+      padding-left: 10px !important;
+      padding-right: 10px !important;
+    }
+
+    /* Garis tipis pemisah */
+    .border-top {
+      border-top: 1px solid #eee !important;
+    }
+
+    /* untuk tombol export dll */
+    /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+    .dropdown-toggle::after {
+      vertical-align: middle;
+    }
+
+    /* Efek hover pada item dropdown */
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: #2b7de9;
+    }
+
+    /* Memberikan warna ikon agar lebih informatif */
+    .dropdown-item i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .card-body-easyui {
+      padding: 15px !important;
+      border-radius: 0 0 4px 4px;
+    }
+  </style>
+  <ul class="nav nav-tabs custom-terminal-tabs" id="clientTab" style="position: sticky; top: 0">
+    <li class="nav-item">
+      <button class="nav-link text-light" id="btn-tab-list-client"
+        onclick="clientModel.switchTabClient('view-list-client')">
+        <i class="fas fa-list me-1"></i>
+      </button>
+    </li>
+
+    <li class="nav-item">
+      <button class="nav-link active" id="btn-tab-input-client"
+        onclick="clientModel.switchTabClient('view-input-client')">
+        <i class="fas fa-edit me-1" id="txtinput"></i>
+        <span id="text-label-client">Data Baru</span>
+      </button>
+    </li>
+
+    <li class="nav-item" id="li-tab-detail-client" style="display: none">
+      <button class="nav-link text-light" id="btn-tab-detail-client">
+        <i class="fas fa-id-card me-1"></i> Detail:
+        <span id="tab-label-client"></span>
+        <span class="ms-2 badge bg-danger" onclick="clientModel.closeEdit(event)" style="cursor: pointer">×</span>
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content-container p-0">
+    <form id="formClient">
+      <div id="view-input-client" style="display: block">
+        <div class="container-fluid py-2">
+          <div class="row g-3">
+            <div class="col-md-12">
+              <div class="card border-0 shadow-sm" style="width: 100%; border-radius: 0px">
+                <div class="card-body card-body-easyui p-3">
+                  <div class="row">
+                    <input type="hidden" id="client_id" name="clientId" />
+                    <div class="col-md-6 pe-md-4">
+                      <div class="accurate-form-group">
+                        <label>Kode</label>
+                        <input type="text" id="client_code" name="clientCode" readonly
+                          class="form-control form-control-sm bg-light" />
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nama Lengkap <span>*</span></label>
+                        <div class="form-field">
+                          <input type="text" id="client_name" name="clientName" class="form-control form-control-sm"
+                            placeholder="PT. Jaya Maju Bersama" />
+                          <small id="err-clientName"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label> Tipe Client <span>*</span></label>
+                        <div class="form-field">
+                          <select id="client_type" name="clientType" class="form-control form-control-sm">
+                            <option value="" disabled selected>
+                              -- Pilih Tipe Client --
+                            </option>
+                            <option value="Perorangan">👤 Perorangan</option>
+                            <option value="Perusahaan">🏢 Perusahaan</option>
+                            <option value="Pemerintah">🏛 Pemerintah</option>
+                          </select>
+                          <small class="text-danger" id="err-clientType"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Npwp</label>
+                        <div class="form-field">
+                          <input type="text" id="client_npwp" name="clientNpwp" class="form-control form-control-sm"
+                            placeholder="Nomor Pokok Wajib Pajak" />
+                          <small class="text-danger" id="err-clientNpwp"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nik</label>
+                        <div class="form-field">
+                          <input type="text" id="client_nik" name="clientNik" class="form-control form-control-sm"
+                            placeholder="Nomor Induk Kependudukan " />
+                          <small class="text-danger" id="err-clientNik"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nitku</label>
+                        <div class="form-field">
+                          <input type="text" id="client_nitku" name="clientNitku" class="form-control form-control-sm"
+                            placeholder="Nomor Identitas Tempat Kegiatan Usaha" />
+                          <small class="text-danger" id="err-clientNitku"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Pkp <span class="text-danger">*</span></label>
+                        <div class="form-field">
+                          <select id="client_is_pkp" name="clientIsPkp" class="form-control form-control-sm">
+                            <option disabled selected>
+                              -- Pilih Status PKP --
+                            </option>
+                            <option value="true">Ya</option>
+                            <option value="false">Tidak</option>
+                          </select>
+                          <small class="text-danger" id="err-clientIsPkp"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label style="padding-top: 5px">Alamat</label>
+                        <div class="form-field">
+                          <textarea id="client_address" name="clientAddress" class="form-control form-control-sm"
+                            rows="3"
+                            placeholder="Jl. ZA. Pagar Alam, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141"></textarea>
+                          <small class="text-danger" id="err-clientAddress"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Kota</label>
+                        <div class="form-field">
+                          <input type="text" id="client_city" name="clientCity" class="form-control form-control-sm"
+                            placeholder="Bandar Lampung" />
+                          <small class="text-danger" id="err-clientCity"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Provinsi</label>
+                        <div class="form-field">
+                          <input type="text" id="client_province" name="clientProvince"
+                            class="form-control form-control-sm" placeholder="Lampung" />
+                          <small class="text-danger" id="err-clientProvince"></small>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 ps-md-4">
+                      <div class="accurate-form-group">
+                        <label>Kode Pos</label>
+                        <div class="form-field">
+                          <input type="text" id="client_postal_code" name="clientPostalCode"
+                            class="form-control form-control-sm" placeholder="12345" />
+                          <small class="text-danger" id="err-clientPostalCode"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Negara</label>
+                        <div class="form-field">
+                          <input type="text" id="client_country" name="clientCountry"
+                            class="form-control form-control-sm" placeholder="Indonesia" />
+                          <small class="text-danger" id="err-clientCountry"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nama Kontak</label>
+                        <div class="form-field">
+                          <input type="text" id="client_contact_person" name="clientContactPerson"
+                            class="form-control form-control-sm" placeholder="Syahrini" />
+                          <small class="text-danger" id="err-clientContactPerson"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Handphone</label>
+                        <div class="form-field">
+                          <input type="text" id="client_contact_phone" name="clientContactPhone"
+                            class="form-control form-control-sm" placeholder="085269530000" />
+                          <small class="text-danger" id="err-clientContactPhone"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Email</label>
+                        <div class="form-field">
+                          <input type="email" id="client_email" name="clientEmail" class="form-control form-control-sm"
+                            placeholder="jayamajubersama@gmail.com" />
+                          <small class="text-danger" id="err-clientEmail"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Nama Bank</label>
+                        <div class="form-field">
+                          <input type="text" id="client_bank_name" name="clientBankName"
+                            class="form-control form-control-sm" placeholder="BNI" />
+                          <small class="text-danger" id="err-clientBankName"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>No. Rekening</label>
+                        <div class="form-field">
+                          <input type="text" id="client_account_number" name="clientAccountNumber"
+                            class="form-control form-control-sm" placeholder="0123456789" />
+                          <small class="text-danger" id="err-clientAccountNumber"></small>
+                        </div>
+                      </div>
+
+                      <div class="accurate-form-group">
+                        <label>Pemilik</label>
+                        <div class="form-field">
+                          <input type="text" id="client_account_name" name="clientAccountName"
+                            class="form-control form-control-sm" placeholder="Contoh : PT Jaya Maju Bersama" />
+                          <small class="text-danger" id="err-clientAccountName"></small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="p-2">
+                <button type="submit" form="formClient" class="btn btn-primary" style="
+                    --bs-btn-padding-y: 0.35rem;
+                    --bs-btn-padding-x: 0.5rem;
+                    --bs-btn-font-size: 0.75rem;
+                  ">
+                  <i class="bi bi-floppy"></i> Simpan
+                </button>
+
+                <button type="button" class="btn btn-danger" style="
+                    --bs-btn-padding-y: 0.35rem;
+                    --bs-btn-padding-x: 0.5rem;
+                    --bs-btn-font-size: 0.75rem;
+                  ">
+                  <i class="bi bi-x-circle"></i> Batal
+                </button>
+              </div> -->
+              <div class="card mt-1 shadow-sm border-0">
+                <div class="card-body text-center">
+                  <div class="d-flex justify-content-center gap-3">
+                    <button type="submit" class="btn btn-primary px-4">
+                      <i class="bi bi-floppy"></i> Simpan
+                    </button>
+                    <button type="button" class="btn btn-danger px-4" id="btn-batal-client">
+                      <i class="bi bi-x-circle"></i> Batal
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div id="view-list-client" style="display: none; padding: 5px">
+      <div class="toolbar-easyui">
+        <div class="btn-separator"></div>
+        <button id="btn-tambah-client" class="btn-tambah fw-bold">
+          <i class="fas fa-plus"></i> Tambah
+        </button>
+        <button id="btn-refresh-client" class="btn-segarkan">
+          <i class="fas fa-sync-alt"></i> Refresh
+        </button>
+
+        <div class="dropdown d-inline-block" style="position: relative">
+          <button class="btn-excel dropdown-toggle" type="button" onclick="clientModel.toggleExcelMenu(event)">
+            <i class="fas fa-file-excel me-1"></i> Export
+          </button>
+
+          <ul class="dropdown-menu shadow border" id="menu-excel-client" style="
+              display: none;
+              position: absolute !important;
+              left: 0;
+              top: 100%;
+              z-index: 99999 !important;
+              min-width: 180px;
+              background: white;
+              list-style: none;
+              padding: 5px 0;
+              margin: 0;
+            ">
+            <li>
+              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/export">
+                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
+                Excel
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/template">
+                <i class="fas fa-download me-2 text-info"></i> Download Template
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" style="margin: 5px 0" />
+            </li>
+            <li>
+              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="javascript:void(0)" onclick="
+                  document.getElementById('menu-excel-client').style.display =
+                    'none'
+                " data-bs-toggle="modal" data-bs-target="#importModal">
+                <i class="fas fa-file-upload me-2 text-warning"></i> Import
+                Excel
+              </a>
+            </li>
+          </ul>
+        </div>
+        <button class="btn-print"><i class="fas fa-print"></i> Print</button>
+
+        <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+          <div class="search-container-terminal me-2">
+            <input type="text" id="search-client-input" placeholder="Search..." class="input-hugo-terminal" />
+          </div>
+          <button id="btn-search-client" class="btn-cari">
+            <i class="fas fa-search"></i> Submit
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrapper table-wrapper-client" id="client-wrapper">
+        <table id="client-table">
+          <thead>
+            <tr>
+              <th class="kolom-sticky-1 resizer">Kode</th>
+              <th class="kolom-sticky-2 resizer">Perusahaan</th>
+              <th class="kolom-sticky-3 resizer">Tipe Klien</th>
+              <th class="resizer" style="width: 150px">Npwp</th>
+              <th class="resizer" style="width: 150px">Nik</th>
+              <th class="resizer" style="width: 150px">Nitku</th>
+              <th class="resizer" style="width: 100px">Pkp</th>
+              <th class="resizer" style="width: 200px">Alamat</th>
+              <th class="resizer" style="width: 160px">Kota</th>
+              <th class="resizer" style="width: 160px">Propinsi</th>
+              <th class="resizer" style="width: 100px">Kode Pos</th>
+              <th class="resizer" style="width: 150px">Negara</th>
+              <th class="resizer" style="width: 150px">Email</th>
+              <th class="resizer" style="width: 150px">Nama Kontak</th>
+              <th class="resizer" style="width: 130px">Telepon</th>
+              <th class="resizer" style="width: 100px">Status</th>
+              <th class="resizer" style="width: 100px">Bank</th>
+              <th class="resizer" style="width: 120px">Rekening</th>
+              <th class="resizer" style="width: 150px">Pemilik Rekening</th>
+            </tr>
+          </thead>
+          <tbody id="client-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" th:inline="javascript">
+    const clientModel = {
+      cursorCreatedAt: null,
+      cursorId: null,
+      hasNext: true,
+      loading: false,
+      limit: 15,
+      resizableInit: false,
+      allData: [],
+
+      init: function () {
+        setTimeout(() => {
+          document.getElementById("search-client-input")?.focus();
+        }, 100);
+        const wrapperId = document.getElementById("client-wrapper");
+        const keyword = document.getElementById("search-client-input").value;
+        this.findById("", true);
+        this.initDropdownListener();
+        this.bindEvents();
+        this.initScroll(wrapperId, keyword); // 🔥 pasang di sini
+        this.switchTabClient("view-list-client");
+        // this.bersih();
+        this.generateCode();
+      },
+
+      // initScroll: function (wrapper, keyword) {
+      //   //const wrapper = document.querySelector(wrapperId);
+      //   let lastScrollTop = 0; // Untuk mendeteksi arah scroll
+
+      //   wrapper.addEventListener("scroll", () => {
+      //     const scrollTop = wrapper.scrollTop;
+      //     const isScrollingDown = scrollTop > lastScrollTop; // Cek arah bawah
+      //     lastScrollTop = scrollTop;
+
+      //     const nearBottom =
+      //       scrollTop + wrapper.clientHeight >= wrapper.scrollHeight - 50;
+
+      //     // ✅ SYARAT: Harus scroll ke bawah, sedang tidak loading, dan masih ada data selanjutnya
+      //     if (isScrollingDown && nearBottom && !this.loading && this.hasNext) {
+      //       console.log("Memuat data selanjutnya...");
+
+      //       this.findById(keyword);
+      //     }
+      //   });
+      // },
+
+      initScroll: function (wrapper) {
+        if (this.scrollInitialized) return;
+        this.scrollInitialized = true;
+
+        let lastScrollTop = 0;
+
+        wrapper.addEventListener("scroll", () => {
+          const scrollTop = wrapper.scrollTop;
+          const isScrollingDown = scrollTop > lastScrollTop;
+          lastScrollTop = scrollTop;
+
+          const nearBottom =
+            scrollTop + wrapper.clientHeight >= wrapper.scrollHeight - 50;
+
+          if (isScrollingDown && nearBottom && !this.loading && this.hasNext) {
+            console.log("LOAD NEXT PAGE");
+
+            this.findById("", false);
+          }
+        });
+      },
+
+      bindEvents: function () {
+        const self = this;
+
+        // 1. Ambil semua elemen
+        const searchInput = document.getElementById("search-client-input");
+        const btnTambah = document.getElementById("btn-tambah-client");
+        const btnSearch = document.getElementById("btn-search-client");
+        const btnRefresh = document.getElementById("btn-refresh-client");
+        const btnBatal = document.getElementById("btn-batal-client");
+        const form = document.getElementById("formClient");
+
+        // 2. Gunakan Optional Chaining atau IF check agar script tidak mati jika ada elemen yang null
+        if (btnSearch && searchInput) {
+          btnSearch.onclick = () => {
+            const keyword = searchInput.value.trim();
+            if (!keyword) {
+              Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Input pencarian masih kosong",
+                didClose: () => {
+                  setTimeout(() => {
+                    const input = document.getElementById("search-client-input");
+                    input?.focus();
+                    input?.select();
+                  }, 100);
+                }
+              });
+
+              return;
+            }
+            this.findById(keyword, true);
+            // alert("cokk")
+          };
+
+        }
+
+        if (btnRefresh && searchInput) {
+          btnRefresh.onclick = () => {
+            searchInput.value = "";
+            this.findById("", true);
+          };
+        }
+
+        if (btnTambah) {
+          btnTambah.onclick = () => {
+            this.switchTabClient("view-input-client");
+          };
+        }
+
+        if (searchInput) {
+          searchInput.onkeyup = (e) => {
+            if (e.key === "Enter") {
+              this.findById(searchInput.value.trim(), 0);
+            }
+          };
+        }
+
+        if (btnBatal) {
+          btnBatal.onclick = () => {
+            form.reset();
+            this.generateCode();
+            this.switchTabClient("list");
+            // document.getElementById("btn-hapus").style.display = "none";
+            const label = document.getElementById("text-label-client");
+            if (label) label.textContent = "Data Baru";
+          };
+        }
+
+        // 3. Pasang Listener Form (Pastikan ini dijalankan)
+        if (form) {
+          console.log("Form Client ditemukan, memasang event listener...");
+          form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            console.log("Submit terdeteksi!");
+            //alert("yess");
+            self.createClients(this);
+          });
+        } else {
+          console.warn("Elemen #formClient tidak ditemukan di DOM saat init!");
+        }
+
+        const tbody = document.getElementById("client-table-body");
+        tbody.addEventListener("dblclick", (e) => {
+          const tr = e.target.closest("tr.clickable-row-client");
+          if (!tr) return;
+
+          const index = tr.dataset.index;
+
+          // DEBUG: Cek isi 'this' dan 'allData' di console
+          console.log("Konteks this:", this);
+          console.log("Isi allData:", this.allData);
+
+          const row = this.allData[index];
+          console.log("Hasil row ", row);
+
+          if (row) {
+            this.switchTabClient("view-input-client", row);
+            document.getElementById("text-label-client").textContent =
+              "Perbaharui Data";
+          }
+        });
+      },
+
+      generateCode: async function () {
+        try {
+          const json = await api.get(`/api/v1/clients/generate-code`);
+          if (json.status === "success")
+            document.getElementById("client_code").value = json.data.clientCode;
+        } catch (e) { }
+      },
+
+      findById: async function (keyword = "", reset = false) {
+        if (this.loading) return;
+        if (!this.hasNext && !reset) return;
+        const tbody = document.getElementById("client-table-body");
+        const statusMsg = "";
+
+        if (reset) {
+          this.cursorCreatedAt = null;
+          this.cursorId = null;
+          this.hasNext = true;
+          tbody.innerHTML = "";
+        }
+
+        this.loading = true;
+        UI.showSkeleton("client-table-body", 15);
+
+        try {
+          const params = new URLSearchParams({
+            keyword: keyword,
+            limit: this.limit,
+          });
+
+          if (this.cursorCreatedAt && this.cursorId) {
+            params.append("lastCreatedAt", this.cursorCreatedAt);
+            params.append("lastId", this.cursorId);
+          }
+
+          const [json] = await Promise.all([
+            api.get(`/api/v1/clients?${params.toString()}`),
+            new Promise((resolve) => setTimeout(resolve, 1000)),
+          ]);
+
+          if (json && json.status === "success") {
+            const res = json.data;
+            UI.hideSkeleton();
+
+            const newBatch = res.data;
+            // 🔥 GABUNGKAN DATA: Jika reset, buat baru. Jika scroll, tambah ke belakang.
+            if (reset) {
+              this.allData = newBatch;
+            } else {
+              this.allData = [...(this.allData || []), ...newBatch];
+            }
+
+            // Kirim 'this.allData.length' untuk tahu posisi index awal batch ini
+            const startIndex = reset
+              ? 0
+              : this.allData.length - newBatch.length;
+            this.renderTable(newBatch, reset, startIndex);
+
+            // Update metadata paging dari res
+
+            console.log("res ", res);
+            // console.log("new Batch ", newBatch)
+
+            this.cursorCreatedAt = res.nextCreatedAt;
+            this.cursorId = res.nextId;
+            this.hasNext = res.hasNext;
+
+            console.log(" cursorId =", this.cursorId);
+            console.log(" hasNext =", this.hasNext);
+          }
+          document.getElementsByClassName(
+            "table-wrapper-client",
+          )[0].style.height = "80svh";
+        } catch (err) {
+          tbody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error: ${err.message}</td></tr>`;
+          UI.hideSkeleton();
+        } finally {
+          this.loading = false;
+          UI.hideSkeleton();
+        }
+      },
+
+      renderTable: function (data, isReset = false, startIndex = 0) {
+        const tbody = document.getElementById("client-table-body");
+
+        if (!data || data.length === 0) {
+          if (isReset) {
+            tbody.innerHTML =
+              '<tr><td colspan="13" class="text-center py-3">No data available</td></tr>';
+          }
+          return;
+        }
+
+        if (isReset) {
+          tbody.innerHTML = "";
+        }
+
+        let rowsHtml = "";
+        data.forEach((row, i) => {
+          var pkp = row.clientIsPkp;
+          var status = row.clientIsActive;
+          const globalIndex = startIndex + i;
+          rowsHtml += `
+                    <tr class="clickable-row-client" data-index="${globalIndex}" id="row-client-${row.clientId}">
+                        <td class="kolom-sticky-1 text-center">${row.clientCode}</td>
+                        <td class="kolom-sticky-2 cell-wrap">${row.clientName}</td>
+                        <td class="kolom-sticky-3 cell-wrap">${row.clientType || "-"}</td>
+                        <td>${row.clientNpwp || "-"}</td>
+                        <td>${row.clientNik || "-"}</td>
+                        <td>${row.clientNitku || "-"}</td>
+                        <td class="text-center">
+                        ${pkp === true
+              ? '<span class="badge badge-glass-green w-100">Ya</span>'
+              : '<span class="badge badge-glass-red w-100">Tidak</span>'
+            }
+                        </td>
+                        <td class="col-text">${row.clientAddress || "-"}</td>
+                        <td>${row.clientCity || "-"}</td>
+                        <td>${row.clientProvince || "-"}</td>
+                        <td>${row.clientPostalCode || "-"}</td>
+                        <td>${row.clientCountry || "-"}</td>
+                        <td>${row.clientEmail || "-"}</td>
+                        <td>${row.clientContactPerson || "-"}</td>
+                        <td>${row.clientContactPhone || "-"}</td>
+                        <td class="text-center">
+                        ${status === true
+              ? '<span class="badge badge-glass-green w-100">Aktif</span>'
+              : '<span class="badge badge-glass-red w-100">Nonaktif</span>'
+            }
+                        </td>
+                        <td>${row.clientBankName || "-"}</td>
+                        <td>${row.clientAccountNumber || "-"}</td>
+                        <td>${row.clientAccountName || "-"}</td>
+                   </tr > `;
+        });
+
+        tbody.insertAdjacentHTML("beforeend", rowsHtml);
+
+        if (!this.resizableInit) {
+          this.makeColumnsResizable();
+          this.resizableInit = true;
+        }
+      },
+
+      makeColumnsResizable: function () {
+        const table = document.getElementById("client-table");
+        const cols = table.querySelectorAll("th.resizer");
+
+        cols.forEach((th) => {
+          let startX, startWidth;
+
+          th.addEventListener("mousedown", (e) => {
+            startX = e.pageX;
+            startWidth = th.offsetWidth;
+
+            const onMouseMove = (e) => {
+              const newWidth = startWidth + (e.pageX - startX);
+              th.style.width = newWidth + "px";
+            };
+
+            const onMouseUp = () => {
+              document.removeEventListener("mousemove", onMouseMove);
+              document.removeEventListener("mouseup", onMouseUp);
+            };
+
+            document.addEventListener("mousemove", onMouseMove);
+            document.addEventListener("mouseup", onMouseUp);
+          });
+        });
+      },
+
+      switchTabClient: function (type, row) {
+        // Element Konten
+        const viewInput = document.getElementById("view-input-client");
+        const viewList = document.getElementById("view-list-client");
+
+        // Element Tombol
+        const btnInput = document.getElementById("btn-tab-input-client");
+        const btnList = document.getElementById("btn-tab-list-client");
+
+        if (type === "view-input-client") {
+          viewInput.style.display = "block";
+          viewList.style.display = "none";
+
+          btnInput.classList.add("active");
+          btnInput.classList.remove("text-light");
+
+          btnList.classList.remove("active");
+          btnList.classList.add("text-light");
+
+          this.rowData(row);
+        } else {
+          viewInput.style.display = "none";
+          viewList.style.display = "block";
+
+          btnInput.classList.remove("active");
+          btnInput.classList.add("text-light");
+
+          btnList.classList.add("active");
+          btnList.classList.remove("text-light");
+          // this.bersih();
+          // this.findById('', true);
+        }
+      },
+
+      closeEdit: function (e) {
+        e.stopPropagation(); // Biar gak trigger click tabnya
+        document.getElementById("li-tab-detail-client").style.display = "none";
+        this.switchTabClient("view-list-client", "");
+      },
+
+      rowData: function (row) {
+        if (!row) {
+          console.warn("Data row tidak ditemukan atau undefined");
+          return;
+        }
+        //    private UUID bankAccountId;
+        // private String accountCode;
+        // private String accountName;
+        // // private AccountType accountType; // Menggunakan Enum
+        // private String accountType;
+        // private String bankName;
+        // private String bankBranch;
+        // private String accountNumber;
+        // private String accountHolder;
+        // private String currency = "IDR";
+        // private BigDecimal openingBalance = BigDecimal.ZERO;
+        // private Boolean isDefault = false;
+        // private Boolean isActive = true;
+        // private UUID companyId;
+        // private UUID coaId;
+
+        const fields = {
+          client_id: row.bankAccountId,
+          client_code: row.clientCode,
+          client_name: row.clientName,
+          client_type: row.clientType,
+          client_npwp: row.clientNpwp,
+          client_nik: row.clientNik,
+          client_address: row.clientAddress,
+          client_city: row.clientCity,
+          client_province: row.clientProvince,
+          client_postal_code: row.clientPostalCode,
+          client_country: row.clientCountry,
+          client_email: row.clientEmail,
+          client_contact_person: row.clientContactPerson,
+          client_contact_phone: row.clientContactPhone,
+          client_bank_name: row.clientBankName,
+          client_account_number: row.clientAccountNumber,
+          client_account_name: row.clientAccountName,
+          client_is_pkp: row.clientIsPkp,
+          client_nitku: row.clientNitku,
+        };
+
+        // Isi secara otomatis dengan pengecekan safety
+        Object.keys(fields).forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            // Paksa ke String agar select option bisa mencocokkan value
+            // Gunakan ?? (Nullish Coalescing) bukan || (OR)
+            const value = fields[id] ?? "";
+            el.value = String(value);
+          }
+        });
+      },
+
+      toggleExcelMenu: function (e) {
+        if (e) e.stopPropagation(); // Kunci utama agar menu tidak langsung tertutup saat tombol diklik
+        const menu = document.getElementById("menu-excel-client");
+        if (menu) {
+          const isHidden =
+            menu.style.display === "none" || menu.style.display === "";
+          menu.style.display = isHidden ? "block" : "none";
+        }
+      },
+
+      // Fungsi tambahan: Tutup menu kalau user klik di luar menu
+      initDropdownListener: function () {
+        window.addEventListener("click", function () {
+          const menu = document.getElementById("menu-excel-client");
+          if (menu) {
+            menu.style.display = "none";
+          }
+        });
+      },
+
+      createClients: async function (formEl) {
+        const searchInput = document.getElementById("search-client-input");
+        const formData = new FormData(formEl);
+        const id = formData.get("clientId");
+        const payload = Object.fromEntries(formData.entries());
+
+        const msg = id ? "Memperbaharui data client..." : "Menyimpan data client...";
+        UI.showSkeleton("client-table-body", 15);
+        this.showErrors({}, formEl);
+        try {
+          const result = id
+            ? await api.put(`/api/v1/clients/${id} `, payload, msg)
+            : await api.post(`/api/v1/clients`, payload, msg);
+
+          if (id) {
+            // 1. Ambil data terbaru hasil return dari Backend (biasanya result.data berisi object yang baru diupdate)
+            const updatedRow = result.data;
+
+            // 2. Update Array local agar saat di-klik lagi datanya sudah yang baru
+            const index = this.allData.findIndex(
+              (item) => item.clientId === id,
+            );
+
+            if (index !== -1) {
+              this.allData[index] = updatedRow;
+
+              // 3. Update Baris Tabel secara langsung tanpa refresh
+              this.updateRowUI(id, updatedRow);
+            }
+            document.getElementById("text-label-client").textContent =
+              "Data Baru";
+          } else {
+            this.findById("", true);
+          }
+
+          Swal.fire({
+            title: "Sukses!",
+            text: result.message,
+            icon: "success",
+          });
+
+          console.log("===================", result.message);
+          const clientIdEl = document.getElementById("client_id");
+          if (clientIdEl) {
+            clientIdEl.value = "";
+          }
+
+          formEl.reset();
+          this.generateCode();
+          this.switchTabClient("view-list-client", "");
+          // document.getElementById("btn-hapus").style.display = "none";
+        } catch (err) {
+          console.log("Full Error Object = ", err);
+          const errors = err?.errors || err?.data?.errors;
+          if (errors) {
+            this.showErrors(errors, formEl);
+          } else {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: err.message,
+            });
+          }
+          UI.hideSkeleton();
+        } finally {
+          UI.hideSkeleton();
+        }
+      },
+
+      updateRowUI: function (id, data) {
+        console.log("data updateRowUI ", data);
+        const tr = document.getElementById(`row-client-${id}`);
+        if (!tr) return;
+
+        const cells = tr.cells;
+        // Sesuaikan dengan nama property di JSON kamu (case-sensitive!)
+        cells[0].textContent = data.clientCode;
+        cells[1].textContent = data.clientName; // Di JSON namanya 'name', bukan 'companyName'
+        cells[2].textContent = data.clientType || "-";
+        cells[3].textContent = data.clientNpwp || "-"; // Di JSON namanya 'npwp', bukan 'taxId'
+        cells[4].textContent = data.clientNik || "-";
+        cells[5].textContent = data.clientNitku || "-"; // Di JSON 'contactPhone', bukan 'phoneNumber'
+        const pkpStatus = data.clientIsPkp === true ? "Ya" : "Tidak";
+        const pkpClass =
+          data.clientIsPkp === true ? "badge-glass-green" : "badge-glass-red";
+        cells[6].innerHTML = `<span class="badge ${pkpClass}">${pkpStatus}</span>`;
+        cells[7].textContent = data.clientAddress || "-";
+        cells[8].textContent = data.clientCity || "-";
+        cells[9].textContent = data.clientProvince || "-";
+        cells[10].textContent = data.clientPostalCode || "-";
+        cells[11].textContent = data.clientCountry || "-";
+        cells[12].textContent = data.clientEmail || "-";
+        cells[13].textContent = data.clientContactPerson || "-";
+        cells[14].textContent = data.clientContactPhone || "-";
+        const activeStatus =
+          data.clientIsActive === true ? "Aktif" : "Non-Aktif";
+        const activeClass =
+          data.clientIsActive === true
+            ? "badge-glass-green"
+            : "badge-glass-red";
+        cells[15].innerHTML = `<span class="badge ${activeClass}">${activeStatus}</span>`;
+        cells[16].textContent = data.clientBankName || "-";
+        cells[17].textContent = data.clientAccountNumber || "-";
+        cells[18].textContent = data.clientAccountName || "-";
+
+        // 2. 🔥 SOLUSI HIGHLIGHT: Targetkan semua TD di dalam baris ini
+        const allCells = tr.querySelectorAll("td");
+
+        allCells.forEach((td) => {
+          td.style.transition = "background-color 1s ease"; // Animasi halus
+          td.style.backgroundColor = "#e8f5e9"; // Kuning highlight
+        });
+
+        // 3. Kembalikan ke warna semula setelah 1.5 detik
+        setTimeout(() => {
+          allCells.forEach((td) => {
+            td.style.backgroundColor = ""; // Reset (kembali ke CSS asli)
+          });
+        }, 1500);
+      },
+
+      delete: function () {
+        const id = document.getElementById("client_id").value;
+        if (!id) {
+          showToast("warning", "Pilih data yang akan dihapus terlebih dahulu");
+          return;
+        }
+
+        Swal.fire({
+          title: "Konfirmasi Hapus",
+          text: "Apakah Anda yakin ingin menghapus data ini? setuju atau batalkan.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#0092DC", // Biru EasyUI
+          cancelButtonColor: "#e57373",
+          confirmButtonText: "Ya, Hapus!",
+          cancelButtonText: "Batal",
+          // Agar kotak seperti EasyUI
+          customClass: {
+            popup: "border-easyui-blue",
+            cancelButton: "btn-swal-cancel",
+          },
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Panggil fungsi delete data milikmu
+            this.deleteData(id);
+            // showLoading("Proses penghapusan dijalankan...");
+          } else {
+            console.log("Penghapusan dibatalkan.");
+          }
+        });
+      },
+
+      deleteData: async function (id) {
+        const payload = {
+          status: "0",
+        };
+
+        try {
+          const rst = await api.put(
+            `/ api / v1 / clients / updatestatus / ${id} `,
+            payload,
+            "Menghapus data...",
+          );
+
+          showToast("success", rst.message);
+          const clientIdEl = document.getElementById("client_id");
+          if (clientIdEl) {
+            clientIdEl.value = "";
+          }
+          const form = document.getElementById("formClient");
+          form.reset();
+          this.generateCode();
+          this.switchTabClient("view-list-client", "");
+          this.findById("", true);
+
+          const btn = document.getElementById("btn-hapus");
+          if (btn) btn.style.display = "none";
+        } catch (error) {
+          showToast("error", error.message);
+        }
+      },
+
+      //   showErrors: function (errors) {
+
+      //     document.querySelectorAll('input').forEach(i => i.classList.remove('is-invalid'));
+      //     document.querySelectorAll('.text-danger').forEach(e => e.innerText = '');
+
+      //     for (const field in errors) {
+      //       const input = document.querySelector(`[name = "${field}"]`);
+      //       const errorEl = document.getElementById('err-' + field);
+
+      //       if (input) input.classList.add('is-invalid');
+      //       if (errorEl) errorEl.innerText = errors[field];
+      //     }
+      //   }
+
+      showErrors: function (errors, formEl) {
+        if (!formEl) return; // 🔥 guard biar gak error lagi
+
+        // 🔥 reset hanya di form ini
+        formEl
+          .querySelectorAll(".is-invalid")
+          .forEach((i) => i.classList.remove("is-invalid"));
+
+        formEl
+          .querySelectorAll('[id^="err-"]')
+          .forEach((e) => (e.innerText = ""));
+
+        // 🔥 set error
+        for (const field in errors) {
+          const input = formEl.querySelector(`[name = "${field}"]`);
+          const errorEl = formEl.querySelector("#err-" + field);
+
+          if (input) input.classList.add("is-invalid");
+          if (errorEl) errorEl.innerText = errors[field];
+        }
+      },
+    };
+
+    // window.clientModel = clientModel;
+    window.clientModel = clientModel;
+    clientModel.init();
+  </script>
+</div>

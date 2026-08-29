@@ -1,0 +1,154 @@
+# =============================================================
+# 1. BASIC APPLICATION SETTINGS
+# =============================================================
+spring:
+  application:
+    name: kawal-laba
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5432/erp_kontraktor
+    username: postgres
+    password: "259369@ddN" # Gunakan kutip jika password mengandung karakter khusus
+    driver-class-name: org.postgresql.Driver
+
+    # 4. HikariCP Connection Pool
+    hikari:
+      maximum-pool-size: 50
+      minimum-idle: 20
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 20000 # Batas maksimal mengantre koneksi
+      pool-name: kawal-laba
+      # Tambahkan auto-commit: false untuk aplikasi keuangan
+      # Agar transaksi benar-benar dikontrol oleh Spring @Transactional
+      auto-commit: false
+
+  # 2. PERFORMANCE SETTINGS (Project Loom)
+  threads:
+    virtual:
+      enabled: true
+
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: "c95d34d7c8fecb"
+    password: "****8f30"
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  # 5. VIEW ENGINE (Thymeleaf)
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+
+  # 6. SERVLET & MULTIPART SETTINGS (File Upload)
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 13MB
+      file-size-threshold: 10KB
+      location: D:/Web Spring/Amankanlaba/temp/uploads
+      resolve-lazily: true
+
+  # 7. STATIC RESOURCES & LIFECYCLE
+  web:
+    resources:
+      static-locations: classpath:/static/,file:uploads/
+
+  lifecycle:
+    timeout-per-shutdown-phase: 15s
+
+  # 8 DEVTOOLS
+  devtools:
+    restart:
+      enabled: true
+      exclude: "static/**, public/**, templates/**" # CSS/JS berubah, server TIDAK restart
+      poll-interval: 2s
+      quiet-period: 1s
+
+# =============================================================
+# 9 SERVER SETTINGS
+# =============================================================
+server:
+  address: 127.0.0.1
+  port: 8080
+  shutdown: graceful
+  forward-headers-strategy: framework
+  error:
+    include-stacktrace: always # atau 'never' / 'on_param'
+    include-message: always
+
+# =============================================================
+# 10 CUSTOM APP SETTINGS (CORS, JWT, UPLOAD)
+# =============================================================
+app:
+  cors:
+    allowed-origins: https://kawallaba.my.id
+    #allowed-origins: http://localhost:8080,http://127.0.0.1:8080,http://192.168.1.9:8080
+  # upload:
+  #   dir: D:/Web Spring/Amankanlaba/
+
+  error-messages:
+    database: # database harus menjorok ke dalam error-messages
+      unique-constraints:
+        clients_client_code_key: "Kode Klien sudah terdaftar. Gunakan kode lain."
+        idx_unique_active_npwp_clients: "Nomor NPWP sudah terdaftar dan masih aktif"
+        idx_unique_active_nik_clients: "Nik sudah terdaftar dan masih aktif"
+        idx_unique_active_npwp_suppliers: "Nomor NPWP sudah terdaftar dan masih aktif"
+        uq_bank_account_code : "Kode Akun sudah ada "
+        fk_bank_coa : "Coa Id Sudah Ada"
+      default-unique: "Data sudah ada di sistem. Gunakan kode atau nama lain."
+    general:
+      internal-error: "Terjadi kesalahan internal pada sistem kami."
+      not-found: "Data yang Anda cari tidak ditemukan."
+
+jwt:
+  secret: 9f3K!pL0xQz@8vM7nR4sT2uY6bW1cV9x
+  access-expiration: 3600000 # 1 jam
+  refresh-expiration: 604800000 # 7 hari
+
+# =============================================================
+# 11. LOGGING & DEBUGGING
+# =============================================================
+logging:
+  level:
+    root: INFO
+    # Log internal aplikasi kamu
+    com.logikaintermedia.erp: DEBUG
+    org.thymeleaf: DEBUG
+    org.springframework:
+      web.servlet.view.InternalResourceViewResolver: DEBUG
+      jdbc.core: DEBUG
+      jdbc.datasource: DEBUG
+      # TRACE penting untuk melihat pesan "Committing" atau "Rolling back"
+      transaction: TRACE
+      transaction.interceptor: DEBUG
+      # Tambahkan ini untuk cek kenapa JWT tiba-tiba gagal akses
+      security: DEBUG
+      context: DEBUG
+      boot.web.embedded.tomcat: DEBUG
+
+      # DEBUG untuk memantau kebocoran koneksi (penyebab aplikasi macet)
+    com.zaxxer.hikari: DEBUG
+    org.hibernate.resource.transaction: DEBUG
+
+# =============================================================
+# 12. MONITORING (Actuator)
+# =============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health,info
+
+# 13. --- TELEGRAM BOT SETTINGS ---
+#telegram:
+#  bot:
+#   token: "8446749326:AAEiLKlpw2McfKDR5jmiXbIoWbxMsrosfd4" # Masukkan token di sini
+#    username: AmankanLabaBot
+

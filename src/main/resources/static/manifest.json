@@ -1,0 +1,9 @@
+{
+  "name": "Aplikasi Kontraktor",
+  "short_name": "KontraktorApp",
+  "description": "Aplikasi manajemen proyek kontraktor",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976D2"
+}

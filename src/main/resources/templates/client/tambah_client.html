@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/head :: head('Tambah Data Client - Kawallaba')}"></div>
+
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="main">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+        <div class="detail-container">
+            <form id="formClient">
+                <div class="card p-1">
+                    <div class="card-body">
+                        <input type="hidden" id="client_id" name="clientId" />
+                        <div class="mb-3">
+                            <label class="form-label">Kode</label>
+                            <div class="form-field">
+                                <input type="text" class="form-control" id="client_code" name="clientCode" readonly
+                                    placeholder="P-0001">
+                                <small class="text-danger" id="err-clientCode"></small>
+                            </div>
+
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama*</label>
+                            <div class="form-field">
+                                <input type="text" d="client_name" name="clientName" class="form-control"
+                                    placeholder="PT ABC">
+                                <small class="text-danger" id="err-clientName"></small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipe*</label>
+                            <div class="form-field">
+                                <select id="client_type" name="clientType" class="form-select"
+                                    aria-label="Default select example">
+                                    <option value="" disabled selected>
+                                        -- Pilih Tipe Client --
+                                    </option>
+                                    <option value="Perorangan"><i class="bi bi-person-circle"></i> Perorangan</option>
+                                    <option value="Perusahaan"><i class="bi bi-building"></i> Perusahaan</option>
+                                    <option value="Pemerintah"><i class="bi bi-bank"></i> Pemerintah</option>
+                                </select>
+                                <small class="text-danger" id="err-clientType"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Npwp</label>
+                            <div class="form-field">
+                                <input type="text" id="client_npwp" name="clientNpwp"
+                                    class="form-control form-control-sm" placeholder="Nomor Pokok Wajib Pajak" />
+                                <small class="text-danger" id="err-clientNpwp"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nik</label>
+                            <div class="form-field">
+                                <input type="text" id="client_nik" name="clientNik" class="form-control form-control-sm"
+                                    placeholder="Nomor Induk Kependudukan " />
+                                <small class="text-danger" id="err-clientNik"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nitku</label>
+                            <div class="form-field">
+                                <input type="text" id="client_nitku" name="clientNitku"
+                                    class="form-control form-control-sm"
+                                    placeholder="Nomor Identitas Tempat Kegiatan Usaha" />
+                                <small class="text-danger" id="err-clientNitku"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Pkp <span class="text-danger">*</span></label>
+                            <div class="form-field">
+                                <select id="client_is_pkp" name="clientIsPkp" class="form-control form-control-sm">
+                                    <option disabled selected>
+                                        -- Pilih Status PKP --
+                                    </option>
+                                    <option value="true">Ya</option>
+                                    <option value="false">Tidak</option>
+                                </select>
+                                <small class="text-danger" id="err-clientIsPkp"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label style="padding-top: 5px">Alamat</label>
+                            <div class="form-field">
+                                <textarea id="client_address" name="clientAddress" class="form-control form-control-sm"
+                                    rows="3"
+                                    placeholder="Jl. ZA. Pagar Alam, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141"></textarea>
+                                <small class="text-danger" id="err-clientAddress"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Kota</label>
+                            <div class="form-field">
+                                <input type="text" id="client_city" name="clientCity"
+                                    class="form-control form-control-sm" placeholder="Bandar Lampung" />
+                                <small class="text-danger" id="err-clientCity"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Provinsi</label>
+                            <div class="form-field">
+                                <input type="text" id="client_province" name="clientProvince"
+                                    class="form-control form-control-sm" placeholder="Lampung" />
+                                <small class="text-danger" id="err-clientProvince"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Kode Pos</label>
+                            <div class="form-field">
+                                <input type="text" id="client_postal_code" name="clientPostalCode"
+                                    class="form-control form-control-sm" placeholder="12345" />
+                                <small class="text-danger" id="err-clientPostalCode"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Negara</label>
+                            <div class="form-field">
+                                <input type="text" id="client_country" name="clientCountry"
+                                    class="form-control form-control-sm" placeholder="Indonesia" />
+                                <small class="text-danger" id="err-clientCountry"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nama Kontak</label>
+                            <div class="form-field">
+                                <input type="text" id="client_contact_person" name="clientContactPerson"
+                                    class="form-control form-control-sm" placeholder="Syahrini" />
+                                <small class="text-danger" id="err-clientContactPerson"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Handphone</label>
+                            <div class="form-field">
+                                <input type="text" id="client_contact_phone" name="clientContactPhone"
+                                    class="form-control form-control-sm" placeholder="085269530000" />
+                                <small class="text-danger" id="err-clientContactPhone"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <div class="form-field">
+                                <input type="email" id="client_email" name="clientEmail"
+                                    class="form-control form-control-sm" placeholder="jayamajubersama@gmail.com" />
+                                <small class="text-danger" id="err-clientEmail"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nama Bank</label>
+                            <div class="form-field">
+                                <input type="text" id="client_bank_name" name="clientBankName"
+                                    class="form-control form-control-sm" placeholder="BNI" />
+                                <small class="text-danger" id="err-clientBankName"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>No. Rekening</label>
+                            <div class="form-field">
+                                <input type="text" id="client_account_number" name="clientAccountNumber"
+                                    class="form-control form-control-sm" placeholder="0123456789" />
+                                <small class="text-danger" id="err-clientAccountNumber"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Pemilik</label>
+                            <div class="form-field">
+                                <input type="text" id="client_account_name" name="clientAccountName"
+                                    class="form-control form-control-sm" placeholder="Contoh : PT Jaya Maju Bersama" />
+                                <small class="text-danger" id="err-clientAccountName"></small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="detail-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Simpan
+                    </button>
+                    <a th:href="@{/client}" class="btn btn-danger">Batal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+    <script th:src="@{/js/utility/dashboard.js}"></script>
+
+    <script type="module" th:inline="javascript">
+        const clientModelTambah = {
+
+            init: function () {
+                this.bindEvents();
+                this.generateCode();
+            },
+
+            bindEvents: function () {
+                const self = this;
+                const form = document.getElementById("formClient");
+                if (form) {
+                    console.log("Form Client ditemukan, memasang event listener...");
+                    form.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        console.log("Submit terdeteksi!");
+                        self.createClients(this);
+                    });
+                } else {
+                    console.warn("Elemen #formClient tidak ditemukan di DOM saat init!");
+                }
+            },
+
+            generateCode: async function () {
+                try {
+                    const json = await api.get(`/api/v1/clients/generate-code`);
+                    if (json.status === "success")
+                        document.getElementById("client_code").value = json.data.clientCode;
+                } catch (e) { }
+            },
+
+            createClients: async function (formEl) {
+                const formData = new FormData(formEl);
+                const payload = Object.fromEntries(formData.entries());
+                this.showErrors({}, formEl);
+
+                try {
+
+                    const result = await api.post(`/api/v1/clients`, payload, "Menyimpan Data...");
+                    if (result && result.success !== false) {
+                        await Toast.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: result.message,
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/client';
+                        }, 500);
+                        return result;
+                    } else {
+                        throw new Error(result?.message || 'Gagal Menyimpan data');
+                    }
+                } catch (err) {
+                    console.log("Full Error Object = ", err);
+                    const errors = err?.errors || err?.data?.errors;
+                    if (errors) {
+                        this.showErrors(errors, formEl);
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Gagal Menyimpan Data, Periksa inputan'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: err.message,
+                        });
+                    }
+                    throw errors;
+                }
+            },
+
+            showErrors: function (errors, formEl) {
+                if (!formEl) return; // 🔥 guard biar gak error lagi
+
+                // 🔥 reset hanya di form ini
+                formEl
+                    .querySelectorAll(".is-invalid")
+                    .forEach((i) => i.classList.remove("is-invalid"));
+
+                formEl
+                    .querySelectorAll('[id^="err-"]')
+                    .forEach((e) => (e.innerText = ""));
+
+                // 🔥 set error
+                for (const field in errors) {
+                    const input = formEl.querySelector(`[name = "${field}"]`);
+                    const errorEl = formEl.querySelector("#err-" + field);
+
+                    if (input) input.classList.add("is-invalid");
+                    if (errorEl) errorEl.innerText = errors[field];
+                }
+            },
+        };
+
+        window.clientModelTambah = clientModelTambah;
+        clientModelTambah.init();
+    </script>
+</body>
+
+</html>

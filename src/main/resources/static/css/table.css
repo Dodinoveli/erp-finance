@@ -1,0 +1,147 @@
+:root {
+  --table-bg: #ffffff;
+  --table-header-bg: rgba(255, 255, 255, 0.95);
+  --win-border: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  /* padding: 20px; */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.table-wrapper {
+
+ /* 100vh (layar) - 60px (navbar atas) - 50px (tab menu) */
+  /* max-height: calc(100vh - 110px); */
+  border: 1px solid var(--win-border);
+  overflow: auto;
+  position: relative;
+  /* Menghilangkan scrollbar untuk Firefox */
+  scrollbar-width: thin;
+
+  /* Menghilangkan scrollbar untuk IE dan Edge lama */
+  /* -ms-overflow-style: none; */
+
+  -ms-overflow-style: auto;
+  scrollbar-width: thin; /* Untuk Firefox */
+  scrollbar-color: var(--win-border) transparent; /* Warna scrollbar custom */
+}
+
+/* Tambahkan ini khusus untuk Chrome/Edge/Safari agar bar-nya estetik */
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #ccc; /* Warna scrollbar */
+  border-radius: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 1200px;
+  table-layout: fixed; /* penting untuk ellipsis dan resize */
+}
+
+th{
+  padding: 8px 12px;
+  border: 1px solid var(--win-border);
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+td {
+  line-height: 25px;
+  padding: 4px 8px;
+  border: 1px solid var(--win-border);
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Sticky header semua th */
+thead th {
+  position: sticky !important;
+  top: 0;
+    background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+  z-index: 4;
+  /* background: #0e2d5f !important; */
+  /* background: var(--table-header-bg); */
+  cursor: col-resize;
+  color: #0e2d5f;
+}
+
+/* Sticky kolom pertama sampai ketiga */
+.kolom-sticky-1,
+.kolom-sticky-2,
+.kolom-sticky-3 {
+  position: sticky !important;
+  z-index: 5 !important;
+
+  background-color: var(--table-header-bg) !important;
+  /* background: #ff5f57 !important; */
+}
+
+.kolom-sticky-1 {
+  left: 0 !important;
+  width: 100px;
+  min-width: 100px;
+}
+.kolom-sticky-2 {
+  left: 100px !important;
+  width: 130px;
+  min-width: 130px;
+}
+.kolom-sticky-3 {
+  left: 230px !important;
+  width: 200px;
+  min-width: 200px;
+  border-right: 1.5px solid var(--win-border) !important;
+}
+
+/* .kolom-sticky-1 { left: 0 !important; width: 100px; min-width: 100px; }
+.kolom-sticky-2 { left: 100px !important; width: 210px; min-width: 210px; }
+.kolom-sticky-3 { left: 310px !important; width: 150px; min-width: 150px; border-right: 1.5px solid var(--win-border) !important; } */
+
+/* Sticky header untuk kolom pertama sampai ketiga */
+thead th.kolom-sticky-1,
+thead th.kolom-sticky-2,
+thead th.kolom-sticky-3 {
+     background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+  /* background: #0e2d5f !important; */
+  color: #0e2d5f;
+  /* background: var(--table-header-bg) !important; */
+  /* background: #ff5f57 !important; */
+  z-index: 6 !important;
+  backdrop-filter: blur(15px);
+  /* position: sticky; */
+}
+
+th.resizer {
+  position: relative;
+}
+
+th.resizer::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  cursor: col-resize;
+}
+
+tbody tr:nth-child(even) {
+  background: #fafafa;
+}

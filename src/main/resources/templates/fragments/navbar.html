@@ -1,0 +1,34 @@
+<header class="top" th:fragment="navbar">
+    <div style="display:flex;align-items:center;gap:12px"><button class="mobile" id="open">☰</button>
+        <div class="crumb"><b th:text="${pageTitle}">Dashboard</b></div>
+    </div>
+    <div class="right">
+        <!-- <input class="search" placeholder="Cari proyek, invoice, supplier...">
+        <span>🔔</span> -->
+        <div class="profile-wrap" id="profileWrap">
+            <button class="profile-btn" id="profileBtn" type="button" aria-expanded="false">
+                <div class="avatar">DN</div>
+                <div class="profile-text"><b>Dodi Noveli</b></div>
+                <span class="profile-arrow">▼</span>
+            </button>
+            <div class="profile-menu">
+                <div class="profile-menu-head">
+                    <b>Dodi Noveli</b>
+                    <small style="font-size: 10px;">Administrator</small>
+                </div>
+                <!-- <a class="profile-item" href="#">👤 Profil Saya</a>
+                <a class="profile-item" href="#">⚙ Pengaturan</a>
+                <button class="profile-item logout" type="button" id="logoutBtn">↪ Logout</button> -->
+                <a class="profile-item" href="#">
+                    <i class="bi bi-person me-2"></i> Profil Saya
+                </a>
+                <a class="profile-item" href="#">
+                    <i class="bi bi-gear me-2"></i> Pengaturan
+                </a>
+                <button class="profile-item logout" type="button" id="logoutBtn">
+                    <i class="bi bi-box-arrow-right me-2"></i> Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</header>

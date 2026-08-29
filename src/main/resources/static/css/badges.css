@@ -1,0 +1,123 @@
+.badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 0px; /* Membuat lonjong sempurna */
+            text-transform: uppercase; /* Huruf besar semua */
+            letter-spacing: 0.5px;
+            border: 1px solid transparent;
+            transition: all 0.3s ease; /* Efek halus saat hover */
+        }
+
+        /* =========================================
+           DESAIN 1: MODERN GLASSMORPHISM (TRANSPARAN)
+           Cocok untuk UI Modern/Minimalis
+           ========================================= */
+        
+        /* Hijau Transparan */
+        .badge-glass-green {
+            background-color: rgba(40, 167, 69, 0.15); /* Hijau transparan */
+            color: #2ecc71; /* Warna teks terang */
+            border-color: rgba(40, 167, 69, 0.3);
+        }
+        .badge-glass-green:hover {
+            background-color: rgba(40, 167, 69, 0.25);
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.3); /* Efek glow saat hover */
+        }
+
+        /* Merah Transparan */
+        .badge-glass-red {
+            background-color: rgba(220, 53, 69, 0.15); /* Merah transparan */
+            color: #e74c3c;
+            border-color: rgba(220, 53, 69, 0.3);
+        }
+        .badge-glass-red:hover {
+            background-color: rgba(220, 53, 69, 0.25);
+            box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+        }
+
+        /* =========================================
+           DESAIN 2: SOLID & SOFT SHADOW
+           Cocok untuk UI Klasik/Material Design
+           ========================================= */
+        
+        /* Hijau Solid Soft */
+        .badge-solid-green {
+            background-color: #27ae60;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Bayangan lembut biar timbul */
+        }
+        .badge-solid-green:hover {
+            background-color: #2ecc71;
+            transform: translateY(-1px); /* Efek melayang sedikit */
+        }
+
+        /* Merah Solid Soft */
+        .badge-solid-red {
+            background-color: #c0392b;
+            color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .badge-solid-red:hover {
+            background-color: #e74c3c;
+            transform: translateY(-1px);
+        }
+
+        /* =========================================
+           DESAIN 3: NEON GLOW & DOT INDICATOR
+           Paling mencolok, bagus untuk status real-time
+           ========================================= */
+        
+        /* Basis untuk Desain 3 */
+        .badge-glow {
+            padding: 5px 12px;
+            font-size: 11px;
+            position: relative;
+        }
+        /* Dot (titik) indikator */
+        .badge-glow::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        /* Neon Hijau */
+        .badge-glow-green {
+            background-color: rgba(0, 0, 0, 0.5); /* Background hitam transparan */
+            color: #2ecc71;
+            border-color: #2ecc71;
+            box-shadow: 0 0 8px rgba(46, 204, 113, 0.6); /* Efek Neon */
+        }
+        .badge-glow-green::before {
+            background-color: #2ecc71;
+            box-shadow: 0 0 5px #2ecc71; /* Dot juga nge-glow */
+        }
+        /* Efek Berkedip (Pulsing) Opsional */
+        .badge-glow-green:hover::before {
+            animation: pulse-green 1.5s infinite;
+        }
+
+        /* Neon Merah */
+        .badge-glow-red {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #e74c3c;
+            border-color: #e74c3c;
+            box-shadow: 0 0 8px rgba(231, 76, 60, 0.6);
+        }
+        .badge-glow-red::before {
+            background-color: #e74c3c;
+            box-shadow: 0 0 5px #e74c3c;
+        }
+
+        /* Animasi Pulsing */
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+            70% { box-shadow: 0 0 0 5px rgba(46, 204, 113, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }

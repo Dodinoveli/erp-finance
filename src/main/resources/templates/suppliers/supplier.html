@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/head :: head('Daftar Supplier')}"></div>
+
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="main">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+        <div class="container-fluid py-1">
+
+
+            <!-- TABLE CARD -->
+            <div class="card border-0 shadow-sm">
+
+                <!-- TOOLBAR -->
+                <div class="card-body border-bottom">
+
+                    <div class="row g-3 align-items-center">
+                        <!-- SEARCH -->
+                        <div class="col-12 col-md-12">
+                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                <div class="input-group" style="flex: 1; min-width: 200px;">
+                                    <input type="search" id="searchSupplier" class="form-control"
+                                        placeholder="search nama...">
+                                </div>
+
+                                <a th:href="@{/supplier/new}" class="btn btn-primary" style="white-space: nowrap;"> <i
+                                        class="bi bi-plus-lg"></i>
+                                    Supplier
+                                    Baru</a>
+                                <button type="button" id="btn-refresh" class="btn btn-success"
+                                    style="white-space: nowrap;">
+                                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="table-responsive table-wrapper-client" id="supplier-wrapper">
+                    <table class="table table-hover align-middle mb-0" id="supplier">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="kolom-sticky-1 resizer">KODE</th>
+                                <th class="kolom-sticky-3 resizer">NAMA</th>
+                                <th class="resizer" style="width: 150px">KONTAK</th>
+                                <th class="resizer" style="width: 150px">EMAIL</th>
+                                <th class="resizer" style="width: 100px">STATUS</th>
+                                <th class="resizer" style="width: 100px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supplier-table-body"></tbody>
+                    </table>
+                </div>
+
+
+                <!-- FOOTER -->
+                <!-- <div class="card-body border-top">
+                    <div class="d-flex flex-column flex-md-row
+                            justify-content-between
+                            align-items-center gap-3">
+                        <small class="text-muted">
+                            Menampilkan 1–2 dari 2 data
+                        </small>
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">
+                                        Sebelumnya
+                                    </a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">
+                                        1
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        2
+                                    </a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">
+                                        Selanjutnya
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div> -->
+
+            </div>
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+    <script th:src="@{/js/utility/dashboard.js}"></script>
+    <script type="module" th:inline="javascript">
+        import { library } from '/js/utility/library.js';
+        const clientModel = {
+            cursorCreatedAt: null,
+            cursorId: null,
+            hasNext: true,
+            loading: false,
+            limit: 13,
+            resizableInit: false,
+            allData: [],
+
+            setTableHeight: function (id_wrapper, id_table) {
+                return library.setTableHeight(id_wrapper, id_table);
+            },
+
+            init: function () {
+                const self = this;
+                const wrapperId = document.getElementById("client-wrapper");
+                this.findById("", true);
+                this.initScroll(wrapperId); // 🔥 pasang di sini
+                this.refResh()
+
+                const searchInput = document.getElementById('searchSupplier');
+                if (searchInput) {
+                    searchInput.addEventListener('input', function (e) {
+                        const keyword = e.target.value;
+                        console.log("Kata Kunci", keyword)
+                        self.findById(keyword, true);
+                    });
+
+                    // Clear search dengan tombol ESC
+                    searchInput.addEventListener('keydown', function (e) {
+                        const key = e.key;
+                        // ✅ Deteksi ESC, Backspace, atau Delete
+                        if (key === 'Escape' || key === 'Backspace' || key === 'Delete') {
+                            e.target.value = '';
+                            self.findById('', true);
+                            e.target.blur();
+                        }
+                    });
+                }
+            },
+
+            refResh: function () {
+                const btnRefresh = document.getElementById("btn-refresh");
+                btnRefresh.onclick = () => {
+                    this.findById("", true);
+                }
+            },
+
+            initScroll: function (wrapper) {
+                if (this.scrollInitialized) return;
+                this.scrollInitialized = true;
+                let lastScrollTop = 0;
+                wrapper.addEventListener("scroll", () => {
+                    const scrollTop = wrapper.scrollTop;
+                    const isScrollingDown = scrollTop > lastScrollTop;
+                    lastScrollTop = scrollTop;
+                    const nearBottom =
+                        scrollTop + wrapper.clientHeight >= wrapper.scrollHeight - 50;
+                    if (isScrollingDown && nearBottom && !this.loading && this.hasNext) {
+                        console.log("LOAD NEXT PAGE");
+                        this.findById("", false);
+                    }
+                });
+            },
+
+            findById: async function (keyword = "", reset = false) {
+                if (this.loading) return;
+                if (!this.hasNext && !reset) return;
+                const tbody = document.getElementById("supplier-table-body");
+                const statusMsg = "";
+
+                if (reset) {
+                    this.cursorCreatedAt = null;
+                    this.cursorId = null;
+                    this.hasNext = true;
+                    tbody.innerHTML = "";
+                }
+
+                this.loading = true;
+                UI.showSkeleton("supplier-table-body", 10);
+
+                try {
+                    const params = new URLSearchParams({
+                        keyword: keyword,
+                        limit: this.limit,
+                    });
+
+                    if (this.cursorCreatedAt && this.cursorId) {
+                        params.append("lastCreatedAt", this.cursorCreatedAt);
+                        params.append("lastId", this.cursorId);
+                    }
+
+                    const [json] = await Promise.all([
+                        api.get(`/api/v1/suppliers?${params.toString()}`),
+                        new Promise((resolve) => setTimeout(resolve, 1000)),
+                    ]);
+
+                    if (json && json.status === "success") {
+                        const res = json.data;
+                        UI.hideSkeleton();
+
+                        const newBatch = res.data;
+                        // 🔥 GABUNGKAN DATA: Jika reset, buat baru. Jika scroll, tambah ke belakang.
+                        if (reset) {
+                            this.allData = newBatch;
+                        } else {
+                            this.allData = [...(this.allData || []), ...newBatch];
+                        }
+
+                        // Kirim 'this.allData.length' untuk tahu posisi index awal batch ini
+                        const startIndex = reset
+                            ? 0
+                            : this.allData.length - newBatch.length;
+                        this.renderTable(newBatch, reset, startIndex);
+
+                        // Update metadata paging dari res
+
+                        console.log("res ", res);
+                        // console.log("new Batch ", newBatch)
+
+                        this.cursorCreatedAt = res.nextCreatedAt;
+                        this.cursorId = res.nextId;
+                        this.hasNext = res.hasNext;
+
+                        console.log(" cursorId =", this.cursorId);
+                        console.log(" hasNext =", this.hasNext);
+                    }
+                    this.setTableHeight("supplier-wrapper", "supplier")
+                } catch (err) {
+                    tbody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error: ${err.message}</td></tr>`;
+                    UI.hideSkeleton();
+                } finally {
+                    this.loading = false;
+                    UI.hideSkeleton();
+                }
+            },
+
+            renderTable: function (data, isReset = false, startIndex = 0) {
+                const tbody = document.getElementById("supplier-table-body");
+
+                if (!data || data.length === 0) {
+                    if (isReset) {
+                        tbody.innerHTML =
+                            '<tr><td colspan="13" class="text-center py-3">No data available</td></tr>';
+                    }
+                    return;
+                }
+
+                if (isReset) {
+                    tbody.innerHTML = "";
+                }
+
+                let rowsHtml = "";
+                data.forEach((row, i) => {
+                    var status = row.supplierIsActive;
+                    const globalIndex = startIndex + i;
+                    rowsHtml += `
+                    <tr class="clickable-row-client" data-index="${globalIndex}" id="row-client-${row.supplierId}">
+                        <td>${row.supplierCode}</td>
+                        <td>${row.supplierName}</td>
+                        <td>${row.supplierContactPhone || "-"}</td>
+                        <td>${row.supplierEmail || "-"}</td>
+                        <td class="text-center">
+                        ${status === true
+                            ? '<span class="status-aktif">Aktif</span>'
+                            : '<span class="status-tidak-aktif">Nonaktif</span>'
+                        }
+                        </td>
+                        <td>
+                            <a href="/supplier/detail/${row.supplierId}" style="text-decoration:none">Detail</a>
+                        </td>
+                       
+                   </tr > `;
+                });
+
+                // <td>${row.clientType || "-"}</td>
+                //         <td>${row.clientNpwp || "-"}</td>
+                //         <td>${row.clientNik || "-"}</td>
+                //         <td>${row.clientNitku || "-"}</td>
+                //         <td class="text-center">
+                //         ${pkp === true
+                //             ? '<span class="badge badge-glass-green w-100">Ya</span>'
+                //             : '<span class="badge badge-glass-red w-100">Tidak</span>'
+                //         }
+                //         </td>
+
+                //  <td class="col-text">${row.clientAddress || "-"}</td>
+                //         <td>${row.clientCity || "-"}</td>
+                //         <td>${row.clientProvince || "-"}</td>
+                //         <td>${row.clientPostalCode || "-"}</td>
+                //         <td>${row.clientCountry || "-"}</td>
+
+                //         <td>${row.clientContactPerson || "-"}</td>
+                //  <td>${row.clientBankName || "-"}</td>
+                //         <td>${row.clientAccountNumber || "-"}</td>
+                //         <td>${row.clientAccountName || "-"}</td>
+
+                tbody.insertAdjacentHTML("beforeend", rowsHtml);
+
+                // if (!this.resizableInit) {
+                //     this.makeColumnsResizable();
+                //     this.resizableInit = true;
+                // }
+            },
+            // ======================================================
+            // 📐 SET TABLE HEIGHT - Tanpa Asumsi Class
+            // ======================================================
+
+        };
+        window.clientModel = clientModel;
+        clientModel.init();
+
+    </script>
+</body>
+
+</html>

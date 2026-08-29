@@ -1,0 +1,63 @@
+Tentu, ini adalah Master Checklist Keamanan untuk aplikasi Spring Boot Anda. Catatan ini disusun berdasarkan apa yang sudah kita bahas, mulai dari pembersihan input hingga proteksi level jaringan.
+
+🛡️ Master Security Checklist (Spring Boot & PostgreSQL)
+1. Perlindungan terhadap XSS (Cross-Site Scripting)
+Mencegah penyusupan skrip berbahaya ke dalam sistem.
+
+[x] Request Body Sanitization: Menggunakan @JsonComponent dengan Jsoup.clean() untuk membersihkan HTML pada input JSON.
+
+[x] URL Parameter Sanitization: Menggunakan @ControllerAdvice dengan WebDataBinder untuk membersihkan tag HTML pada Query Params dan Path Variables.
+
+[x] Strict Data Validation: Menggunakan @Pattern(regexp = "^\\d+$") untuk kolom sensitif (NIK, No. Rekening, Gaji) agar hanya menerima angka.
+
+[ ] Output Escaping: Selalu pastikan Frontend tidak merender string mentah sebagai HTML (Gunakan th:text di Thymeleaf atau proteksi bawaan React/Vue).
+
+
+
+2. Perlindungan terhadap CSRF (Cross-Site Request Forgery)
+Mencegah penipuan aksi atas nama pengguna yang sedang login.
+
+[ ] Enable CSRF: Pastikan CSRF aktif di Spring Security (default aktif).
+
+[ ] SameSite Cookie: Setel atribut Cookie ke Lax atau Strict untuk mencegah pengiriman cookie otomatis dari situs pihak ketiga.
+
+[ ] Stateless Protection: Jika menggunakan JWT, pastikan token dikirim via Header Authorization: Bearer, bukan hanya lewat Cookie.
+
+3. Keamanan Data & Database
+Melindungi integritas dan kerahasiaan data di PostgreSQL.
+
+[ ] SQL Injection Prevention: Selalu gunakan Spring Data JPA atau Parameterized Queries. Hindari penggabungan string manual dalam Query.
+
+[ ] Encryption at Rest: Gunakan AES-256 GCM untuk mengenkripsi data sensitif (seperti nomor rekening) sebelum disimpan ke database.
+
+[ ] Secure Key Management: Jangan simpan Secret Key di dalam kode. Gunakan Environment Variables atau Key Vault.
+
+[ ] Password Hashing: Gunakan BCrypt atau Argon2 (bawaan Spring Security) untuk menyimpan password.
+
+4. HTTP Security Headers
+Instruksi keamanan langsung ke browser.
+
+[ ] HSTS (Strict Transport Security): Memaksa koneksi selalu HTTPS (Min. 1 tahun/31536000 detik).
+
+[ ] X-Frame-Options: Setel ke DENY atau SAMEORIGIN untuk mencegah Clickjacking.
+
+[ ] X-Content-Type-Options: Setel ke nosniff untuk mencegah browser menebak tipe file (mencegah eksekusi skrip terselubung).
+
+[ ] CSP (Content Security Policy): Batasi sumber skrip hanya dari domain sendiri (script-src 'self').
+
+5. Keamanan Akses & API
+Membatasi siapa yang bisa mengakses dan seberapa sering.
+
+[ ] CORS Configuration: Jangan gunakan allowOrigin("*"). Tentukan secara spesifik domain frontend Anda.
+
+[ ] IDOR Protection: Selalu validasi kepemilikan data. (Contoh: User A tidak boleh melihat data gaji User B hanya dengan mengganti ID di URL).
+
+[ ] Rate Limiting: Batasi jumlah request per menit per IP untuk mencegah Brute Force atau DDoS kecil-kecilan.
+
+[ ] Audit Logging: Catat setiap aktivitas penting (Siapa, Kapan, Melakukan apa). Contoh: Perubahan gaji atau penghapusan data teknisi.
+
+6. Infrastruktur & Maintenance
+[ ] HTTPS/SSL: Pastikan sertifikat SSL terpasang dengan benar di server produksi (Nginx/Cloudflare).
+
+[ ] Dependency Scan: Cek secara berkala apakah ada library (JAR) yang sudah usang dan memiliki celah keamanan (Gunakan mvn dependency-check:check).
+

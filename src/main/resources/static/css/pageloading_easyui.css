@@ -1,0 +1,93 @@
+/* =====================================================
+    MACOS SEQUOIA PAGE LOADING MASK (Ultra Glass Mode)
+   ===================================================== */
+.eui-mask {
+    position: fixed;
+    inset: 0;
+    /* Efek overlay gelap tipis khas macOS */
+    background: rgba(0, 0, 0, 0.2); 
+    /* Blur background agar konten di belakang terlihat estetik */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001; 
+}
+
+.eui-mask.show {
+    display: flex;
+}
+
+/* Content Box (macOS Floating HUD Style) */
+.eui-mask-content {
+    display: flex;
+    flex-direction: column; /* macOS loading biasanya vertikal (ikon di atas teks) */
+    align-items: center;
+    gap: 16px;
+
+    padding: 20px 58px;
+    /* Squircle corner khas Apple */
+    border-radius: 20px;
+
+    /* Efek Kaca (Glassmorphism) */
+    background: rgba(255, 255, 255, 0.75); 
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    /* Bayangan lembut dan dalam */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+
+    font-size: 16px;
+    /* Paksa ke font Inter/San Francisco */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    color: #1d1d1f; /* Apple Dark */
+    letter-spacing: -0.01em;
+}
+
+/* Spinner (macOS Rotating Pinwheel Style) */
+.eui-spinner {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    /* Border tipis transparan */
+    border: 3px solid rgba(0, 0, 0, 0.05); 
+    /* Biru khas Apple (San Francisco Blue) */
+    border-top-color: #007AFF; 
+    border-radius: 50%;
+    /* Animasi lebih smooth dengan cubic-bezier */
+    animation: spin 1s cubic-bezier(0.42, 0, 0.58, 1) infinite;
+}
+
+/* Hapus elemen yang tidak perlu */
+.eui-spinner::after {
+    display: none;
+}
+
+/* Loading Text */
+.eui-text {
+    white-space: nowrap;
+    opacity: 0.8;
+}
+
+/* Indikator titik tiga macOS */
+.eui-text::after {
+    content: ""; 
+    animation: none;
+}
+
+/* Animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile Adjustment */
+@media (max-width: 576px) {
+    .eui-mask-content {
+        padding: 20px 25px;
+        border-radius: 18px;
+        scale: 0.9; /* Sedikit lebih kecil di HP agar tidak makan tempat */
+    }
+}

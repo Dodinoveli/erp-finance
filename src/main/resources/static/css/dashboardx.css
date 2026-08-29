@@ -1,0 +1,554 @@
+  
+    :root {
+      /* JeasyUI Classic Palette */
+      --jeasy-blue-primary: #0e2d5f;
+      /* Warna teks biru tua header */
+      --jeasy-blue-light: #eff5ff;
+      /* Background header/panel light */
+      --jeasy-blue-border: #95b8e7;
+      /* Border biru khas JeasyUI */
+      --jeasy-gray-bg: #eeeeee;
+      /* Background sidebar/gray */
+      --jeasy-white: #ffffff;
+      /* Background utama */
+
+      --sidebar-width: 200px;
+      --header-height: 55px;
+      --sidebar-transition: all 0.3s ease;
+
+      /* Override variabel agar seluruh UI berubah otomatis */
+      --bg-body: #f5f5f5;
+      /* Abu-abu sangat muda untuk base */
+      --bg-sidebar: var(--jeasy-gray-bg);
+      --bg-card: var(--jeasy-white);
+      --bg-panel: var(--jeasy-white);
+      --text-main: #444444;
+      /* Teks gelap standar */
+      --text-muted: #888888;
+      --primary: #007bff;
+      /* Link biru */
+      --border-color: var(--jeasy-blue-border);
+      --tab-bg: #F2F2F2;
+      --tab-inactive: #fafafa;
+
+      /* Variable tambahan untuk styling panel/header */
+      --header-gradient: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+    }
+
+    [data-theme="dark"] {
+      --navy-primary: #0d1624;
+      /* Header lebih gelap */
+      --bg-body: #121212;
+      --bg-sidebar: #1e1e1e;
+      --bg-card: #252525;
+      --bg-panel: #18191a;
+      --text-main: #e4e6eb;
+      --text-muted: #b0b3b8;
+      --primary: #3992ff;
+      --border-color: #333333;
+      --tab-bg: #1e1e1e;
+      --tab-inactive: #2d2d2d;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      /* Font Monospace khas Hugo */
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif !important;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      text-transform: capitalize;
+      /* Sesuai style login Anda */
+    }
+
+    /* 3. TOMBOL TOGGLE */
+    .btn-toggle {
+      /* Menggunakan gradasi biru khas JeasyUI */
+      background: linear-gradient(to bottom, #ffffff 0, #e6e6e6 100%);
+      color: #444;
+      border: 1px solid #bbb;
+      padding: 4px 12px;
+      /* Radius kecil (khas desktop UI) */
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 1.5;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .btn-toggle:hover {
+      background: #e6e6e6;
+      border-color: #999;
+      color: #000;
+      opacity: 1;
+      /* Hapus opacity hover agar warna tetap solid */
+    }
+
+    /* Versi tombol primary (jika ingin menonjol) */
+    .btn-toggle-primary {
+      background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+      border-color: #95b8e7;
+      color: #0e2d5f;
+    }
+
+    .btn-toggle-primary:hover {
+      background: #e0ecff;
+      border-color: #95b8e7;
+    }
+
+    /* Tambahkan properti min-width: 0; pada class 
+        .main-content. Tanpa ini, Flexbox tidak akan mengizinkan 
+        kontainer mengecil lebih kecil dari konten tabel di dalamnya. */
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      /* KRUSIAL: Agar kontainer tidak melebar mengikuti tabel */
+      width: 100%;
+    }
+
+    .header {
+      height: var(--header-height);
+      /* Gradasi biru muda khas JeasyUI Panel */
+      background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%) !important;
+      /* Warna teks biru tua profesional */
+      color: #0e2d5f;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 1001;
+      /* Border biru khas komponen panel JeasyUI */
+      border-bottom: 1px solid #95b8e7;
+      /* JeasyUI jarang menggunakan shadow berat, kita buat sangat tipis atau hilangkan */
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .toggle-sidebar-btn {
+      /* Menggunakan warna background netral agar tidak bentrok dengan header */
+      background: #f4f4f4;
+      /* Border tipis yang serasi dengan JeasyUI */
+      border: 1px solid #bbb;
+      /* Warna icon/teks biru tua sesuai header */
+      color: #0e2d5f;
+      padding: 3px 10px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-sidebar-btn:hover {
+      /* Efek hover sedikit lebih gelap atau biru pucat */
+      background: #e6e6e6;
+      border-color: #95b8e7;
+      color: #000;
+      transform: none;
+      /* Menghilangkan scale agar tetap stabil/kaku khas desktop */
+    }
+
+    .brand-text {
+      /* Ukuran font tetap proporsional */
+      font-size: 1.2rem;
+      font-weight: 800;
+      /* Ubah ke biru tua agar terbaca di header biru muda */
+      color: #0e2d5f;
+      letter-spacing: 0.5px;
+      /* Hapus text-transform: capitalize dari body jika ingin custom di sini */
+      text-transform: none;
+      display: flex;
+      align-items: center;
+    }
+
+    /* Kita hapus atau modifikasi animasi kedip '_' agar lebih profesional */
+    .brand-text::after {
+      /* Ganti karakter kursor terminal '_' dengan titik atau hilangkan */
+      content: ".";
+      color: #95b8e7;
+      /* Warna biru border JeasyUI */
+      margin-left: 2px;
+      animation: none;
+      /* Matikan animasi kedip agar tidak pusing */
+    }
+
+    /* Jika Anda punya tag span class="highlight" di dalam brand-text */
+    .brand-text .highlight {
+      color: #007bff;
+      /* Biru terang khas JeasyUI */
+    }
+
+    .brand-text small {
+      font-size: 0.65rem;
+      /* Menggunakan biru muda yang sedikit lebih gelap dari header agar kontras */
+      background: #d0e1f9;
+      color: #0e2d5f;
+      padding: 2px 8px;
+      border-radius: 10px;
+      /* Membuat lonjong rapi seperti pill badge */
+      margin-left: 8px;
+      vertical-align: middle;
+      font-weight: 600;
+      border: 1px solid #95b8e7;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+      /* Memastikan background body tidak terlihat bocor di sela-sela komponen */
+      background-color: var(--bg-body);
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: var(--sidebar-width);
+      /* Warna standar panel sidebar EasyUI */
+      background-color: #f4f4f4;
+      /* Border kanan biru yang menyatu dengan header dan tabs */
+      border-right: 1px solid #95b8e7;
+      overflow-y: auto;
+      transition: var(--sidebar-transition);
+      z-index: 1000;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      /* Hilangkan bayangan/shadow agar terlihat seperti aplikasi desktop */
+      box-shadow: none;
+    }
+
+    /* Mengatur scrollbar sidebar agar lebih tipis khas aplikasi profesional */
+    .sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 0;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: #f4f4f4;
+    }
+
+    body.sidebar-collapsed .sidebar {
+      width: 0;
+      opacity: 0;
+      /* Mencegah border tetap muncul saat sidebar ditutup */
+      border-right: none;
+    }
+
+    .sidebar-title {
+      /* Layout & Spacing */
+      display: flex;
+      align-items: center;
+      padding: 12px 15px;
+
+      /* Typography */
+      font-size: 14px;
+      font-weight: bold;
+      color: #0e2d5f;
+      /* Biru tua khas JeasyUI */
+      text-transform: uppercase;
+      letter-spacing: 1px;
+
+      /* Visual Style (Panel Look) */
+      background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+      border-bottom: 1px solid #95b8e7;
+    }
+
+    /* Tambahkan sedikit margin top jika ini bukan judul pertama, 
+   agar antar grup menu ada pemisah yang jelas */
+    .sidebar-title:not(:first-child) {
+      margin-top: 10px;
+      border-top: 1px solid #95b8e7;
+    }
+
+    .sidebar-title::before {
+      /* Ganti "> " dengan icon kecil atau bullet yang lebih bersih */
+      content: "■";
+      font-size: 8px;
+      margin-right: 8px;
+      color: #95b8e7;
+    }
+
+    /* --- SIDEBAR MENU REFINEMENT --- */
+    .tree-node {
+      margin-left: 0;
+      /* Reset margin agar tidak terlalu menjorok */
+      padding: 2px 0;
+      border-left: 1px solid #e0ecff;
+      /* Garis vertikal tipis yang lebih rapi */
+      display: none;
+    }
+
+    .tree-node.active {
+      top: 10;
+      display: block;
+      margin-left: 15px;
+      /* Baru berikan jarak saat menu terbuka */
+    }
+
+    .tree-item {
+      padding: 5px 4px;
+      /* EasyUI lebih rapat/padat */
+      font-size: 14px;
+      color: #444;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      /* HAPUS border-radius dan margin-right agar full-width kotak */
+      border-radius: 0;
+      margin-right: 0;
+      margin-left: 10px;
+      border: 1px solid transparent;
+      /* Placeholder agar saat hover tidak goyang */
+    }
+
+    .tree-item:hover {
+      background-color: #eaf2ff;
+      /* Background biru muda khas EasyUI */
+      color: #000;
+      /* Memberikan border tipis saat hover adalah ciri khas EasyUI */
+      border: 1px solid #b7d2ff;
+    }
+
+    /* State ketika menu dipilih/aktif */
+    .tree-item.selected {
+      background-color: #fbec88;
+      /* Kuning khas EasyUI untuk item terpilih */
+      border: 1px solid #fbca76;
+      color: #000;
+    }
+
+    .tree-icon {
+      width: 16px;
+      /* Ukuran standar icon EasyUI adalah 16x16 */
+      height: 16px;
+      margin-right: 15px;
+      /* Jarak icon ke teks lebih rapat */
+      text-align: center;
+      display: inline-block;
+      line-height: 16px;
+      font-size: 14px;
+      color: #0e2d5f;
+    }
+
+    /* Teks Menu */
+    .tree-title {
+      padding: 0 2px;
+    }
+
+    /* Styling tambahan untuk memisahkan antar kategori menu */
+    .sidebar-title {
+      margin-top: 5px;
+      border-top: 1px solid #d1d9e6;
+    }
+
+    /* .toggle-arrow {
+        width: 14px;
+        font-size: 10px;
+        color: var(--gold-primary);
+        transition: 0.2s;
+        margin-right: 5px;
+      }
+
+      .toggle-arrow.open {
+        transform: rotate(90deg);
+      } */
+
+    /* --- TABS --- */
+    /* --- TABS --- */
+    .tab-bar {
+      display: flex;
+      /* Background bar yang sedikit lebih gelap dari putih agar tab terlihat kontras */
+      background: #f2f2f2;
+      padding: 5px 10px 0 10px;
+      gap: 2px;
+      /* Border biru khas JeasyUI yang menyambung ke panel */
+      border-bottom: 1px solid #95b8e7;
+      overflow-x: auto;
+      /* hanya horizontal */
+      overflow-y: hidden;
+      /* matikan vertical */
+      white-space: nowrap;
+      /* cegah turun baris */
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+
+      /* Firefox */
+      scrollbar-width: thin;
+      scrollbar-color: #95b8e7 transparent;
+
+    }
+
+    /* Chrome, Edge, Opera */
+    .tab-bar::-webkit-scrollbar {
+      height: 6px;
+      /* tinggi scrollbar horizontal */
+    }
+
+    .tab-bar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .tab-bar::-webkit-scrollbar-thumb {
+      background: linear-gradient(90deg, #b4c8f0, #95b8e7);
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .tab-bar::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(90deg, #95b8e7, #6a9ae0);
+    }
+
+
+    .tab-item {
+      padding: 6px 15px;
+      /* Tab tidak aktif berwarna abu-abu sangat muda */
+      background: #fafafa;
+      /* Border mengikuti tema biru lembut */
+      border: 1px solid #d1d1d1;
+      border-bottom: none;
+      color: #444;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 4px 4px 0 0;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+    }
+
+    .tab-item:hover {
+      background: #eaf2ff;
+    }
+
+    .tab-item.active {
+      /* Tab aktif berwarna putih bersih */
+      background: #ffffff;
+      /* Teks biru tua tegas */
+      color: #0e2d5f;
+      /* Border biru di atas dan samping */
+      border: 1px solid #95b8e7;
+      border-top: 2px solid #007bff;
+      /* Garis aksen biru di paling atas */
+      border-bottom: 1px solid #ffffff;
+      /* Trik agar border bawah hilang & menyatu ke panel */
+      margin-bottom: -1px;
+      /* Menutup border-bottom dari .tab-bar */
+      font-weight: bold;
+      z-index: 2;
+    }
+
+    .tab-close {
+      font-size: 14px;
+      line-height: 1;
+      color: #999;
+      margin-left: 10px;
+      padding: 2px;
+      border-radius: 50%;
+    }
+
+    .tab-close:hover {
+      background: #ff5f56;
+      color: #fff;
+    }
+
+    .panel-container {
+      flex: 1;
+      padding: 5px;
+      /* Background putih bersih khas aplikasi desktop */
+      background-color: #e9ecef;
+      overflow-y: auto;
+      /* Memastikan konten tidak menempel ke pinggir */
+      box-sizing: border-box;
+      /* Memberikan sedikit tekstur agar berbeda dengan sidebar */
+      /* background-image: linear-gradient(#ffffff, #fafafa); */
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+      width: 100%;
+      /* Pastikan panel mengisi seluruh ruang yang ada */
+      height: 100%;
+    }
+
+    /* Efek transisi halus saat pindah tab */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* CARDS (JeasyUI Panel Style) */
+    .win-card,
+    .glass-card {
+      background: #ffffff !important;
+      /* Border biru khas JeasyUI */
+      border: 1px solid #95b8e7;
+      border-radius: 3px;
+      /* Radius lebih kotak khas aplikasi desktop */
+      color: #333;
+      margin-bottom: 20px;
+      /* Hapus shadow tebal, ganti dengan yang sangat halus */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .win-card-header {
+      /* Gradasi biru khas Panel Header EasyUI */
+      background: linear-gradient(to bottom, #eff5ff 0, #e0ecff 100%);
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: #0e2d5f;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #95b8e7;
+    }
+
+    /* Kita hapus Dot Merah/Kuning/Hijau ala Terminal */
+    .win-card-header::before {
+      /* Ganti jadi icon folder atau kotak kecil khas EasyUI */
+      content: "";
+      width: 12px;
+      height: 12px;
+      background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAADhJREFUKFNjYBgFo2AUYAFMUIyB8f////8z4NOMDP/BGAtS8H8wSMMF8YphmPAn6ALsBuInmKMYpAAAnH8S9m996pkAAAAASUVORK5CYII=') no-repeat;
+      box-shadow: none;
+      margin-right: 5px;
+    }
+
+    /* Khusus untuk Container Grafik */
+    #salesChart {
+      border: 1px solid #d1d1d1;
+      padding: 15px;
+      /* Background putih bersih agar grafik terlihat jelas */
+      background: #ffffff;
+      overflow: hidden;
+      border-radius: 4px;
+      /* Pastikan teks di dalam chart (jika ada) berwarna gelap */
+      color: #333;
+    }

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/head :: head('Edit Supplier/ Vendor')}"></div>
+
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="main">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+        <div class="detail-container">
+            <form id="formSupplier" th:object="${supplier}">
+                <input type="hidden" name="supplierId" id="supplier_id" th:field="*{supplierId}">
+                <div class="card p-2">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Kode</label>
+                            <div class="form-field">
+                                <input type="text" class="form-control" id="supplier_code" name="supplierCode" readonly
+                                    placeholder="P-0001" th:field="*{supplierCode}">
+                                <small class="text-danger" id="err-supplierCode"></small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Nama*</label>
+                            <div class="form-field">
+                                <input type="text" d="supplier_name" name="supplierName" class="form-control"
+                                    placeholder="PT ABC, Toko Bintang " th:field="*{supplierName}">
+                                <small class="text-danger" id="err-supplierName"></small>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tipe*</label>
+                            <div class="form-field">
+                                <select id="supplier_type" name="supplierType" class="form-select"
+                                    aria-label="Default select example" th:field="*{supplierType}">
+                                    <option value="" disabled selected>
+                                        -- Pilih Tipe Supplier --
+                                    </option>
+                                    <option value="Material">Material</option>
+                                    <option value="Service">Service</option>
+                                    <option value="Equipment">Equipment</option>
+                                    <option value="Subcontractor">Subcontractor</option>
+                                </select>
+                                <small class="text-danger" id="err-supplierType"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Npwp</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_npwp" name="supplierNpwp"
+                                    class="form-control form-control-sm" placeholder="Nomor Pokok Wajib Pajak"
+                                    th:field="*{supplierNpwp}" />
+                                <small class="text-danger" id="err-supplierNpwp"></small>
+                            </div>
+                        </div>
+
+                        <!-- <div class="mb-3">
+                            <label>Nik</label>
+                            <div class="form-field">
+                                <input type="text" id="client_nik" name="clientNik" class="form-control form-control-sm"
+                                    placeholder="Nomor Induk Kependudukan " />
+                                <small class="text-danger" id="err-clientNik"></small>
+                            </div>
+                        </div> -->
+
+                        <!-- <div class="mb-3">
+                            <label>Nitku</label>
+                            <div class="form-field">
+                                <input type="text" id="client_nitku" name="clientNitku"
+                                    class="form-control form-control-sm"
+                                    placeholder="Nomor Identitas Tempat Kegiatan Usaha" />
+                                <small class="text-danger" id="err-clientNitku"></small>
+                            </div>
+                        </div> -->
+
+                        <div class="mb-3">
+                            <label>Pkp <span class="text-danger">*</span></label>
+                            <div class="form-field">
+                                <select id="supplier_pkp" name="supplierPkp" class="form-control form-control-sm"
+                                    th:field="*{supplierPkp}">
+                                    <option value="" disabled selected>
+                                        -- Pilih Status PKP --
+                                    </option>
+                                    <option value="true">Ya</option>
+                                    <option value="false">Tidak</option>
+                                </select>
+                                <small class="text-danger" id="err-supplierPkp"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label style="padding-top: 5px">Alamat</label>
+                            <div class="form-field">
+                                <textarea id="supplier_address" name="supplierAddress"
+                                    class="form-control form-control-sm" rows="3"
+                                    placeholder="Jl. ZA. Pagar Alam, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141"
+                                    th:field="*{supplierAddress}"></textarea>
+                                <small class="text-danger" id="err-supplierAddress"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Kota</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_city" name="supplierCity"
+                                    class="form-control form-control-sm" placeholder="Bandar Lampung"
+                                    th:field="*{supplierCity}" />
+                                <small class="text-danger" id="err-supplierCity"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Provinsi</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_province" name="supplierProvince"
+                                    class="form-control form-control-sm" placeholder="Lampung"
+                                    th:field="*{supplierProvince}" />
+                                <small class="text-danger" id="err-supplierProvince"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Kode Pos</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_postal_code" name="supplierPostalCode"
+                                    class="form-control form-control-sm" placeholder="12345"
+                                    th:field="*{supplierPostalCode}" />
+                                <small class="text-danger" id="err-clientPostalCode"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Negara</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_country" name="supplierCountry"
+                                    class="form-control form-control-sm" placeholder="Indonesia"
+                                    th:field="*{supplierCountry}" />
+                                <small class="text-danger" id="err-supplierCountry"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nama Kontak</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_contact_person" name="supplierContactPerson"
+                                    class="form-control form-control-sm" placeholder="Syahrini"
+                                    th:field="*{supplierContactPerson}" />
+                                <small class="text-danger" id="err-supplierContactPerson"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Handphone</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_contact_phone" name="supplierContactPhone"
+                                    class="form-control form-control-sm" placeholder="085269530000"
+                                    th:field="*{supplierContactPhone}" />
+                                <small class="text-danger" id="err-supplierContactPhone"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <div class="form-field">
+                                <input type="email" id="supplier_email" name="supplierEmail"
+                                    class="form-control form-control-sm" placeholder="jayamajubersama@gmail.com"
+                                    th:field="*{supplierEmail}" />
+                                <small class="text-danger" id="err-supplierEmail"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Nama Bank</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_bank_name" name="supplierBankName"
+                                    class="form-control form-control-sm" placeholder="BNI"
+                                    th:field="*{supplierBankName}" />
+                                <small class="text-danger" id="err-supplierBankName"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>No. Rekening</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_bank_account_number" name="supplierBankAccountNumber"
+                                    class="form-control form-control-sm" placeholder="0123456789"
+                                    th:field="*{supplierBankAccountNumber}" />
+                                <small class="text-danger" id="err-supplierBankAccountNumber"></small>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Pemilik</label>
+                            <div class="form-field">
+                                <input type="text" id="supplier_bank_account_name" name="supplierBankAccountName"
+                                    class="form-control form-control-sm" placeholder="Contoh : PT Jaya Maju Bersama"
+                                    th:field="*{supplierBankAccountName}" />
+                                <small class="text-danger" id="err-supplierBankAccountName"></small>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="detail-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Simpan
+                    </button>
+                    <a th:href="@{/supplier}" class="btn btn-danger">Batal
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+    <script th:src="@{/js/utility/dashboard.js}"></script>
+
+    <script type="module" th:inline="javascript">
+        const clientModelTambah = {
+
+            init: function () {
+                this.bindEvents();
+                this.generateCode();
+            },
+
+            bindEvents: function () {
+                const self = this;
+                const form = document.getElementById("formSupplier");
+                if (form) {
+                    console.log("Form Client supplier, memasang event listener...");
+                    form.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        console.log("Submit terdeteksi!");
+                        self.createSupplier(this);
+                    });
+                } else {
+                    console.warn("Elemen #formSupplier tidak ditemukan di DOM saat init!");
+                }
+            },
+
+            generateCode: async function () {
+                try {
+                    const json = await api.get(`/api/v1/suppliers/generate-code`);
+                    if (json.status === "success")
+                        document.getElementById("supplier_code").value = json.data.supplierCode;
+                } catch (e) { }
+            },
+
+            createSupplier: async function (formEl) {
+                const formData = new FormData(formEl);
+                const payload = Object.fromEntries(formData.entries());
+                const id = formData.get("supplierId");
+
+                this.showErrors({}, formEl);
+
+                try {
+
+                    const result = await api.put(`/api/v1/suppliers/${id}`, payload, "Mengubah Data...");
+                    if (result && result.success !== false) {
+                        await Toast.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: result.message,
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                        setTimeout(() => {
+                            window.location.href = `/supplier/detail/${id}`;
+                        }, 500);
+                        return result;
+                    } else {
+                        throw new Error(result?.message || 'Gagal Menyimpan data');
+                    }
+                } catch (err) {
+                    console.log("Full Error Object = ", err);
+                    const errors = err?.errors || err?.data?.errors;
+                    if (errors) {
+                        this.showErrors(errors, formEl);
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Gagal Menyimpan Data, Periksa inputan'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: err.message,
+                        });
+                    }
+                    throw errors;
+                }
+            },
+
+            showErrors: function (errors, formEl) {
+                if (!formEl) return; // 🔥 guard biar gak error lagi
+
+                // 🔥 reset hanya di form ini
+                formEl
+                    .querySelectorAll(".is-invalid")
+                    .forEach((i) => i.classList.remove("is-invalid"));
+
+                formEl
+                    .querySelectorAll('[id^="err-"]')
+                    .forEach((e) => (e.innerText = ""));
+
+                // 🔥 set error
+                for (const field in errors) {
+                    const input = formEl.querySelector(`[name = "${field}"]`);
+                    const errorEl = formEl.querySelector("#err-" + field);
+
+                    if (input) input.classList.add("is-invalid");
+                    if (errorEl) errorEl.innerText = errors[field];
+                }
+            },
+        };
+
+        window.clientModelTambah = clientModelTambah;
+        clientModelTambah.init();
+    </script>
+</body>
+
+</html>

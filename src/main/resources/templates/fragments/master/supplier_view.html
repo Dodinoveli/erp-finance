@@ -1,0 +1,991 @@
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-Supplier-Content">
+    <style>
+        /* Container untuk merapikan isi konten di bawah tab */
+        .tab-content-container {
+            border: 0px solid #dee2e6;
+            border-top: none;
+            background: #f5f5f5;
+        }
+
+        /* #formSupplier,
+        #view-input-supplier {
+            height: 100%;
+            overflow: hidden;
+        } */
+
+        .container-fluid {
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+        }
+
+        /* Garis tipis pemisah */
+        .border-top {
+            border-top: 1px solid #eee !important;
+        }
+
+        /* untuk tombol export dll */
+        /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+        .dropdown-toggle::after {
+            vertical-align: middle;
+        }
+
+        /* Efek hover pada item dropdown */
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            color: #2b7de9;
+        }
+
+        /* Memberikan warna ikon agar lebih informatif */
+        .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .card-body-easyui {
+            padding: 15px !important;
+            border-radius: 0 0 4px 4px;
+        }
+    </style>
+    <ul class="nav nav-tabs custom-terminal-tabs" id="supplierTab">
+        <li class="nav-item">
+            <button class="nav-link text-light" id="btn-tab-list-supplier"
+                onclick="supplierModel.switchTabSupplier('view-list-supplier')">
+                <i class="fas fa-list me-1"></i>
+            </button>
+        </li>
+
+        <li class="nav-item">
+            <button class="nav-link active" id="btn-tab-input-supplier"
+                onclick="supplierModel.switchTabSupplier('view-input-supplier')">
+                <i class="fas fa-edit me-1" id="txtinput"></i>
+                <span id="text-label-supplier">Data Baru</span>
+            </button>
+        </li>
+
+        <li class="nav-item" id="li-tab-detail-supplier" style="display: none">
+            <button class="nav-link text-light" id="btn-tab-detail-supplier">
+                <i class="fas fa-id-card me-1"></i> Detail:
+                <span id="tab-label-supplier"></span>
+                <span class="ms-2 badge bg-danger" onclick="supplierModel.closeEdit(event)"
+                    style="cursor: pointer">×</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content-container p-0">
+        <form id="formSupplier">
+            <div id="view-input-supplier" style="display: block">
+                <div class="container-fluid py-2">
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="card border-0 shadow-sm" style="width: 100%; border-radius: 0px">
+                                <div class="card-body card-body-easyui p-3">
+                                    <div class="row">
+                                        <input type="hidden" id="supplier_id" name="supplierId" />
+
+                                        <div class="col-md-6 pe-md-4">
+                                            <div class="accurate-form-group">
+                                                <label>Kode</label>
+                                                <input type="text" id="supplier_code" name="supplierCode" readonly
+                                                    class="form-control form-control-sm bg-light" />
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Nama Lengkap
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_name" name="supplierName"
+                                                        class="form-control form-control-sm"
+                                                        placeholder=" PT Jaya Maju Bersama" />
+                                                    <small class="text-danger" id="err-supplierName"></small>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accurate-form-group">
+                                                <label>Tipe Pemasok
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="form-field">
+                                                    <select name="supplierType" id="supplier_type"
+                                                        class="form-control form-control-sm">
+                                                        <option value="" disabled selected> --Pilih Tipe Pemasok ---
+                                                        </option>
+                                                        <option value="Material">Material</option>
+                                                        <option value="Service">Service</option>
+                                                        <option value="Equipment">Equipment</option>
+                                                        <option value="Subcontractor">Subcontractor</option>
+                                                    </select>
+                                                    <small class="text-danger" id="err-supplierType"></small>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accurate-form-group">
+                                                <label>Npwp</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_npwp" name="supplierNpwp"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Nomor Pokok Wajib Pajak" />
+                                                    <small class="text-danger" id="err-supplierNpwp"></small>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accurate-form-group">
+                                                <label>Pkp</label>
+                                                <div class="form-field">
+                                                    <select name="supplierPkp" id="supplier_pkp"
+                                                        class="form-control form-control-sm">
+                                                        <option disabled selected>-- Pilih Status PKP --</option>
+                                                        <option value="true">Ya</option>
+                                                        <option value="false">Tidak</option>
+                                                    </select>
+                                                    <small class="text-danger" id="err-supplierPkp"></small>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accurate-form-group">
+                                                <label style="padding-top: 5px">Alamat</label>
+                                                <div class="form-field">
+                                                    <textarea id="supplier_address" name="supplierAddress"
+                                                        class="form-control form-control-sm" rows="3"
+                                                        placeholder="Contoh : Jl. Kuningan Persada Kavling 4, Setiabudi, Jakarta Selatan, 12950"></textarea>
+                                                    <small class="text-danger" id="err-supplierAddress"></small>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Nama Kontak</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_contact_person"
+                                                        name="supplierContactPerson"
+                                                        class="form-control form-control-sm" placeholder="Syahrini" />
+                                                    <small class="text-danger" id="err-supplierContactPerson"></small>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="accurate-form-group">
+                                                <label>Kontak</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_contact_phone"
+                                                        name="supplierContactPhone" class="form-control form-control-sm"
+                                                        placeholder="085269531161" />
+                                                    <small class="text-danger" id="err-supplierContactPhone"></small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 ps-md-4">
+                                            <div class="accurate-form-group">
+                                                <label>Kota</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_city" name="supplierCity"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="Bandar Lampung" />
+                                                    <small class="text-danger" id="err-supplierCity"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Provinsi</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_province" name="supplierProvince"
+                                                        class="form-control form-control-sm" placeholder="Lampung" />
+                                                    <small class="text-danger" id="err-supplierProvince"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Kode Pos</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_postal_code"
+                                                        name="supplierPostalCode" class="form-control form-control-sm"
+                                                        placeholder="12345" />
+                                                    <small class="text-danger" id="err-supplierPostalCode"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Negara</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_country" name="supplierCountry"
+                                                        class="form-control form-control-sm" placeholder="Indonesia" />
+                                                </div>
+                                                <small class="text-danger" id="err-supplierCountry"></small>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Email</label>
+                                                <div class="form-field">
+                                                    <input type="email" id="supplier_email" name="supplierEmail"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="jayamajubersama@gmail.com" />
+                                                    <small class="text-danger" id="err-supplierEmail"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Nama Bank</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_bank_name" name="supplierBankName"
+                                                        class="form-control form-control-sm" placeholder="BNI" />
+                                                    <small class="text-danger" id="err-supplierBankName"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>No. Rekening</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_bank_account_number"
+                                                        name="supplierBankAccountNumber"
+                                                        class="form-control form-control-sm" placeholder="0123456789" />
+                                                    <small class="text-danger"
+                                                        id="err-supplierBankAccountNumber"></small>
+                                                </div>
+                                            </div>
+
+                                            <div class="accurate-form-group">
+                                                <label>Pemilik Rekening</label>
+                                                <div class="form-field">
+                                                    <input type="text" id="supplier_bank_account_name"
+                                                        name="supplierBankAccountName"
+                                                        class="form-control form-control-sm"
+                                                        placeholder="PT Jaya Maju Bersama" />
+                                                    <small class="text-danger" id="err-supplierBankAccountName"></small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-1 shadow-sm border-0">
+                                <div class="card-body text-center">
+                                    <div class="d-flex justify-content-center gap-3">
+                                        <button type="submit" class="btn btn-primary px-4">
+                                            <i class="bi bi-floppy"></i> Simpan
+                                        </button>
+                                        <button type="reset" class="btn btn-danger px-4" id="btn-batal-supplier">
+                                            <i class="bi bi-x-circle"></i> Batal
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="view-list-supplier" style="display: none; padding: 5px">
+            <div class="toolbar-easyui">
+                <div class="btn-separator"></div>
+                <button id="btn-tambah-supplier" class="btn-tambah fw-bold">
+                    <i class="fas fa-plus"></i> Tambah
+                </button>
+                <button id="btn-refresh-supplier" class="btn-segarkan">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+
+                <div class="dropdown d-inline-block" style="position: relative">
+                    <button class="btn-excel dropdown-toggle" type="button"
+                        onclick="supplierModel.toggleExcelMenu(event)">
+                        <i class="fas fa-file-excel me-1"></i> Export
+                    </button>
+
+                    <ul class="dropdown-menu shadow border" id="menu-excel-client" style="
+              display: none;
+              position: absolute !important;
+              left: 0;
+              top: 100%;
+              z-index: 99999 !important;
+              min-width: 180px;
+              background: white;
+              list-style: none;
+              padding: 5px 0;
+              margin: 0;
+            ">
+                        <li>
+                            <a class="dropdown-item p-2 d-block text-decoration-none text-dark"
+                                href="/api/v1/clients/export">
+                                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
+                                Excel
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-2 d-block text-decoration-none text-dark"
+                                href="/api/v1/clients/template">
+                                <i class="fas fa-download me-2 text-info"></i> Download Template
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider" style="margin: 5px 0" />
+                        </li>
+                        <li>
+                            <a class="dropdown-item p-2 d-block text-decoration-none text-dark"
+                                href="javascript:void(0)" onclick="
+                  document.getElementById('menu-excel-client').style.display =
+                    'none'
+                " data-bs-toggle="modal" data-bs-target="#importModal">
+                                <i class="fas fa-file-upload me-2 text-warning"></i> Import
+                                Excel
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button class="btn-print"><i class="fas fa-print"></i> Print </button>
+
+                <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+                    <div class="search-container-terminal me-2">
+                        <input type="text" id="search-supplier-input" placeholder="Search..."
+                            class="input-hugo-terminal" />
+                    </div>
+                    <button id="btn-search-supplier" class="btn-cari">
+                        <i class="fas fa-search"></i> Submit
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrapper table-wrapper-supplier" id="supplier-wrapper">
+                <table id="supplier-table">
+                    <thead>
+                        <tr>
+                            <th class="kolom-sticky-1 resizer">Kode</th>
+                            <th class="kolom-sticky-2 resizer">Perusahaan</th>
+                            <th class="kolom-sticky-3 resizer">Tipe Pemasok</th>
+                            <th class="resizer" style="width: 150px">Npwp</th>
+                            <th class="resizer" style="width: 150px">Nama Kontak</th>
+                            <th class="resizer" style="width: 150px">Kontak</th>
+                            <th class="resizer" style="width: 70px">Pkp</th>
+                            <th class="resizer" style="width: 200px">Alamat</th>
+                            <th class="resizer" style="width: 200px">Kota</th>
+                            <th class="resizer" style="width: 200px">Propinsi</th>
+                            <th class="resizer" style="width: 200px">Kode Pos</th>
+                            <th class="resizer" style="width: 200px">Negara</th>
+                            <th class="resizer" style="width: 150px">Email</th>
+                            <th class="resizer" style="width: 80px">Status</th>
+                            <th class="resizer" style="width: 100px">Bank</th>
+                            <th class="resizer" style="width: 120px">Rekening</th>
+                            <th class="resizer" style="width: 150px">Pemilik Rekening</th>
+                        </tr>
+                    </thead>
+                    <tbody id="supplier-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" th:inline="javascript">
+        const supplierModel = {
+            cursorCreatedAt: null,
+            cursorId: null,
+            hasNext: true,
+            loading: false,
+            limit: 15,
+            resizableInit: false,
+            allData: [],
+
+            init: function () {
+                setTimeout(() => {
+                    document.getElementById("search-supplier-input")?.focus();
+                }, 100);
+                const wrapperId = document.getElementById("supplier-wrapper");
+                const keyword = document.getElementById("search-supplier-input").value;
+                this.findById("", true);
+                this.initDropdownListener();
+                this.bindEvents();
+                this.initScroll(wrapperId, keyword); // 🔥 pasang di sini
+                this.switchTabSupplier("view-list-supplier");
+                // this.bersih();
+                this.generateCode();
+            },
+
+            initScroll: function (wrapper, keyword) {
+                //const wrapper = document.querySelector(wrapperId);
+                let lastScrollTop = 0; // Untuk mendeteksi arah scroll
+
+                wrapper.addEventListener("scroll", () => {
+                    const scrollTop = wrapper.scrollTop;
+                    const isScrollingDown = scrollTop > lastScrollTop; // Cek arah bawah
+                    lastScrollTop = scrollTop;
+
+                    const nearBottom =
+                        scrollTop + wrapper.clientHeight >= wrapper.scrollHeight - 50;
+
+                    // ✅ SYARAT: Harus scroll ke bawah, sedang tidak loading, dan masih ada data selanjutnya
+                    if (isScrollingDown && nearBottom && !this.loading && this.hasNext) {
+                        console.log("Memuat data selanjutnya...");
+
+                        this.findById(keyword);
+                    }
+                });
+            },
+
+            bersih: function () {
+                // const form = document.getElementById("formSupplier");
+                // const target = document.getElementById("client_code");
+                // const val = target.value;
+                // form.reset();
+                // target.value = val;
+            },
+
+            bindEvents: function () {
+                const self = this;
+
+                // 1. Ambil semua elemen
+                const searchInput = document.getElementById("search-supplier-input");
+                const btnTambah = document.getElementById("btn-tambah-supplier");
+                const btnSearch = document.getElementById("btn-search-supplier");
+                const btnRefresh = document.getElementById("btn-refresh-supplier");
+                const btnBatal = document.getElementById("btn-batal-supplier");
+                const form = document.getElementById("formSupplier");
+
+                // 2. Gunakan Optional Chaining atau IF check agar script tidak mati jika ada elemen yang null
+                if (btnSearch && searchInput) {
+                    btnSearch.onclick = () => {
+                        const keyword = searchInput.value.trim();
+                        if (!keyword) {
+                            // showToast("error", "Input pencarian masih kosong");
+                            Swal.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Input pencarian masih kosong",
+                            });
+                            return;
+                        }
+                        this.findById(keyword, true);
+                        // alert("cokk")
+                    };
+                }
+
+                if (btnRefresh && searchInput) {
+                    btnRefresh.onclick = () => {
+                        searchInput.value = "";
+                        this.findById("", true);
+                    };
+                }
+
+                if (btnTambah) {
+                    btnTambah.onclick = () => {
+                        this.switchTabSupplier("view-input-supplier");
+                    };
+                }
+
+                if (searchInput) {
+                    searchInput.onkeyup = (e) => {
+                        if (e.key === "Enter") {
+                            this.findById(searchInput.value.trim(), 0);
+                        }
+                    };
+                }
+
+                if (btnBatal) {
+                    btnBatal.onclick = () => {
+                        form.reset();
+                        this.generateCode();
+                        this.switchTabSupplier("list");
+                        const label = document.getElementById("text-label-supplier");
+                        if (label) label.textContent = "Data Baru";
+                    };
+                }
+
+                // 3. Pasang Listener Form (Pastikan ini dijalankan)
+                if (form) {
+                    console.log("Form Client ditemukan, memasang event listener...");
+                    form.addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        console.log("Submit terdeteksi!");
+                        //alert("yess");
+                        self.create(this);
+                    });
+                } else {
+                    console.warn("Elemen #formSupplier tidak ditemukan di DOM saat init!");
+                }
+
+                const tbody = document.getElementById("supplier-table-body");
+                tbody.addEventListener("dblclick", (e) => {
+                    const tr = e.target.closest("tr.clickable-row");
+                    if (!tr) return;
+
+                    const index = tr.dataset.index;
+                    const row = this.allData[index];
+
+                    // this.switchTabSupplier('view-input-supplier', row);
+                    // document.getElementById('text-label-supplier').textContent = 'Perbaharui Data';
+
+                    if (row) {
+                        this.switchTabSupplier("view-input-supplier", row);
+                        document.getElementById("text-label-supplier").textContent =
+                            "Perbaharui Data";
+                    }
+                });
+            },
+
+            generateCode: async function () {
+                try {
+                    const json = await api.get(`/api/v1/suppliers/generate-code`);
+                    if (json.status === "success")
+                        document.getElementById("supplier_code").value = json.data.supplierCode;
+                } catch (e) { }
+            },
+
+            findById: async function (keyword = "", reset = false) {
+                if (this.loading) return;
+                if (!this.hasNext && !reset) return;
+                const tbody = document.getElementById("supplier-table-body");
+                const statusMsg = "";
+
+                if (reset) {
+                    this.cursorCreatedAt = null;
+                    this.cursorId = null;
+                    this.hasNext = true;
+                    tbody.innerHTML = "";
+                }
+
+                this.loading = true;
+                UI.showSkeleton("supplier-table-body", 11);
+
+                try {
+                    const params = new URLSearchParams({
+                        keyword: keyword,
+                        limit: this.limit,
+                    });
+
+                    if (this.cursorCreatedAt && this.cursorId) {
+                        params.append("lastCreatedAt", this.cursorCreatedAt);
+                        params.append("lastId", this.cursorId);
+                    }
+
+                    const [json] = await Promise.all([
+                        api.get(`/api/v1/suppliers?${params.toString()}`),
+                        new Promise((resolve) => setTimeout(resolve, 1000)),
+                    ]);
+
+                    if (json && json.status === "success") {
+                        const res = json.data;
+                        UI.hideSkeleton();
+
+                        const newBatch = res.data;
+
+                        // 🔥 GABUNGKAN DATA: Jika reset, buat baru. Jika scroll, tambah ke belakang.
+                        if (reset) {
+                            this.allData = newBatch;
+                        } else {
+                            this.allData = [...(this.allData || []), ...newBatch];
+                        }
+
+                        // Kirim 'this.allData.length' untuk tahu posisi index awal batch ini
+                        const startIndex = reset
+                            ? 0
+                            : this.allData.length - newBatch.length;
+                        this.renderTable(newBatch, reset, startIndex);
+
+                        // 🔥 update cursor
+                        this.cursorCreatedAt = res.nextCreatedAt;
+                        this.cursorId = res.nextId;
+                        this.hasNext = res.hasNext;
+
+                        console.log(" cursorId =", this.cursorId);
+                        console.log(" hasNext =", this.hasNext);
+                    }
+                    document.getElementsByClassName('table-wrapper-supplier')[0].style.height = "80svh"
+                    // Mengatur tinggi tabel sebesar 60% dari tinggi layar monitor
+                    // document.getElementsByClassName('table-wrapper')[0].style.height = "90vh";
+                } catch (err) {
+                    tbody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error: ${err.message}</td></tr>`;
+                    UI.hideSkeleton();
+                } finally {
+                    this.loading = false;
+                    UI.hideSkeleton();
+                }
+            },
+
+            renderTable: function (data, isReset = false, startIndex = 0) {
+                const tbody = document.getElementById("supplier-table-body");
+
+                if (!data || data.length === 0) {
+                    if (isReset) {
+                        tbody.innerHTML =
+                            '<tr><td colspan="13" class="text-center py-3">No data available</td></tr>';
+                    }
+                    return;
+                }
+
+                if (isReset) {
+                    tbody.innerHTML = "";
+                }
+
+                let rowsHtml = "";
+                data.forEach((row, i) => {
+                    var pkp = row.supplierPkp;
+                    var status = row.supplierIsActive;
+                    const globalIndex = startIndex + i;
+                    rowsHtml += `
+                    <tr class="clickable-row" data-index="${globalIndex}" id="row-supplier-${row.supplierId}">
+                        <td class="kolom-sticky-1 text-center">${row.supplierCode}</td>
+                        <td class="kolom-sticky-2 cell-wrap">${row.supplierName}</td>
+                        <td class="kolom-sticky-3 cell-wrap">${row.supplierType || "-"}</td>
+                        <td>${row.supplierNpwp || "-"}</td>
+                        <td>${row.supplierContactPerson || "-"}</td>
+                        <td>${row.supplierContactPhone || "-"}</td>
+                        <td class="text-center">
+                        ${pkp === true
+                            ? '<span class="badge badge-glass-green w-100">Ya</span>'
+                            : '<span class="badge badge-glass-red w-100">Tidak</span>'}
+                        </td>
+                        <td class="col-text">${row.supplierAddress || "-"}</td>
+                        <td>${row.supplierCity || "-"}</td>
+                        <td>${row.supplierProvince || "-"}</td>
+                        <td>${row.supplierPostalCode || "-"}</td>
+                        <td>${row.supplierCountry || "-"}</td>
+                        <td>${row.supplierEmail || "-"}</td>
+                        <td class="text-center">
+                        ${status === true
+                            ? '<span class="badge badge-glass-green w-100">Aktif</span>'
+                            : '<span class="badge badge-glass-red w-100">Nonaktif</span>'}
+                        </td>
+                        <td>${row.supplierBankName || "-"}</td>
+                        <td>${row.supplierBankAccountNumber || "-"}</td>
+                        <td>${row.supplierBankAccountName || "-"}</td>
+                   </tr>`;
+                });
+
+                tbody.insertAdjacentHTML("beforeend", rowsHtml);
+
+                if (!this.resizableInit) {
+                    this.makeColumnsResizable();
+                    this.resizableInit = true;
+                }
+            },
+
+            makeColumnsResizable: function () {
+                const table = document.getElementById("supplier-table");
+                const cols = table.querySelectorAll("th.resizer");
+
+                cols.forEach((th) => {
+                    let startX, startWidth;
+
+                    th.addEventListener("mousedown", (e) => {
+                        startX = e.pageX;
+                        startWidth = th.offsetWidth;
+
+                        const onMouseMove = (e) => {
+                            const newWidth = startWidth + (e.pageX - startX);
+                            th.style.width = newWidth + "px";
+                        };
+
+                        const onMouseUp = () => {
+                            document.removeEventListener("mousemove", onMouseMove);
+                            document.removeEventListener("mouseup", onMouseUp);
+                        };
+
+                        document.addEventListener("mousemove", onMouseMove);
+                        document.addEventListener("mouseup", onMouseUp);
+                    });
+                });
+            },
+
+            switchTabSupplier: function (type, row) {
+                // Element Konten
+                const viewInput = document.getElementById("view-input-supplier");
+                const viewList = document.getElementById("view-list-supplier");
+
+                // Element Tombol
+                const btnInput = document.getElementById("btn-tab-input-supplier");
+                const btnList = document.getElementById("btn-tab-list-supplier");
+
+                if (type === "view-input-supplier") {
+                    viewInput.style.display = "block";
+                    viewList.style.display = "none";
+
+                    btnInput.classList.add("active");
+                    btnInput.classList.remove("text-light");
+
+                    btnList.classList.remove("active");
+                    btnList.classList.add("text-light");
+
+                    this.rowData(row);
+                } else {
+                    viewInput.style.display = "none";
+                    viewList.style.display = "block";
+
+                    btnInput.classList.remove("active");
+                    btnInput.classList.add("text-light");
+
+                    btnList.classList.add("active");
+                    btnList.classList.remove("text-light");
+                    this.bersih();
+                    // this.findById('', true);
+                }
+            },
+
+            closeEdit: function (e) {
+                e.stopPropagation(); // Biar gak trigger click tabnya
+                document.getElementById("li-tab-detail-supplier").style.display = "none";
+                this.switchTabSupplier("view-list-supplier", "");
+            },
+
+            rowData: function (row) {
+                if (!row) {
+                    console.warn("Data row tidak ditemukan atau undefined");
+                    return;
+                }
+
+                // Mapping antara ID element HTML dan property dari data 'row'
+                const fields = {
+                    supplier_id: row.supplierId,
+                    supplier_code: row.supplierCode,
+                    supplier_name: row.supplierName,
+                    supplier_type: row.supplierType,
+                    supplier_npwp: row.supplierNpwp,
+                    supplier_address: row.supplierAddress,
+                    supplier_city: row.supplierCity,
+                    supplier_province: row.supplierProvince,
+                    supplier_postal_code: row.supplierPostalCode,
+                    supplier_country: row.supplierCountry,
+                    supplier_email: row.supplierEmail,
+                    supplier_contact_person: row.supplierContactPerson,
+                    supplier_contact_phone: row.supplierContactPhone,
+                    supplier_bank_name: row.supplierBankName,
+                    supplier_bank_account_number: row.supplierBankAccountNumber,
+                    supplier_bank_account_name: row.supplierBankAccountName,
+                    supplier_pkp: row.supplierPkp
+                };
+
+                // Isi secara otomatis dengan pengecekan safety
+                Object.keys(fields).forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                        // Paksa ke String agar select option bisa mencocokkan value
+                        // Gunakan ?? (Nullish Coalescing) bukan || (OR)
+
+                        const value = fields[id] ?? "";
+                        el.value = String(value);
+                    }
+                });
+
+                // Tampilkan tombol hapus
+                // const btnHapus = document.getElementById("btn-hapus");
+                // if (btnHapus) {
+                //     btnHapus.style.display = "block";
+                // }
+            },
+
+            toggleExcelMenu: function (e) {
+                if (e) e.stopPropagation(); // Kunci utama agar menu tidak langsung tertutup saat tombol diklik
+                const menu = document.getElementById("menu-excel-client");
+                if (menu) {
+                    const isHidden =
+                        menu.style.display === "none" || menu.style.display === "";
+                    menu.style.display = isHidden ? "block" : "none";
+                }
+            },
+
+            // Fungsi tambahan: Tutup menu kalau user klik di luar menu
+            initDropdownListener: function () {
+                window.addEventListener("click", function () {
+                    const menu = document.getElementById("menu-excel-client");
+                    if (menu) {
+                        menu.style.display = "none";
+                    }
+                });
+            },
+
+            create: async function (formEl) {
+                const searchInput = document.getElementById("search-supplier-input");
+                const formData = new FormData(formEl);
+                const id = formData.get("supplierId");
+                // 🔥 kalau backend butuh JSON
+                const payload = Object.fromEntries(formData.entries());
+
+                const msg = id ? "Updating data..." : "Saving data...";
+                UI.showSkeleton("supplier-table-body", 10);
+                this.showErrors({}, formEl);
+                try {
+                    const result = id
+                        ? await api.put(`/api/v1/suppliers/${id}`, payload, msg)
+                        : await api.post(`/api/v1/suppliers`, payload, msg);
+
+                    if (id) {
+                        // 1. Ambil data terbaru hasil return dari Backend (biasanya result.data berisi object yang baru diupdate)
+                        const updatedRow = result.data;
+
+                        // 2. Update Array local agar saat di-klik lagi datanya sudah yang baru
+                        const index = this.allData.findIndex(
+                            (item) => item.supplierId === id,
+                        );
+                        if (index !== -1) {
+                            this.allData[index] = updatedRow;
+
+                            // 3. Update Baris Tabel secara langsung tanpa refresh
+                            console.log("Jalankan Update Row", updatedRow)
+                            this.updateRowUI(id, updatedRow);
+                        }
+                        document.getElementById("text-label-supplier").textContent =
+                            "Data Baru";
+                    } else {
+                        this.findById("", true);
+                    }
+
+                    Swal.fire({
+                        title: "Sukses!",
+                        text: result.message,
+                        icon: "success"
+                    });
+
+                    const clientIdEl = document.getElementById("supplier_id");
+                    if (clientIdEl) {
+                        clientIdEl.value = "";
+                    }
+
+                    formEl.reset();
+                    this.generateCode();
+                    this.switchTabSupplier("view-list-supplier", "");
+                    // document.getElementById("btn-hapus").style.display = "none";
+                } catch (err) {
+                    console.log("Full Error Object = ", err);
+                    const errors = err?.errors || err?.data?.errors;
+                    if (errors) {
+                        this.showErrors(errors, formEl);
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: err.message
+                        });
+                    }
+                    UI.hideSkeleton();
+                } finally {
+                    UI.hideSkeleton();
+                }
+            },
+
+            updateRowUI: function (id, data) {
+                const tr = document.getElementById(`row-supplier-${id}`);
+                if (!tr) return;
+                const cells = tr.cells;
+                cells[0].textContent = data.supplierCode;
+                cells[1].textContent = data.supplierName;
+                cells[2].textContent = data.supplierType || "-";
+                cells[3].textContent = data.supplierNpwp || "-";
+                cells[4].textContent = data.supplierContactPerson || "-";
+                cells[5].textContent = data.supplierContactPhone || "-";
+                cells[6].textContent = data.supplierPkp || "-";
+                cells[7].textContent = data.supplierAddress || "-";
+                cells[8].textContent = data.supplierCity || "-";
+                cells[9].textContent = data.supplierProvince || "-";
+                cells[10].textContent = data.supplierPostalCode || "-";
+                cells[11].textContent = data.supplierCountry || "-";
+                cells[12].textContent = data.supplierEmail || "-";
+                cells[13].textContent = data.supplierBankName || "-";
+                cells[14].textContent = data.supplierBankAccountNumber || "-";
+                cells[15].textContent = data.supplierBankAccountName || "-";
+
+                // 2. 🔥 SOLUSI HIGHLIGHT: Targetkan semua TD di dalam baris ini
+                const allCells = tr.querySelectorAll("td");
+
+                allCells.forEach((td) => {
+                    td.style.transition = "background-color 1s ease"; // Animasi halus
+                    td.style.backgroundColor = "#e8f5e9"; // Kuning highlight
+                });
+
+                // 3. Kembalikan ke warna semula setelah 1.5 detik
+                setTimeout(() => {
+                    allCells.forEach((td) => {
+                        td.style.backgroundColor = ""; // Reset (kembali ke CSS asli)
+                    });
+                }, 1500);
+            },
+
+            delete: function () {
+                const id = document.getElementById("supplier_id").value;
+                if (!id) {
+                    showToast("warning", "Pilih data yang akan dihapus terlebih dahulu");
+                    return;
+                }
+
+                Swal.fire({
+                    title: "Konfirmasi Hapus",
+                    text: "Apakah Anda yakin ingin menghapus data ini? setuju atau batalkan.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#0092DC", // Biru EasyUI
+                    cancelButtonColor: "#e57373",
+                    confirmButtonText: "Ya, Hapus!",
+                    cancelButtonText: "Batal",
+                    // Agar kotak seperti EasyUI
+                    customClass: {
+                        popup: "border-easyui-blue",
+                        cancelButton: "btn-swal-cancel",
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Panggil fungsi delete data milikmu
+                        this.deleteData(id);
+                        // showLoading("Proses penghapusan dijalankan...");
+                    } else {
+                        console.log("Penghapusan dibatalkan.");
+                    }
+                });
+            },
+
+            deleteData: async function (id) {
+                const payload = {
+                    status: "0",
+                };
+
+                try {
+                    const rst = await api.put(
+                        `/api/v1/clients/updatestatus/${id}`,
+                        payload,
+                        "Menghapus data...",
+                    );
+
+                    showToast("success", rst.message);
+                    const clientIdEl = document.getElementById("supplier_id");
+                    if (clientIdEl) {
+                        clientIdEl.value = "";
+                    }
+                    const form = document.getElementById("formSupplier");
+                    form.reset();
+                    this.generateCode();
+                    this.switchTabSupplier("view-list-supplier", "");
+                    this.findById("", true);
+
+                    // const btn = document.getElementById("btn-hapus");
+                    // if (btn) btn.style.display = "none";
+                } catch (error) {
+                    showToast("error", error.message);
+                }
+            },
+
+            showErrors: function (errors, formEl) {
+                if (!formEl) return; // 🔥 guard biar gak error lagi
+
+                // 🔥 reset hanya di form ini
+                formEl.querySelectorAll('.is-invalid')
+                    .forEach(i => i.classList.remove('is-invalid'));
+
+                formEl.querySelectorAll('[id^="err-"]')
+                    .forEach(e => e.innerText = '');
+
+                // 🔥 set error
+                for (const field in errors) {
+                    const input = formEl.querySelector(`[name = "${field}"]`);
+                    const errorEl = formEl.querySelector('#err-' + field);
+
+                    if (input) input.classList.add('is-invalid');
+                    if (errorEl) errorEl.innerText = errors[field];
+                }
+            }
+
+        };
+
+        // window.supplierModel = supplierModel;
+        window.supplierModel = supplierModel;
+        supplierModel.init();
+    </script>
+</div>
