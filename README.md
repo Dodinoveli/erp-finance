@@ -32,7 +32,7 @@ Kontraktor sering menghadapi tantangan:
 
 ## 🛠️ Teknologi
 
-- **Backend:** Java 17, Spring Boot 3, Spring Security, JWT
+- **Backend:** Java 21, Spring Boot 3, Spring Security, JWT
 - **Frontend:** Thymeleaf, HTML5, CSS3, JavaScript
 - **Database:** MySQL, Flyway Migration
 - **Build Tool:** Maven
@@ -43,7 +43,7 @@ Kontraktor sering menghadapi tantangan:
 ## 🚀 Cara Menjalankan
 
 ### Prasyarat
-- JDK 17 atau lebih baru
+- JDK 21 atau lebih baru
 - Maven 3.8+
 - MySQL 8.0+
 
