@@ -34,7 +34,7 @@ Kontraktor sering menghadapi tantangan:
 
 - **Backend:** Java 21, Spring Boot 3, Spring Security, JWT
 - **Frontend:** Thymeleaf, HTML5, CSS3, JavaScript
-- **Database:** MySQL, Flyway Migration
+- **Database:** PostgreSQL, Flyway Migration
 - **Build Tool:** Maven
 - **Version Control:** Git & GitHub
 
