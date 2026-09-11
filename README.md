@@ -45,7 +45,7 @@ Kontraktor sering menghadapi tantangan:
 ### Prasyarat
 - JDK 21 atau lebih baru
 - Maven 3.8+
-- MySQL 8.0+
+- PostgreSQL 18
 
 ### Langkah-langkah
 
