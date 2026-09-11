@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.uuid.Generators;
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccountsResponse;
 
 @Service
 public class BankAccountsService {
@@ -31,6 +33,7 @@ public class BankAccountsService {
         List<BankAccountsResponse> responseList = new ArrayList<>();
         for (BankAccounts bac : bankAccountsList) {
             BankAccountsResponse response = new BankAccountsResponse();
+            ChartOfAccounts accounts = new ChartOfAccounts();
             response.setBankAccountId(bac.getBankAccountId());
             response.setAccountCode(bac.getAccountCode());
             response.setAccountName(bac.getAccountName());
@@ -40,8 +43,9 @@ public class BankAccountsService {
             response.setAccountNumber(bac.getAccountNumber());
             response.setAccountHolder(bac.getAccountHolder());
             response.setIsActive(bac.getIsActive());
-            response.setCoaId(bac.getCoaId());
-            response.setName(bac.getName());
+            accounts.setAccountId(bac.getAccountId());
+            accounts.setAccountName(bac.getAccountName());
+            response.setCoa(bac.getCoa());
             responseList.add(response);
         }
         return responseList;
@@ -63,7 +67,7 @@ public class BankAccountsService {
         accounts.setIsDefault(request.getIsDefault());
         accounts.setIsActive(request.getIsActive());
         accounts.setCompanyId(companyId);
-        accounts.setCoaId(request.getCoaId());
+        accounts.setAccountId(request.getAccountId());
         accounts.setCreatedAt(request.getCreatedAt());
         accounts.setUpdatedAt(null);
         accounts.setUserId(userId);
@@ -92,7 +96,7 @@ public class BankAccountsService {
         // accounts.setIsDefault(request.getIsDefault());
         accounts.setIsActive(request.getIsActive());
 
-        accounts.setCoaId(request.getCoaId());
+        accounts.setAccountId(request.getAccountId());
         // accounts.setCreatedAt(request.getCreatedAt());
         accounts.setUpdatedAt(request.getUpdatedAt());
         // accounts.setDeletedAt(null);
@@ -106,26 +110,26 @@ public class BankAccountsService {
         return accounts;
     }
 
-    public List<CoaAccountsResponse> findCoaByName(UUID companyId, String keyword) {
+    public List<ChartOfAccountsResponse> findCoaByName(UUID companyId, String keyword) {
         if (keyword.equalsIgnoreCase("CASH")) {
             keyword = "Kas";
         }
 
-        List<CoaAccounts> coaList = repository.findCoaByName(companyId, keyword);
+        List<ChartOfAccounts> coaList = repository.findCoaByName(companyId, keyword);
         System.out.println("Keyword pencarian ========== " + keyword);
-        List<CoaAccountsResponse> responseList = new ArrayList<>();
+        List<ChartOfAccountsResponse> responseList = new ArrayList<>();
         if (keyword.isBlank()) {
             if (coaList.isEmpty()) {
                 return Collections.emptyList();
             }
         } else {
 
-            for (CoaAccounts coa : coaList) {
-                CoaAccountsResponse response = new CoaAccountsResponse();
-                response.setCoaId(coa.getCoaId());
-                response.setName(coa.getName());
-                responseList.add(response);
-            }
+            for (ChartOfAccounts coa : coaList) {
+            ChartOfAccountsResponse response =
+            new ChartOfAccountsResponse(coa);
+            responseList.add(response);
+        }
+
         }
 
         return responseList;

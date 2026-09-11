@@ -1,6 +1,8 @@
 package com.logikaintermedia.erp.modules.employees;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
@@ -63,7 +65,7 @@ public class EmployeesService {
         }).toList();
 
         // Ambil "Kunci" dari data terakhir (Data ke-10) untuk ambil data 11-20 nanti
-        LocalDateTime nextCreatedAt = null;
+        OffsetDateTime nextCreatedAt = null;
 
         UUID nextId = null;
 
@@ -100,7 +102,7 @@ public class EmployeesService {
         mdl.setEmployeeBankAccountName(emp.getEmployeeBankAccountName());
         mdl.setEmployeeIsActive(true);
         mdl.setCompanyId(companyId);
-        mdl.setEmployeeCreatedAt(LocalDateTime.now());
+        mdl.setEmployeeCreatedAt(OffsetDateTime.now(ZoneOffset.UTC));
         mdl.setUserId(userId);
         mdl.setEmployeeUpdatedAt(null);
         mdl.setEmployeeDeletedAt(null);
@@ -138,7 +140,7 @@ public class EmployeesService {
         mdl.setEmployeeBankAccountName(emp.getEmployeeBankAccountName());
         mdl.setEmployeeIsActive(true);
 
-        mdl.setEmployeeUpdatedAt(LocalDateTime.now());
+        mdl.setEmployeeUpdatedAt(OffsetDateTime.now(ZoneOffset.UTC));
         mdl.setEmployeeDeletedAt(null);
         // where
         mdl.setEmployeeId(employeeId);

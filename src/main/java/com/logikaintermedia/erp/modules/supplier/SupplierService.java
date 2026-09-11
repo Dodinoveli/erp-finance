@@ -1,80 +1,94 @@
 package com.logikaintermedia.erp.modules.supplier;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.uuid.Generators;
-import com.logikaintermedia.erp.encryption.EncryptionUtil;
-import com.logikaintermedia.erp.utility.CursorResponse;
-import lombok.AllArgsConstructor;
+import com.logikaintermedia.erp.utility.DataCountResponse;
+import com.logikaintermedia.erp.utility.DataTableResponse;
 import lombok.extern.slf4j.Slf4j;
 
-@AllArgsConstructor
 @Service
 @Slf4j
 public class SupplierService {
-    private SupplierRepository repository;
+    private final SupplierRepository repository;
 
-    public String generateCode(UUID companyId) {
-        return repository.generateCode(companyId);
+    public SupplierService(SupplierRepository repository) {
+        this.repository = repository;
     }
 
     public Supplier detailById(UUID detailId) {
         Supplier supplier = repository.detailById(detailId);
         if (supplier != null) {
-            supplier.setSupplierNpwp(EncryptionUtil.decryptSafely(supplier.getSupplierNpwp()));
-            supplier.setSupplierEmail(EncryptionUtil.decryptSafely(supplier.getSupplierEmail()));
-            supplier.setSupplierContactPhone(EncryptionUtil.decryptSafely(supplier.getSupplierContactPhone()));
-            supplier.setSupplierBankAccountNumber(
-                    EncryptionUtil.decryptSafely(supplier.getSupplierBankAccountNumber()));
+            supplier.setSupplierNpwp(supplier.getSupplierNpwp());
+            supplier.setSupplierEmail(supplier.getSupplierEmail());
+            supplier.setSupplierContactPhone(supplier.getSupplierContactPhone());
+            supplier.setSupplierBankAccountNumber(supplier.getSupplierBankAccountNumber());
         }
+         
         return supplier;
 
     }
 
     @Transactional(readOnly = true)
-    public CursorResponse<SupplierResponse> getSupplierById(UUID companyId, String keyword, LocalDateTime lastCreatedAt,
-            UUID lastId,
-            int limit) {
+    public DataTableResponse<SupplierResponse> getSupplierById(UUID companyId, int draw, int start, int length,
+            String keyword) {
+        if (start < 0) {
+            start = 0;
+        }
+        if (length <= 0) {
+            length = 10;
+        }
+        // Batasi maksimal data per request
+        if (length > 100) {
+            length = 100;
+        }
+        // Bersihkan keyword
+        if (keyword != null) {
+            keyword = keyword.trim();
+            if (keyword.isEmpty()) {
+                keyword = null;
+            }
+        }
 
-        List<Supplier> entities = repository.findById(companyId, keyword, lastCreatedAt, lastId, limit + 1);
-        Boolean hasNext = entities.size() > limit;
-
-        List<Supplier> currentData = hasNext ? entities.subList(0, limit) : entities;
-
-        List<SupplierResponse> list = currentData.stream().map(entity -> {
+        List<Supplier> supplier = repository.findSupplierByCompanyId(companyId, start, length, keyword);
+        List<SupplierResponse> list = supplier.stream().map(entity -> {
             SupplierResponse dto = new SupplierResponse();
             dto.setSupplierId(entity.getSupplierId());
             dto.setSupplierCode(entity.getSupplierCode());
             dto.setSupplierName(entity.getSupplierName());
-            dto.setSupplierEmail(EncryptionUtil.decryptSafely(entity.getSupplierEmail()));
-            dto.setSupplierContactPhone(EncryptionUtil.decryptSafely(entity.getSupplierContactPhone()));
+            dto.setSupplierContactPerson(entity.getSupplierContactPerson());
+            dto.setSupplierEmail(entity.getSupplierEmail());
             dto.setSupplierIsActive(entity.getSupplierIsActive());
-            dto.setSupplierCreatedAt(entity.getSupplierCreatedAt());
+            dto.setSupplierType(entity.getSupplierType());
             return dto;
         }).toList();
+        // Total semua supplier
+        long recordsTotal = repository.countAll(companyId);
+        // Total supplier setelah filter/search
+        long recordsFiltered = repository.countFiltered(companyId, keyword);
+        return new DataTableResponse<>(draw, recordsTotal, recordsFiltered, list);
+    }
 
-        // 5. Ambil "Kunci" dari data terakhir (Data ke-10) untuk ambil data 11-20 nanti
-        LocalDateTime nextCreatedAt = null;
-
-        UUID nextId = null;
-
-        if (!list.isEmpty()) {
-            SupplierResponse last = list.get(list.size() - 1);
-            nextCreatedAt = last.getSupplierCreatedAt();
-            nextId = last.getSupplierId();
-        }
-        return new CursorResponse<>(list, nextCreatedAt, nextId, hasNext);
+    @Transactional(readOnly = true)
+    public DataCountResponse<Supplier> getTotal(UUID companyId) {
+        int total = repository.countTotalByCompanyId(companyId);
+        int totalActive = repository.countTotalActiveByCompanyId(companyId);
+        int totalInactive = repository.countTotalInactiveByCompanyId(companyId);
+        int totalNew = repository.countTotalNewByCompanyId(companyId);
+        return new DataCountResponse<>(total, totalActive, totalInactive, totalNew);
     }
 
     @Transactional
     public Supplier createSupplier(SupplierRequest dto, UUID companyId, UUID userId) {
+        long count = repository.generateSupplierCode(companyId);
+        String code = "SPL-" + count;
         Supplier model = new Supplier();
         model.setSupplierId(Generators.timeBasedEpochRandomGenerator().generate());
-        String code = repository.generateSupplierCode(model.getCompanyId());
         model.setSupplierCode(code);
         model.setSupplierName(dto.getSupplierName());
         model.setSupplierType(dto.getSupplierType());
@@ -94,9 +108,8 @@ public class SupplierService {
         model.setSupplierBankAccountName(dto.getSupplierBankAccountName());
         model.setSupplierPkp(dto.getSupplierPkp());
         model.setSupplierIsActive(true);
-        ;
         model.setCompanyId(companyId);
-        model.setSupplierCreatedAt(LocalDateTime.now());
+        model.setSupplierCreatedAt(OffsetDateTime.now(ZoneOffset.UTC));
         model.setSupplierUpdatedAt(null);
         model.setSupplierDeletedAt(null);
         model.setUserId(userId);
@@ -132,7 +145,7 @@ public class SupplierService {
         model.setSupplierBankAccountName(dto.getSupplierBankAccountName());
         model.setSupplierPkp(dto.getSupplierPkp());
         model.setSupplierIsActive(dto.getSupplierIsActive() != null ? dto.getSupplierIsActive() : true);
-        model.setSupplierUpdatedAt(LocalDateTime.now());
+        model.setSupplierUpdatedAt(OffsetDateTime.now(ZoneOffset.UTC));
         model.setSupplierId(supplierId);
         model.setCompanyId(companyId);
         int data = repository.update(model);

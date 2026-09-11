@@ -3,6 +3,7 @@ package com.logikaintermedia.erp.modules.employees;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -37,13 +38,8 @@ public class EmployeesResponse {
     private String employeeBankAccountName;
     private Boolean employeeIsActive;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime employeeCreatedAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime employeeUpdatedAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime employeeDeletedAt;
+    private OffsetDateTime employeeCreatedAt;
+    private OffsetDateTime employeeUpdatedAt;
+    private OffsetDateTime employeeDeletedAt;
 
 }

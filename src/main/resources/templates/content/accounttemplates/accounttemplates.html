@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/head :: head('Daftar Template Akun')}"></div>
+<style>
+    #coa-table .coa-leaf .tabulator-data-tree-control {
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    #coa-table {
+        background-color: white;
+    }
+</style>
+
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="main">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+        <div class="container-fluid py-1">
+            <!-- TABLE CARD -->
+            <div class="card border-0 shadow-sm">
+                <!-- TOOLBAR -->
+                <div class="card-body border-bottom">
+                    <div class="row g-3 align-items-center">
+
+                        <div class="col-12">
+                            <div class="d-flex gap-2 align-items-center flex-wrap">
+
+                                <!-- BACK -->
+                                <a th:href="@{/chartofaccounts}" class="btn btn-secondary" style="white-space: nowrap;">
+                                    <i class="bi bi-arrow-left"></i>
+                                    Kembali Ke Daftar
+                                </a>
+
+                                <!-- INSTALL COA -->
+                                <button type="button" id="btn-install" class="btn btn-primary"
+                                    style="white-space: nowrap;">
+                                    <i class="bi bi-cloud-arrow-down"></i>
+                                    Install COA
+                                </button>
+
+                            </div>
+
+                            <div class="mt-2 text-muted small">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Install Chart of Accounts (COA) standar ke perusahaan Anda.
+                                COA hanya dapat diinstall satu kali dan tidak akan menggandakan akun
+                                yang sudah tersedia.
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="table-responsive ">
+                    <div id="coa-table"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+    <script th:src="@{/js/utility/dashboard.js}"></script>
+    <script type="module" th:inline="javascript">
+
+        const accountTemplates = {
+            table: null,
+
+            init: function () {
+                this.bindEvents()
+
+            },
+
+            bindEvents: function () {
+                this.initTable();
+
+                const btn = document.getElementById("btn-install");
+                if (btn) {
+                    btn.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        this.install();
+                    })
+                }
+            },
+
+            initTable: function () {
+
+                this.table = new Tabulator("#coa-table", {
+
+                    ajaxURL: "/api/v1/accounttemplates/tree",
+                    ajaxResponse: function (url, params, response) {
+
+                        return response.data;
+
+                    },
+                    height: "600px",
+
+                    layout: "fitColumns",
+                    responsiveLayout: "collapse",
+                    dataTree: true,
+                    dataTreeChildField: "children",
+                    // dataTreeStartExpanded: true,
+                    dataTreeChildIndent: 30,
+
+                    dataTreeStartExpanded: function (row, level) {
+                        return level === 0;
+                    },
+
+                    rowFormatter: function (row) {
+
+                        const data = row.getData();
+                        const element = row.getElement();
+
+                        if (!data.children || data.children.length === 0) {
+                            element.classList.add("coa-leaf");
+                        } else {
+                            element.classList.remove("coa-leaf");
+                        }
+
+                    },
+
+                    columns: [
+                        {
+                            title: "Kode",
+                            field: "accountCode",
+                            width: 180
+                        },
+                        {
+                            title: "Nama Akun",
+                            field: "accountName",
+                            widthGrow: 3,
+                            formatter: function (cell) {
+
+                                const data = cell.getRow().getData();
+
+                                if (data.isHeader) {
+                                    return `<strong>${data.accountName}</strong>`;
+                                }
+
+                                return data.accountName;
+                            }
+                        },
+                        {
+                            title: "Tipe",
+                            field: "accountType"
+                        },
+                        {
+                            title: "Saldo Normal",
+                            field: "normalBalance",
+                            width: 120
+                        },
+                        {
+                            title: "Level",
+                            field: "accountLevel"
+                        },
+                        {
+                            title: "Header",
+                            field: "isHeader",
+                            formatter: "tickCross"
+                        },
+                        {
+                            title: "Bisa Jurnal",
+                            field: "isPostable",
+                            formatter: "tickCross"
+                        }
+                    ]
+
+                });
+            },
+
+            install: async function () {
+                try {
+                    const result = await api.post(`/api/v1/accounts/install`, "", "Menginstall Coa...");
+                    if (result && result.success !== false) {
+                        await Toast.fire({
+                            icon: 'success',
+                            title: 'Berhasil!',
+                            text: result.message,
+                            timer: 3000,
+                            showConfirmButton: false
+                        });
+                        setTimeout(() => {
+                            window.location.href = '/coa';
+                        }, 500);
+                        return result;
+                    } else {
+                        throw new Error(result?.message || 'Menginstall Coa');
+                    }
+                } catch (err) {
+                    console.log("Full Error Object = ", err);
+                    const errors = err?.errors || err?.data?.errors;
+                    if (errors) {
+                        this.showErrors(errors, formEl);
+                        Toast.fire({
+                            icon: 'error',
+                            title: 'Menginstall Coa'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: err.message,
+                        });
+                    }
+                    throw errors;
+                }
+            }
+
+        };
+        window.accountTemplates = accountTemplates;
+        accountTemplates.init();
+
+    </script>
+</body>
+
+</html>

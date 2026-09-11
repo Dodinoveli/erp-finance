@@ -1,8 +1,10 @@
 package com.logikaintermedia.erp.modules.bankaccounts;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
+
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 
 import lombok.Data;
 
@@ -11,7 +13,6 @@ public class BankAccounts {
     private UUID bankAccountId;
     private String accountCode;
     private String accountName;
-    // private AccountType accountType; // Menggunakan Enum
     private String accountType;
     private String bankName;
     private String bankBranch;
@@ -22,12 +23,15 @@ public class BankAccounts {
     private Boolean isDefault = false;
     private Boolean isActive = true;
     private UUID companyId;
-    private UUID coaId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
     private UUID userId;
-    private LocalDateTime deletedAt;
+    private OffsetDateTime deletedAt;
 
-    // coa akun
-    private String name;
+
+    // relasi ke tabel joa
+    private UUID accountId;
+    // hasil json
+    private  ChartOfAccounts coa;
 }

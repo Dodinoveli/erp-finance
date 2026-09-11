@@ -18,8 +18,8 @@ public class CompanyRequest {
     @NotBlank(message = "Nama Perusahaan wajib diisi", groups = { OnCreate.class, OnUpdate.class })
     private String legalName;
 
-    // @NotBlank(message = "Kode wajib diisi", groups = { OnCreate.class,
-    // OnUpdate.class })
+    @NotBlank(message = "Kode wajib diisi", groups = { OnCreate.class,
+    OnUpdate.class })
     private String companyCode;
 
     // @NotBlank(message = "Npwp wajib diisi", groups = { OnCreate.class,

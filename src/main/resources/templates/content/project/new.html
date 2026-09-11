@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="container-fluid mt-2">
+                <form id="formProject">
+                    <div class="card p-1">
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">PO NUMBER/ SPK</label>
+                                        <div class="form-field">
+                                            <input type="text" class="form-control input-underline" id="project_po"
+                                                name="projectPo"
+                                                placeholder="Contoh: PO/2026/08/0142, sesuaikan dengan no po anda">
+                                            <small class="text-danger" id="err-projectPo"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Tanggal PO NUMBER/ SPK</label>
+                                        <div class="form-field">
+                                            <input type="date" id="po_date" name="poDate"
+                                                class="form-control input-underline">
+                                            <small class="text-danger" id="err-poDate"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Nama</label>
+                                        <div class="form-field">
+                                            <input type="text" id="name" name="name"
+                                                class="form-control input-underline">
+                                            <small class="text-danger" id="err-name"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Klien</label>
+                                        <div class="form-field">
+                                            <select id="client_id" name="clientId" class="form-control input-underline">
+                                            </select>
+                                            <small class=" text-danger" id="err-clientId"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Deskripsi</label>
+                                        <div class="form-field">
+                                            <textarea name="description" id="description"
+                                                class="form-control input-underline" rows=" 1"
+                                                placeholder="Contoh: Pekerjaan Pembuatan gudang"></textarea>
+                                            <small class="text-danger" id="err-description"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Jenis Proyek <span
+                                                class="text-danger">*</span></label>
+                                        <div class="form-field">
+                                            <select id="project_type" name="projectType"
+                                                class="form-select select-underline">
+                                                <option value="">-- Pilih Jenis Proyek --</option>
+                                                <option value="Konstruksi">Konstruksi & Bangunan</option>
+                                                <option value="Sipil">Sipil & Infrastruktur</option>
+                                                <option value="Elektrikal">Mekanikal & Elektrikal (MEP)</option>
+                                                <option value="Pengadaan">Pengadaan Barang (Procurement)</option>
+                                                <option value="Konsultansi">Konsultansi & Perencanaan</option>
+                                                <option value="Renovasi">Renovasi & Perawatan (Maintenance)</option>
+                                                <option value="IT">Teknologi Informasi (IT)</option>
+                                                <option value="Multi-Disiplin">Multi-Disiplin / EPC (Campuran)
+                                                </option>
+                                                <option value="General">General / Lain-lain</option>
+                                            </select>
+                                            <small class="text-danger" id="err-projectType"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Lokasi</label>
+                                        <div class="form-field">
+                                            <input type="text" id="location" name="location"
+                                                class="form-control input-underline" placeholder=" Lampung" />
+                                            <small class="text-danger" id="err-location"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Nilai Kontrak</label>
+                                        <div class="form-field">
+                                            <input type="text" id="contract_value" name="contractValue"
+                                                class="form-control input-underline" placeholder=" 100.000.000" />
+                                            <small class="text-danger" id="err-contractValue"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Termasuk PPN 12% ? <span
+                                                class="text-danger">*</span></label>
+                                        <div class="form-field">
+                                            <select id="tax_type" name="taxType" class="form-select select-underline">
+                                                <option value="">-- Pilih Skema PPN --</option>
+                                                <option value=" EXCLUSIVE">Nilai Kontrak BELUM termasuk PPN (Exclusive)
+                                                </option>
+                                                <option value="INCLUSIVE">Nilai Kontrak SUDAH termasuk PPN (Inclusive)
+                                                </option>
+                                                <option value="NON_PPN">Nilai Kontrak NON PPN </option>
+                                            </select>
+                                            <small class="text-danger" id="err-taxType"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" detail-actions">
+                        <button type="submit" class="btn btn-simpan">
+                            <i class="bi bi-floppy"></i> Simpan
+                        </button>
+                        <a th:href="@{/project}" class="btn btn-batal" hx-get="/project" hx-target="#page-content"
+                            hx-push-url="true" hx-indicator="#loading"><i class="bi bi-x-lg"></i> Batal
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </main>
+        <script th:inline="javascript">
+            var projectNew = {
+
+                init: function () {
+                    this.bindEvents();
+                },
+
+                bindEvents: function () {
+                    const self = this;
+                    self.showClient();
+                    const form = document.getElementById("formProject");
+
+                    if (form.dataset.bound === "true") return;
+                    form.dataset.bound = "true";
+
+                    form.addEventListener("submit", (e) => {
+                        e.preventDefault();
+                        self.createNewProject(form);
+                    })
+                },
+
+                showClient: async function () {
+                    const url = "/api/v1/project/clients";
+                    try {
+                        const response = await fetch(url);
+
+                        // Cek HTTP status (500, 404, dll)
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        // Parse response body menjadi JSON
+                        const result = await response.json();
+                        if (result.status === "success") {
+                            const selectElement = document.getElementById('client_id');
+                            selectElement.innerHTML = '<option value="">-- Pilih Klien --</option>';
+                            const coaList = result.data;
+                            coaList.forEach(client => {
+                                const option = document.createElement('option');
+                                option.value = client.clientId;
+                                option.textContent = `${client.clientName}`;
+                                selectElement.appendChild(option);
+                            });
+                        }
+                    } catch (e) {
+                        console.log("error project")
+                    }
+                },
+
+                createNewProject: async function (formEl) {
+                    const formData = new FormData(formEl);
+                    const payload = Object.fromEntries(formData.entries());
+                    this.showErrors({}, formEl);
+
+                    try {
+                        var response = await fetch(`/api/v1/project`, {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            credentials: "include",
+                            body: JSON.stringify(payload),
+                        });
+
+                        var result = await response.json();
+                        if (!response.ok) {
+                            throw {
+                                status: response.status,
+                                message: result?.message,
+                                errors: result?.errors,
+                                data: result,
+                            };
+                        }
+                        await Toast.success(result.message, "Berhasil!", 2000);
+                        setTimeout(() => {
+                            var url = "/project";
+                            htmx
+                                .ajax("GET", url, {
+                                    target: "#page-content",
+                                    swap: "innerHTML",
+                                    indicator: "#loading"
+                                })
+                                .then(() => {
+                                    window.history.pushState({}, "", url);
+                                });
+                        }, 1500);
+
+                        return result;
+                    } catch (err) {
+                        console.log("Full Error Object = ", err);
+                        const errors = err?.errors || err?.data?.errors;
+                        if (errors) {
+                            this.showErrors(errors, formEl);
+                            Toast.error(err.message, "Gagal", 3000)
+                        } else {
+                            Toast.error(err.message, "Opps Error", 3000)
+                        }
+                        throw err;
+                    }
+                },
+
+                showErrors: function (errors, formEl) {
+                    if (!formEl) return; // 🔥 guard biar gak error lagi
+
+                    // 🔥 reset hanya di form ini
+                    formEl
+                        .querySelectorAll(".is-invalid")
+                        .forEach((i) => i.classList.remove("is-invalid"));
+
+                    formEl
+                        .querySelectorAll('[id^="err-"]')
+                        .forEach((e) => (e.innerText = ""));
+
+                    // 🔥 set error
+                    for (const field in errors) {
+                        const input = formEl.querySelector(`[name = "${field}"]`);
+                        const errorEl = formEl.querySelector("#err-" + field);
+
+                        if (input) input.classList.add("is-invalid");
+                        if (errorEl) errorEl.innerText = errors[field];
+                    }
+                },
+            };
+
+            window.projectNew = projectNew;
+            projectNew.init();
+        </script>
+    </div>
+</body>
+
+</html>

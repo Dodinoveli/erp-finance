@@ -12,14 +12,15 @@ spring:
 
     # 4. HikariCP Connection Pool
     hikari:
-      maximum-pool-size: 50
-      minimum-idle: 20
+      maximum-pool-size: 10
+      minimum-idle: 2
       idle-timeout: 30000
       max-lifetime: 1800000
       connection-timeout: 20000 # Batas maksimal mengantre koneksi
       pool-name: kawal-laba
       # Tambahkan auto-commit: false untuk aplikasi keuangan
       # Agar transaksi benar-benar dikontrol oleh Spring @Transactional
+      # Tambahkan  @Transactional di setiap proses update, save, delete
       auto-commit: false
 
   # 2. PERFORMANCE SETTINGS (Project Loom)
@@ -65,7 +66,7 @@ spring:
 
   # 8 DEVTOOLS
   devtools:
-    restart:
+    restart: 
       enabled: true
       exclude: "static/**, public/**, templates/**" # CSS/JS berubah, server TIDAK restart
       poll-interval: 2s

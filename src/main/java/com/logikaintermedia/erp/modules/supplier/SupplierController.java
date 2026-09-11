@@ -5,12 +5,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.logikaintermedia.erp.jwt.AuthUserPrincipal;
 import com.logikaintermedia.erp.utility.ApiResponse;
-import com.logikaintermedia.erp.utility.CursorResponse;
+import com.logikaintermedia.erp.utility.DataCountResponse;
+import com.logikaintermedia.erp.utility.DataTableResponse;
 import com.logikaintermedia.erp.validation.OnCreate;
 import com.logikaintermedia.erp.validation.OnUpdate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
@@ -34,17 +32,39 @@ public class SupplierController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping
+    public ResponseEntity<DataTableResponse<SupplierResponse>> getById(
+            @AuthenticationPrincipal AuthUserPrincipal user,
+            @RequestParam(defaultValue = "0") int draw,
+            @RequestParam(defaultValue = "0") int start,
+            @RequestParam(defaultValue = "10") int length,
+            @RequestParam(required = false) String keyword) {
+        UUID companyId = user.getCompanyId();
+        System.out.println("companyId = " + companyId);
+        DataTableResponse<SupplierResponse> response = service.getSupplierById(companyId, draw, start, length, keyword);
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping("/total-new")
+    public ResponseEntity<DataCountResponse<Supplier>> getTotal(
+            @AuthenticationPrincipal AuthUserPrincipal user) {
+        DataCountResponse<Supplier> response = service.getTotal(user.getCompanyId());
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PostMapping
     public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody SupplierRequest entity,
             @AuthenticationPrincipal AuthUserPrincipal user) {
         Supplier result = service.createSupplier(entity, user.getCompanyId(), user.getUserId());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Data Pemasok berhasil disimpan", result));
+                .body(ApiResponse.created("Data Supplier berhasil disimpan", result));
     }
 
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody SupplierRequest entity,
             @PathVariable UUID id,
@@ -54,33 +74,7 @@ public class SupplierController {
         BeanUtils.copyProperties(result, data);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Data Pemasok berhasil diubah", data));
-    }
-
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/generate-code")
-    public ResponseEntity<?> generateCode(@AuthenticationPrincipal AuthUserPrincipal user) {
-        String supplierCode = service.generateCode(user.getCompanyId());
-        Map<String, String> data = new HashMap<>();
-        data.put("supplierCode", supplierCode);
-        return ResponseEntity.ok(ApiResponse.success("Berhasil", data));
-    }
-
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping
-    public ResponseEntity<ApiResponse<CursorResponse<SupplierResponse>>> getById(
-            @AuthenticationPrincipal AuthUserPrincipal user,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) LocalDateTime lastCreatedAt,
-            @RequestParam(required = false) UUID lastId,
-            @RequestParam(defaultValue = "15") int limit) {
-        UUID companyId = user.getCompanyId();
-        System.out.println("lastCreatedAt = " + lastCreatedAt);
-        System.out.println("lastId = " + lastId);
-        System.out.println("companyId = " + companyId);
-        CursorResponse<SupplierResponse> response = service.getSupplierById(companyId, keyword, lastCreatedAt, lastId,
-                limit);
-        return ResponseEntity.ok(ApiResponse.success("Berhasil", response));
+                .body(ApiResponse.created("Data Supplier berhasil diubah", data));
     }
 
 }

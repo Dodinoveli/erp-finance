@@ -1,10 +1,10 @@
 package com.logikaintermedia.erp.utility;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public interface HasCursor {
-    LocalDateTime getCreatedAt();
+    OffsetDateTime getCreatedAt();
 
     UUID getId();
 }

@@ -64,7 +64,7 @@ public class UserRepository {
 
         if (result.isEmpty()) {
             System.out.println("USER TIDAK KETEMU DI JAVA");
-            return null;
+            throw new IllegalArgumentException("Username atau password tidak sesuai.");
         }
 
         return result.get(0);

@@ -1,0 +1,341 @@
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table {
+  width: 100% !important;
+  font-size: 13px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+
+.table thead th {
+  background: #f8f9fa;
+  color: #495057;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 12px;
+  white-space: nowrap;
+  border-bottom: 1px solid #dee2e6;
+  /* vertical-align: middle;*/
+}
+
+/* =========================
+   BODY
+   ========================= */
+
+.table tbody td {
+  padding: 7px 10px;
+  height: 32px !important;
+  vertical-align: middle;
+  color: #343a40;
+  border-bottom: 1px solid #f1f3f5;
+}
+
+/* table.dataTable tbody tr:nth-child(odd) > * {
+  background-color: #ffffff !important;
+}
+
+table.dataTable tbody tr:nth-child(even) > * {
+  background-color: #f1f3f5 !important;
+}
+
+table.dataTable tbody tr:hover > * {
+  background-color: #e9ecef !important;
+} */
+
+/* =========================================================
+   DATATABLES
+   ========================================================= */
+
+/* Layout */
+.dt-layout-row {
+  margin-bottom: 10px;
+}
+
+/* =========================
+   SEARCH
+   ========================= */
+
+.dt-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.dt-search label {
+  display: none;
+}
+
+.dt-search input {
+  width: 220px !important;
+  height: 32px !important;
+
+  padding: 4px 10px 4px 35px !important;
+
+  font-size: 13px !important;
+
+  border: 1px solid #ced4da !important;
+  border-radius: 6px !important;
+
+  box-shadow: none !important;
+}
+
+.dt-search input:focus {
+  border-color: #86b7fe !important;
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.1) !important;
+}
+
+/* Search Icon */
+
+.dt-search::before {
+  content: "\f52a";
+
+  font-family: "bootstrap-icons";
+
+  position: absolute;
+
+  left: 15px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 13px;
+
+  color: #6c757d;
+
+  z-index: 2;
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   BUTTON ADD
+   ========================================================= */
+
+.dt-search .btn-add {
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+  margin: 0 !important;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 6px;
+}
+
+.dt-search .btn-add i {
+  display: block;
+
+  font-size: 18px;
+
+  line-height: 1;
+}
+
+/* =========================================================
+   LENGTH / DATA PERHALAMAN
+   ========================================================= */
+
+.dt-length {
+  display: flex;
+  align-items: center;
+
+  font-size: 12px;
+}
+
+.dt-length label {
+  text-transform: none !important;
+  font-size: 12px !important;
+}
+
+.dt-length select {
+  width: 58px !important;
+  height: 31px !important;
+
+  padding: 3px 6px !important;
+
+  margin-right: 7px !important;
+
+  font-size: 13px !important;
+
+  border-radius: 6px !important;
+}
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.dt-info {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.dt-paging nav {
+  margin: 0;
+}
+
+.dt-paging .pagination {
+  gap: 2px;
+  justify-content: center;
+}
+
+.dt-paging .page-link {
+  min-width: 30px;
+  height: 30px;
+
+  padding: 3px 8px !important;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  font-size: 12px !important;
+  line-height: 1;
+
+  border-radius: 0px !important;
+}
+
+/* =========================================================
+   STATUS / BADGE
+   ========================================================= */
+
+.table .badge {
+  font-size: 11px;
+  font-weight: 500;
+
+  padding: 4px 7px;
+}
+
+/* =========================================================
+   ACTION BUTTON
+   ========================================================= */
+
+.table .action-detail {
+  height: 29px;
+
+  padding: 2px 8px;
+
+  font-size: 12px;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 2px;
+
+  border-radius: 5px;
+}
+
+/* =========================================================
+   SORTING
+   ========================================================= */
+
+/* Header yang bisa di-sort */
+
+.table thead th {
+  cursor: pointer;
+}
+
+/* Jangan kasih cursor pointer untuk kolom aksi */
+
+.table thead th:last-child {
+  cursor: default;
+}
+
+/* =========================================================
+   RESPONSIVE TABLE
+   ========================================================= */
+
+.table-responsive {
+  width: 100%;
+
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  /* DataTables layout */
+
+  .dt-layout-row {
+    gap: 8px;
+  }
+
+  /* Search */
+
+  .dt-search {
+    width: 100%;
+  }
+
+  .dt-search input {
+    width: 100% !important;
+  }
+
+  /* Tombol tambah */
+
+  .dt-search .btn-add {
+    width: 32px;
+    min-width: 32px;
+  }
+
+  /* Length */
+
+  .dt-length {
+    width: 100%;
+  }
+
+  /* Table */
+
+  .table {
+    font-size: 12px;
+  }
+
+  /* Header */
+
+  .table thead th {
+    font-size: 13px;
+
+    padding: 8px 10px;
+  }
+
+  /* Body */
+
+  .table tbody td {
+    padding: 6px 10px;
+  }
+
+  /* Info */
+
+  .dt-info {
+    font-size: 11px;
+  }
+
+  /* Pagination */
+
+  .dt-paging .page-link {
+    min-width: 28px;
+    height: 28px;
+
+    font-size: 11px !important;
+  }
+}

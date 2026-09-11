@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{fragments/head :: head('Daftar Akun')}"></div>
+<style>
+    #coa-table .coa-leaf .tabulator-data-tree-control {
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    #coa-table {
+        background-color: white;
+    }
+</style>
+
+<body>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <main class="main">
+        <div th:replace="~{fragments/navbar :: navbar}"></div>
+        <div class="container-fluid py-1">
+            <!-- TABLE CARD -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-body border-bottom">
+                    <div class="row g-3 align-items-center">
+
+                        <div class="col-12">
+                            <div class="d-flex gap-2 align-items-center flex-wrap">
+                                <a th:href="@{/chartofaccountstemplates}" type="button" class="btn btn-primary">Lihat
+                                    Daftar
+                                    Akun</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="table-responsive ">
+                    <div id="coa-table"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div th:replace="~{fragments/footer :: footer}">
+    </div>
+    <script th:src="@{/js/utility/dashboard.js}"></script>
+
+    <script type="module" th:inline="javascript">
+        const accountTemplates = {
+
+            table: null,
+
+            init() {
+                this.initTable();
+            },
+
+            initTable() {
+
+                this.table = new Tabulator("#coa-table", {
+
+                    ajaxURL: "/api/v1/accounts/tree",
+                    ajaxResponse: function (url, params, response) {
+
+                        return response.data;
+
+                    },
+                    height: "550px",
+                    layout: "fitColumns",
+                    responsiveLayout: "collapse",
+                    // layout: "fitColumns",
+                    // responsiveLayout: "collapse",
+                    // responsiveLayout: false,
+                    dataTree: true,
+                    dataTreeChildField: "children",
+                    // dataTreeStartExpanded: true,
+                    dataTreeChildIndent: 30,
+
+                    dataTreeStartExpanded: function (row, level) {
+                        return level === 0;
+                    },
+
+                    rowFormatter: function (row) {
+
+                        const data = row.getData();
+                        const element = row.getElement();
+
+                        if (!data.children || data.children.length === 0) {
+                            element.classList.add("coa-leaf");
+                        } else {
+                            element.classList.remove("coa-leaf");
+                        }
+
+                    },
+
+                    columns: [
+                        {
+                            title: "Kode",
+                            field: "accountCode",
+                            width: 180
+                        },
+                        {
+                            title: "Nama Akun",
+                            field: "accountName",
+                            widthGrow: 3,
+                            formatter: function (cell) {
+
+                                const data = cell.getRow().getData();
+
+                                if (data.isHeader) {
+                                    return `<strong>${data.accountName}</strong>`;
+                                }
+
+                                return data.accountName;
+                            }
+                        },
+                        {
+                            title: "Tipe",
+                            field: "accountType"
+                        },
+                        {
+                            title: "Saldo Normal",
+                            field: "normalBalance",
+                            width: 130
+                        },
+                        {
+                            title: "Level",
+                            field: "accountLevel"
+                        },
+                        {
+                            title: "Header",
+                            field: "isHeader",
+                            formatter: "tickCross",
+                            width: 120
+                        },
+                        {
+                            title: "Bisa Jurnal",
+                            field: "isPostable",
+                            formatter: "tickCross",
+                            width: 130
+                        },
+                        {
+                            title: "Aksi",
+                            field: "aksi",
+                            hozAlign: "center",
+                            headerHozAlign: "center",
+                            headerSort: false,
+                            width: 100,
+                            minWidth: 100,
+                            maxWidth: 100,
+                            resizable: false,
+
+                            formatter: function (cell) {
+                                const data = cell.getRow().getData();
+
+                                let id;
+                                if (data.accountLevel !== 3) {
+                                    return "";
+                                } else {
+                                    id = data.accountId;
+                                    return `
+                                    <div class="d-flex justify-content-center align-items-center h-100">
+                                     <a href="/chartofaccounts/detail/${id}" style="text-decoration:inline">Edit</a>
+                                </div>
+                                `;
+                                }
+
+
+                            }
+                        }
+                    ]
+
+                });
+            }
+
+        };
+        window.accountTemplates = accountTemplates;
+        accountTemplates.init();
+
+    </script>
+</body>
+
+</html>

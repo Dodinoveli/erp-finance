@@ -1,11 +1,8 @@
 package com.logikaintermedia.erp.modules.supplier;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.Data;
 
 @Data
@@ -32,15 +29,9 @@ public class Supplier {
     private Boolean supplierIsActive;
     private UUID companyId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime supplierCreatedAt;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime supplierUpdatedAt;
-
+    private OffsetDateTime supplierCreatedAt;
+    private OffsetDateTime supplierUpdatedAt;
     private UUID userId;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime supplierDeletedAt;
+    private OffsetDateTime supplierDeletedAt;
 
 }

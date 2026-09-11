@@ -2,7 +2,7 @@ package com.logikaintermedia.erp.modules.project;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Data;
 
@@ -10,6 +10,7 @@ import lombok.Data;
 public class ProyekResponse {
     private UUID projectId;
     private String projectCode;
+    private String projectPo;
     private String name;
     private String description;
     private UUID clientId;
@@ -19,8 +20,8 @@ public class ProyekResponse {
     // dpp
     private BigDecimal contractValue;
     private String location;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
     private UUID companyId;
     private UUID userId;
     private String taxType;

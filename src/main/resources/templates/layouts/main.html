@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title th:text="${pageTitle}">Kawal Laba</title>
+  <link rel="stylesheet" th:href="@{/css/label.css}" />
+  <link rel="stylesheet" th:href="@{/css/card.css}" />
+  <!-- <link rel="stylesheet" th:href="@{/css/tabel.css}"> -->
+  <link rel="stylesheet" th:href="@{/css/datatables.css}" />
+  <link rel="stylesheet" th:href="@{/css/formdetail.css}" />
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}" />
+  <link rel="stylesheet" th:href="@{/css/skeleton.css}" />
+  <link th:href="@{/css/pageloading_easyui.css}" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+  <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet" />
+  <script src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
+  <script th:src="@{/js/utility/skeleton.js}" defer></script>
+  <script th:src="@{/js/utility/toast.js}"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.10"></script>
+  <!-- <link href="https://cdn.datatables.net/v/dt/dt-3.0.3/datatables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/v/dt/dt-3.0.3/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/3.0.3/js/dataTables.bootstrap5.min.js"></script> -->
+
+  <!-- DataTables 3 + Bootstrap 5 -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/3.0.3/css/dataTables.bootstrap5.min.css" />
+  <script src="https://cdn.datatables.net/3.0.3/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/3.0.3/js/dataTables.bootstrap5.min.js"></script>
+  <script type="module"
+    src="https://unpkg.com/skeleton-webcomponent-loader@3.0.0/dist/skeleton-webcomponent/skeleton-webcomponent.esm.js"></script>
+  <style>
+    #main-content-wrapper {
+      position: relative;
+      margin-left: 0px;
+    }
+
+    #loading {
+      position: absolute;
+      inset: 0;
+      z-index: 9999;
+      margin-left: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+
+      transition:
+        opacity 0.15s ease,
+        visibility 0.15s ease;
+    }
+
+    @media (max-width: 767.98px) {
+      #loading {
+        /* tetap mengikuti area content */
+        inset: 0;
+        margin-left: 0px;
+      }
+
+      .modern-spinner {
+        width: 36px;
+        height: 36px;
+        border-width: 3px;
+      }
+    }
+
+    #loading.htmx-request {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .modern-spinner {
+      width: 42px;
+      height: 42px;
+
+      border: 4px solid #e5e7eb;
+      border-top-color: #0d6efd;
+      border-right-color: #0d6efd;
+
+      border-radius: 50%;
+
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+  <!-- Sidebar -->
+  <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+  <!-- Isi halaman -->
+  <div id="main-content-wrapper">
+    <main id="page-content" layout:fragment="content"></main>
+    <div id="loading" class="htmx-indicator">
+      <div class="modern-spinner"></div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments/footer :: footer}"></div>
+  <script th:src="@{/js/utility/dashboard.js}" defer></script>
+  <script>
+    document.body.addEventListener("htmx:afterRequest", function (event) {
+      const title = event.detail.xhr.getResponseHeader("X-Page-Title");
+
+      if (title) {
+        document.getElementById("page-title").textContent = title;
+        document.title = title + " - Kawal Laba";
+      }
+    });
+  </script>
+</body>
+
+</html>

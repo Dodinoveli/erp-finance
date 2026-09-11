@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="container-fluid py-2">
+                <div class="row g-3 mb-2">
+                    <!-- TOTAL -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body py-2 px-3 d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 text-primary rounded p-2">
+                                    <i class="bi bi-kanban"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="text-muted small">Total Proyek</div>
+                                    <div class="fw-semibold fs-5" id="total-client">1.200</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AKTIF -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body py-2 px-3 d-flex align-items-center">
+                                <div class="bg-success bg-opacity-10 text-success rounded p-2">
+                                    <i class="bi bi-play-circle"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="text-muted small">Proyek Aktif</div>
+                                    <div class="fw-semibold fs-5" id="client-aktif">500</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- NONAKTIF -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body py-2 px-3 d-flex align-items-center">
+                                <div class="bg-danger bg-opacity-10 text-danger rounded p-2">
+                                    <i class="bi bi-pause-circle"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="text-muted small">Nonaktif</div>
+                                    <div class="fw-semibold fs-5" id="client-nonaktif">100</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BARU -->
+                    <div class="col-12 col-sm-6 col-xl-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body py-2 px-3 d-flex align-items-center">
+                                <div class="bg-warning bg-opacity-10 text-warning rounded p-2">
+                                    <i class="bi bi-folder-plus"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <div class="text-muted small">Proyek Baru</div>
+                                    <div class="fw-semibold fs-5" id="client-baru">550</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="card border-0 shadow-sm">
+                    <div class="table-responsive">
+                        <table id="projectTable" class="table table-hover table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>PO/SPK</th>
+                                    <th>TGL-PO/SPK</th>
+                                    <th>Proyek</th>
+                                    <th>Jenis Proyek</th>
+                                    <th>Client</th>
+                                    <th>Nilai Kontrak</th>
+                                    <!-- <th>Status</th> -->
+                                    <!-- <th>PROGRESS</th> -->
+                                    <th>AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <script type="module" th:inline="javascript">
+            import { library } from '/js/utility/library.js';
+            function formatRupiah(data) {
+                return library.formatRupiah(data);
+            }
+
+            function formatDateIndonesia(data) {
+                return library.formatDateIndonesia(data);
+            }
+            var table = new DataTable("#projectTable", {
+                ordering: false,
+                processing: true,
+                serverSide: true,
+                columnDefs: [
+                    { targets: 0, width: '50px' },   // Kode
+                    { targets: 1, width: '100px' },  // Nama
+                    { targets: 2, width: '100px' },  // Kontak
+                    {
+                        targets: 3, width: '200px',
+                    },
+                    { targets: 4, width: '100px' },
+                    { targets: 5, width: '200px', type: 'string', },
+                    { targets: 6, width: '150px' },
+                    // { targets: 7, width: '60px' },
+                    { targets: 7, width: '60px' },  // aksi
+                ],
+                layout: {
+                    topStart: {
+                        pageLength: true,
+                    },
+                    topEnd: {
+                        search: true,
+                    },
+                },
+
+                language: {
+                    search: "",
+                    searchPlaceholder: "Cari nama...",
+                    lengthMenu: "_MENU_ Data Perhalaman",
+                    info: "Menampilkan _START_–_END_ dari _TOTAL_ data",
+                    infoEmpty: "Tidak ada data",
+                    zeroRecords: "Data tidak ditemukan",
+                    emptyTable: "Belum ada data",
+                    paginate: {
+                        first: "«",
+                        last: "»",
+                        next: "›",
+                        previous: "‹",
+                    },
+                },
+
+                ajax: async function (data, callback) {
+                    console.log("DATATABLES DATA:", data);
+                    const keyword = data.search?.value?.trim() || "";
+                    const params = new URLSearchParams({
+                        draw: data.draw,
+                        start: data.start,
+                        length: data.length,
+                        keyword: data.search?.value?.trim() || "",
+                    });
+
+                    console.log("KEYWORD JS =", keyword);
+                    try {
+                        const response = await fetch(`/api/v1/project?${params}`, {
+                            credentials: "include",
+                        });
+                        console.log("RESPONSE:", response);
+                        const result = await response.json();
+
+                        callback({
+                            draw: data.draw,
+                            recordsTotal: result.recordsTotal,
+                            recordsFiltered: result.recordsFiltered,
+                            data: result.data,
+                        });
+                    } catch (error) {
+                        console.error("Gagal mengambil data:", error);
+
+                        callback({
+                            draw: data.draw,
+                            recordsTotal: 0,
+                            recordsFiltered: 0,
+                            data: [],
+                        });
+                    }
+                },
+
+                pageLength: 10,
+                lengthMenu: [
+                    [10, 25, 50, 100],
+                    [10, 25, 50, 100]
+                ],
+                columns: [
+                    { data: "projectCode" },
+                    { data: "projectPo" },
+                    {
+                        data: "poDate",
+                        render: function (data) {
+                            return formatDateIndonesia(data);
+                        }
+                    },
+                    { data: "name" },
+                    { data: "projectType" },
+                    { data: "clientName" },
+                    {
+                        data: "contractValue",
+                        render: function (data, type, row) {
+                            // data = contractValue
+                            // row = seluruh data object (termasuk ppn jika ada)
+
+                            if (type === 'display' || type === 'filter') {
+                                // const contractValue = data || 0;
+                                // const ppn = row.ppn || 0; // Ambil ppn dari data
+                                // const total = contractValue + ppn;
+
+                                return `
+                                <div>
+                                    <div><strong>Status: ${row.taxType}</strong></div>
+                                    <div>Nilai: ${formatRupiah(row.contractValue)}</div>
+                                    <div>DPP: ${formatRupiah(row.dpp)}</div>
+                                    <div>PPN 11%: ${formatRupiah(row.totalTax)}</div>
+                                    <div><strong>Total: ${formatRupiah(row.totalAmount)}</strong></div>
+                                </div>
+                            `;
+                            }
+                            return data;
+                        }
+                    },
+
+                    {
+                        data: null,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, row) {
+                            return ` 
+                            <a href="/project/detail/${row.projectId}"
+                            hx-get="/project/detail/${row.projectId}"
+                            hx-target="#page-content"
+                            hx-push-url="true"
+                            hx-indicator="#loading"
+                            class="btn btn-outline-secondary btn-sm action-btn"
+                            title="Lihat Detail"
+                            style="text-decoration:none">
+                                <i class="bi bi-eye"></i>
+                            </a>`;
+                        },
+                    },
+                ],
+            });
+
+            var searchBox = document.querySelector(
+                "#projectTable_wrapper .dt-search",
+            );
+
+            if (searchBox && !searchBox.querySelector(".btn-add")) {
+                searchBox.insertAdjacentHTML(
+                    "beforeend",
+                    `
+                    <a href="/project/new"
+                        class="btn btn-primary btn-sm ms-2 d-inline-flex align-items-center justify-content-center btn-add"
+                        hx-get="/project/new"
+                        hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
+                    <i class="bi bi-plus"></i>
+                    </a>`,
+                );
+            }
+
+            table.on("draw", function () {
+                htmx.process(document.querySelector("#projectTable tbody"));
+            });
+
+            async function total() {
+                // const url = "/api/v1/clients/total-new";
+
+                // try {
+                //     const response = await fetch(url, {
+                //         method: "GET",
+                //         credentials: "include",
+                //     });
+                //     if (!response.ok) {
+                //         throw new Error(`Response status: ${response.status}`);
+                //     }
+                //     const result = await response.json();
+                //     document.getElementById("total-client").textContent = result.total;
+                //     document.getElementById("client-aktif").textContent =
+                //         result.totalActive;
+                //     document.getElementById("client-nonaktif").textContent =
+                //         result.totalInactive;
+                //     document.getElementById("client-baru").textContent =
+                //         result.totalNew;
+                // } catch (error) { }
+            }
+
+            total();
+
+        </script>
+    </div>
+</body>
+
+</html>

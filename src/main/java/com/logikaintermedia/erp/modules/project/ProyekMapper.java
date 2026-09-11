@@ -3,7 +3,7 @@ package com.logikaintermedia.erp.modules.project;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.NonNull;
@@ -15,6 +15,7 @@ public class ProyekMapper implements RowMapper<Proyek> {
         Proyek mdl = new Proyek();
         mdl.setProjectId(rs.getObject("project_id", UUID.class));
         mdl.setProjectCode(rs.getString("project_code"));
+        mdl.setProjectPo(rs.getString("project_po"));
         mdl.setName(rs.getString("name"));
         mdl.setDescription(rs.getString("description"));
         mdl.setClientId(rs.getObject("client_id", UUID.class));
@@ -23,8 +24,8 @@ public class ProyekMapper implements RowMapper<Proyek> {
         mdl.setContractValue(rs.getBigDecimal("contract_value"));
         mdl.setLocation(rs.getString("location"));
         mdl.setCompanyId(rs.getObject("company_id", UUID.class));
-        mdl.setCreatedAt(rs.getObject("created_at", LocalDateTime.class));
-        mdl.setUpdatedAt(rs.getObject("updated_at", LocalDateTime.class));
+        mdl.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+        mdl.setUpdatedAt(rs.getObject("updated_at", OffsetDateTime.class));
         mdl.setUserId(rs.getObject("user_id", UUID.class));
         mdl.setVatRate(rs.getBigDecimal("vat_rate"));
         Date poDate = rs.getDate("po_date");

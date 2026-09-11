@@ -1,5 +1,7 @@
 package com.logikaintermedia.erp.modules.company;
 
+import java.util.UUID;
+
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -44,5 +46,18 @@ public class CompanyRepository {
                     :companyId, :legalName, :companyCode, :npwp, :nib, :address, :city, :province, :postalCode, :country, :phone, :email, :companyType, :pkp, :baseCurrency, :isActive, :createdAt, :updatedAt);
                                 """;
         return jdbcTemplate.update(sql, toParams(model));
+    }
+
+    public String companyCodeById(UUID id) {
+        String sql = """
+                select
+                company_code
+                from company
+                where company_id = :companyId
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", id);
+
+        return jdbcTemplate.queryForObject(sql, params, String.class);
     }
 }

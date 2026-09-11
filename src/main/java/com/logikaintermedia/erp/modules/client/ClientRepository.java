@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -17,69 +17,34 @@ import lombok.extern.slf4j.Slf4j;
 @Repository
 public class ClientRepository {
 
-    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbc;
 
-    public ClientRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    public ClientRepository(NamedParameterJdbcTemplate jdbc) {
+        this.jdbc = jdbc;
     }
 
-    public String generateClientCode(UUID companyId) {
-        String lastCode = null;
-
-        // 1. Ambil kode terakhir dengan LOCK (FOR UPDATE)
-        String sqlGetLast = """
-                SELECT client_code FROM clients
-                WHERE company_id = :companyId
-                ORDER BY client_code DESC
-                LIMIT 1 FOR UPDATE
-                """;
-        try {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("companyId", companyId);
-            lastCode = namedParameterJdbcTemplate.queryForObject(sqlGetLast, data, String.class);
-        } catch (EmptyResultDataAccessException e) {
-            // Biarkan lastCode tetap null jika belum ada data sama sekali
-        }
-
-        // 2. Logika increment nomor urut
-        int newNumber = 1;
-        if (lastCode != null && lastCode.startsWith("CL-")) {
-            try {
-                // Mengambil angka setelah "CL-"
-                newNumber = Integer.parseInt(lastCode.substring(3)) + 1;
-            } catch (NumberFormatException e) {
-                newNumber = 1; // Fallback jika format kode rusak
-            }
-        }
-
-        return String.format("CL-%05d", newNumber);
-    }
-
-    public String code(UUID companyId) {
+    /**
+     * Generator Urutan Bilangan Bulat
+     * 
+     * @param companyId
+     * @return
+     */
+    public long IntSequenceGenerator(UUID companyId) {
         String sql = """
-                SELECT client_code
-                FROM clients
-                WHERE company_id = :companyId
-                ORDER BY client_code DESC
-                LIMIT 1
+                     UPDATE company_sequences
+                         SET current_value = current_value + 1
+                     WHERE company_id = :companyId
+                         AND sequence_type = 'CLIENT'
+                         RETURNING current_value;
                 """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
 
-        try {
-            Map<String, Object> params = new LinkedHashMap<>();
-            params.put("companyId", companyId);
-            String lastCode = namedParameterJdbcTemplate.queryForObject(sql, params, String.class);
-
-            if (lastCode != null && lastCode.startsWith("CL-")) {
-                int number = Integer.parseInt(lastCode.substring(3));
-                number++;
-                return String.format("CL-%05d", number);
-            }
-        } catch (EmptyResultDataAccessException e) {
-            return "CL-00001";
-        } catch (Exception e) {
-            System.err.println("Error generating code: " + e.getMessage());
+        Long result = jdbc.queryForObject(sql, params, Long.class);
+        if (result == null) {
+            throw new IllegalStateException("Gagal mendapatkan nomor client untuk company: " + companyId);
         }
-        return "CL-00001";
+        return result;
     }
 
     private @NonNull MapSqlParameterSource toParams(Client model) {
@@ -130,7 +95,7 @@ public class ClientRepository {
                         :clientBankName, :clientAccountNumber, :clientAccountName, :clientNitku, :clientIsPkp
                     )
                 """;
-        return namedParameterJdbcTemplate.update(sql, toParams(model));
+        return jdbc.update(sql, toParams(model));
     }
 
     public int update(Client model) {
@@ -161,19 +126,19 @@ public class ClientRepository {
                     WHERE client_id = :clientId and company_id = :companyId
                 """;
 
-        return namedParameterJdbcTemplate.update(sql, toParams(model));
+        return jdbc.update(sql, toParams(model));
     }
 
     public List<Client> findById(UUID companyId, String keyword, LocalDateTime lastCreatedAt, UUID lastId,
             int limit) {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("companyId", companyId);
-        params.put("limit", limit);
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("limit", limit);
 
         boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
         if (hasKeyword) {
-            // params.put("keyword", "%" + keyword + "%");
-            params.put("keyword", keyword + "%");
+            params.addValue("keyword", keyword + "%");
         }
 
         String sql = """
@@ -185,7 +150,7 @@ public class ClientRepository {
         if (hasKeyword) {
             // query ini hanya lambat jika datanya sudah 100.000 baris di bawah itu cepat
             // AND (supplier_name ILIKE CONCAT('%', :keyword, '%'))
-            sql += " AND (client_name) ILIKE CONCAT('%', :keyword, '%')";
+            sql += " AND client_name ILIKE :keyword";
         }
 
         // 🔥 keyset filter (optional)
@@ -196,13 +161,13 @@ public class ClientRepository {
                             OR (client_created_at = :lastCreatedAt AND client_id < :lastId)
                         )
                     """;
-            params.put("lastCreatedAt", lastCreatedAt);
-            params.put("lastId", lastId);
+             params.addValue("lastCreatedAt", lastCreatedAt);
+             params.addValue("lastId", lastId);
         }
         sql += " ORDER BY client_created_at DESC, client_id DESC LIMIT :limit ";
 
         try {
-            List<Client> result = namedParameterJdbcTemplate.query(sql, params, new ClientMapper());
+            List<Client> result = jdbc.query(sql, params, new ClientMapper());
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,18 +177,190 @@ public class ClientRepository {
 
     public Client detailById(UUID clientId) {
         String sql = """
-                 SELECT *
-                FROM public.clients
-                      WHERE client_id = :clientId
+                SELECT *
+                    FROM public.clients
+                WHERE client_id = :clientId
                                 """;
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("clientId", clientId);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("clientId", clientId);
         try {
-            return namedParameterJdbcTemplate.queryForObject(sql, params, new ClientMapper());
+            return jdbc.queryForObject(sql, params, new ClientMapper());
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Gagal mengambil clients dengan ID: " + clientId, e);
         }
     }
 
+    public List<Client> findClientByCompanyId(UUID companyId,
+            int start,
+            int length,
+            String keyword) {
+        String sql = """
+                SELECT
+                client_id,
+                client_name,
+                client_code,
+                client_contact_person,
+                client_contact_phone,
+                client_email,
+                client_is_active
+                    FROM public.clients
+                WHERE company_id = :companyId
+                    """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("start", start);
+        params.addValue("length", length);
+        if (keyword != null && !keyword.isBlank()) {
+            sql += """
+                    AND (
+                        client_name ILIKE :keyword
+                        OR client_code ILIKE :keyword
+                        OR client_contact_person ILIKE :keyword
+                        OR client_email ILIKE :keyword
+                    )
+                    """;
+            params.addValue("keyword", "%" + keyword.trim() + "%");
+        }
+        sql += """
+                ORDER BY client_code DESC
+                LIMIT :length OFFSET :start
+                """;
+
+        try {
+            List<Client> result = jdbc.query(sql, params,
+                    new BeanPropertyRowMapper<>(Client.class));
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    @SuppressWarnings("null")
+    public long countAll(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*)
+                FROM clients
+                WHERE company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result : 0;
+    }
+
+    @SuppressWarnings("null")
+    public long countFiltered(
+            UUID companyId,
+            String keyword) {
+
+        StringBuilder sql = new StringBuilder("""
+                SELECT COUNT(*)
+                FROM clients
+                WHERE company_id = :companyId
+                """);
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("companyId", companyId);
+
+        if (keyword != null && !keyword.isBlank()) {
+            sql.append("""
+                    AND (
+                        client_name ILIKE :keyword
+                        OR client_code ILIKE :keyword
+                        OR client_contact_person ILIKE :keyword
+                        OR client_email ILIKE :keyword
+                    )
+                    """);
+
+            params.addValue(
+                    "keyword",
+                    "%" + keyword.trim() + "%");
+        }
+
+        Long result = jdbc.queryForObject(
+                sql.toString(),
+                params,
+                Long.class);
+
+        return result != null ? result : 0;
+    }
+
+    // untuk dashboard client
+    @SuppressWarnings("null")
+    public int countTotalByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as count
+                FROM clients
+                WHERE company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
+
+    //
+    @SuppressWarnings("null")
+    public int countTotalActiveByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as count_active
+                    FROM clients
+                where client_is_active=true
+                and company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
+
+    @SuppressWarnings("null")
+    public int countTotalInactiveByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as count_active
+                    FROM clients
+                where client_is_active=false
+                and company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
+
+    @SuppressWarnings("null")
+    public int countTotalNewByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as total_new
+                    FROM clients
+                WHERE company_id = :companyId
+                    and client_created_at  >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
 }

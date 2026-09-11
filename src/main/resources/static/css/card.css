@@ -1,0 +1,19 @@
+.cardx {
+    /* Warna dasar bersih khas HarmonyOS (putih atau abu-abu sangat muda) */
+    background-color: #FFFFFF !important; 
+    
+    /* Atau jika ingin sedikit kebiruan sangat lembut: */
+    /* background-color: #F7F9FC !important; */
+
+    /* Sudut membulat */
+    border-radius: 8px !important;
+    
+    /* Hapus garis border kaku */
+    border: none !important;
+    
+    /* Bayangan lembut */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    
+    /* Jarak dalam */
+    padding: 24px !important;
+}

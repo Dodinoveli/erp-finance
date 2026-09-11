@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+
+<head>
+    <title>Dashboard</title>
+</head>
+
+<body>
+
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <!-- Navbar Disini -->
+            <!-- <div th:replace="~{fragments/navbar :: navbar}">
+        </div> -->
+            <section class="content">
+                <div class="head">
+                    <div>
+                        <p>Ringkasan kondisi proyek dan keuangan perusahaan.</p>
+                    </div><button class="btn">📅 16 Agustus 2026</button>
+                </div>
+
+
+                <!-- <div class="welcome">
+                <div>
+                    <h2>Good evening, Dodi 👋</h2>
+                    <p>Pantau kesehatan keuangan dan proyek perusahaan Anda.</p>
+                </div>
+                <div class="welcome-status">● Sistem aktif</div>
+            </div> -->
+
+                <div class="kpis">
+                    <div class="card kpi">
+                        <div class="kt"><span class="label">Total Pendapatan</span>
+                            <div class="ki"><i class="bi bi-cash me-2"></i></div>
+                        </div>
+                        <div class="value">Rp 12,8 M</div>
+                        <div class="trend">↑ 8,4% bulan lalu</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="kt"><span class="label">Total Pengeluaran</span>
+                            <div class="ki"><i class="bi bi-arrow-up-circle me-2"></i>
+                            </div>
+                        </div>
+                        <div class="value">Rp 4,2 M</div>
+                        <div class="trend">↑ 12,5% bulan lalu</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="kt"><span class="label">Total Hutang</span>
+                            <div class="kihutang"><i class="bi bi-credit-card-fill me-2"></i></div>
+                        </div>
+                        <div class="value">Rp 3,1 M</div>
+                        <div class="trend red">↑ 4,2% bulan lalu</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="kt"><span class="label">Total Laba Bersih</span>
+                            <div class="ki"><i class="bi bi-graph-up text-success me-2"></i> </div>
+                        </div>
+                        <div class="value">Rp 1,1 M</div>
+                        <div class="trend">↑ 18,7% bulan lalu</div>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div class="card">
+                        <div class="headcard"><b>Pendapatan vs Biaya</b><span>Jan — Agt 2026</span></div>
+                        <div class="chart">
+                            <div class="barbox"><i class="bar" style="height:45%"></i><i class="bar cost"
+                                    style="height:30%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:53%"></i><i class="bar cost"
+                                    style="height:35%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:60%"></i><i class="bar cost"
+                                    style="height:42%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:58%"></i><i class="bar cost"
+                                    style="height:40%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:68%"></i><i class="bar cost"
+                                    style="height:45%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:72%"></i><i class="bar cost"
+                                    style="height:50%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:80%"></i><i class="bar cost"
+                                    style="height:55%"></i></div>
+                            <div class="barbox"><i class="bar" style="height:75%"></i><i class="bar cost"
+                                    style="height:53%"></i></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="headcard"><b>Profit Margin</b><span>YTD</span></div>
+                        <div class="profit">
+                            <div class="circle">
+                                <div class="inner"><b>26,4%</b><small>Net Margin</small></div>
+                            </div>
+                            <div style="display:flex;justify-content:space-around;margin-top:18px;font-size:9px">
+                                <div><span style="color:var(--muted);display:block">Pendapatan</span><b>Rp 4,2 M</b>
+                                </div>
+                                <div><span style="color:var(--muted);display:block">Laba</span><b>Rp 1,1 M</b></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="headcard"><b>Cash Position</b><span>Hari ini</span></div>
+                        <div class="cash">
+                            <div class="cash-total cash-total-highlight">
+                                <small style="font-size: 12px;">Total Kas & Bank</small>
+                                <b>Rp 850,4 Jt</b>
+                                <span style="font-size: 10px;">↑ 12,4% bulan ini</span>
+                            </div>
+                            <div class="cash-row">
+                                <div class="cash-row-left">
+                                    <div class="cash-icon"><i class="bi bi-cash me-2"></i></div>
+                                    <div><b style="font-size: 12px;">Kas</b><small>Cash on hand</small></div>
+                                </div>
+                                <div class="cash-value">Rp 125 Jt</div>
+                            </div>
+                            <div class="cash-row">
+                                <div class="cash-row-left">
+                                    <div class="cash-icon"><i class="bi bi-bank me-2"></i></div>
+                                    <div><b style="font-size: 12px;">Bank</b><small>Saldo rekening</small></div>
+                                </div>
+                                <div class="cash-value">Rp 725,4 Jt</div>
+                            </div>
+                            <div class="cash-row">
+                                <div class="cash-row-left">
+                                    <div class="cash-icon"><i class="bi bi-receipt me-2"></i></div>
+                                    <div><b style="font-size: 12px;">Piutang</b><small>Belum diterima</small></div>
+                                </div>
+                                <div class="cash-value">Rp 1,35 M</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottomgrid">
+                    <div class="card">
+                        <div class="headcard"><b>Progress Proyek</b><span>4 proyek aktif</span></div>
+                        <div class="project">
+                            <div class="pt"><b>Pembangunan Gedung PT ABC</b><span>78%</span></div>
+                            <div class="progress">
+                                <div style="width:78%"></div>
+                            </div>
+                            <div class="meta"><span>Rp 5,2 M</span><span>Okt 2026</span></div>
+                        </div>
+                        <div class="project">
+                            <div class="pt"><b>Instalasi Panel MV</b><span>62%</span></div>
+                            <div class="progress">
+                                <div style="width:62%;background:#16a34a"></div>
+                            </div>
+                            <div class="meta"><span>Rp 2,85 M</span><span>Nov 2026</span></div>
+                        </div>
+                        <div class="project">
+                            <div class="pt"><b>Maintenance Genset</b><span>45%</span></div>
+                            <div class="progress">
+                                <div style="width:45%;background:#f59e0b"></div>
+                            </div>
+                            <div class="meta"><span>Rp 950 Jt</span><span>Sep 2026</span></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="headcard"><b>Transaksi Terbaru</b><span>Lihat semua →</span></div>
+                        <div class="tx">
+                            <div class="txico">↗</div>
+                            <div class="txinfo"><b>Invoice INV-0812</b><small>Pembangunan Gedung</small></div>
+                            <div class="txval">Rp 350 Jt<div class="paid">✓ Dibayar</div>
+                            </div>
+                        </div>
+                        <div class="tx">
+                            <div class="txico">▤</div>
+                            <div class="txinfo"><b>PO-2026-091</b><small>Instalasi Panel MV</small></div>
+                            <div class="txval">Rp 185 Jt<div style="color:#d97706;font-size:8px">• Pending</div>
+                            </div>
+                        </div>
+                        <div class="tx">
+                            <div class="txico">↗</div>
+                            <div class="txinfo"><b>Invoice INV-0808</b><small>Maintenance Genset</small></div>
+                            <div class="txval">Rp 95 Jt<div class="paid">✓ Dibayar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+
+</html>

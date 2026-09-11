@@ -1,0 +1,55 @@
+/* Toolbar */
+.toolbar {
+  padding: 5px 10px;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.search-box {
+  width: 270px;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: #101828;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.table tbody tr td {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: normal;
+  color: #101828;
+  /* text-transform: uppercase; */
+  letter-spacing: 0.02em;
+  /* padding: 3px 6px; */
+  vertical-align: middle;
+}
+
+.action-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.table-wrapper {
+  position: relative;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Sticky header */
+.table-wrapper thead th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #f8f9fa;
+}

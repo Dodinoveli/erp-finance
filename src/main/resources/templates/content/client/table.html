@@ -1,0 +1,877 @@
+```html
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Daftar Piutang</title>
+
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f6f8;
+            font-size: 14px;
+        }
+
+        .card {
+            border-radius: 10px;
+        }
+
+        /* Header */
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            padding: 14px 16px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .search-box {
+            width: 280px;
+        }
+
+        /* Table */
+        .table {
+            white-space: nowrap;
+        }
+
+        .table> :not(caption)>*>* {
+            padding: 10px 12px;
+        }
+
+        .table thead th {
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            vertical-align: middle;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .table tbody td {
+            font-size: 13px;
+        }
+
+        .table tbody tr {
+            transition: background-color .15s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Sorting */
+        .sort-icon {
+            font-size: 11px;
+            margin-left: 3px;
+            color: #adb5bd;
+        }
+
+        .sort-active {
+            color: #212529;
+        }
+
+        /* Status */
+        .status-badge {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 5px 8px;
+            border-radius: 6px;
+        }
+
+        /* Action */
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Summary */
+        .summary {
+            color: #6c757d;
+            font-size: 12px;
+        }
+
+        .summary strong {
+            color: #212529;
+        }
+
+        /* Responsive */
+        @media (max-width: 767.98px) {
+
+            body {
+                font-size: 13px;
+            }
+
+            .page-title {
+                font-size: 18px;
+            }
+
+            .toolbar {
+                padding: 12px;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+
+            .toolbar-actions {
+                width: 100%;
+            }
+
+            .toolbar-actions .btn,
+            .toolbar-actions .form-select {
+                flex: 1;
+            }
+
+            .table> :not(caption)>*>* {
+                padding: 9px 10px;
+            }
+
+            .table-responsive {
+                border-radius: 0 0 10px 10px;
+            }
+        }
+
+        /* Small mobile */
+        @media (max-width: 575.98px) {
+
+            .header-section {
+                padding: 14px !important;
+            }
+
+            .toolbar {
+                gap: 10px;
+            }
+
+            .toolbar-actions {
+                flex-direction: column;
+            }
+
+            .toolbar-actions .btn,
+            .toolbar-actions .form-select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-fluid py-3 py-md-4">
+
+        <!-- PAGE HEADER -->
+        <div class="header-section mb-3">
+
+            <div class="d-flex flex-column flex-md-row
+                    justify-content-between
+                    align-items-md-center
+                    gap-2">
+
+                <div>
+                    <div class="page-title">
+                        Daftar Piutang
+                    </div>
+
+                    <div class="page-subtitle">
+                        Kelola invoice dan piutang pelanggan
+                    </div>
+                </div>
+
+                <div>
+                    <button class="btn btn-primary btn-sm" onclick="newInvoice()">
+
+                        <i class="bi bi-plus-lg me-1"></i>
+                        Invoice
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CARD -->
+        <div class="card border-0 shadow-sm">
+
+            <!-- TOOLBAR -->
+            <div class="toolbar">
+
+                <div class="d-flex flex-column flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                    <!-- LEFT -->
+                    <div class="toolbar-actions d-flex gap-2">
+
+                        <select id="statusFilter" class="form-select form-select-sm" onchange="applyFilter()">
+
+                            <option value="">Semua Status</option>
+                            <option value="BELUM LUNAS">Belum Lunas</option>
+                            <option value="SEBAGIAN">Sebagian</option>
+                            <option value="LUNAS">Lunas</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- RIGHT -->
+                    <div class="search-box">
+
+                        <div class="input-group input-group-sm">
+
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+
+                            <input type="search" id="searchInput" class="form-control"
+                                placeholder="Cari invoice, client, proyek..." oninput="applyFilter()">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle mb-0">
+
+                    <thead class="table-light">
+
+                        <tr>
+
+                            <th onclick="sortTable('invoice')">
+                                No. Invoice
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-invoice"></i>
+                            </th>
+
+                            <th onclick="sortTable('date')">
+                                Tanggal
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-date"></i>
+                            </th>
+
+                            <th onclick="sortTable('client')">
+                                Client
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-client"></i>
+                            </th>
+
+                            <th onclick="sortTable('project')">
+                                Proyek
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-project"></i>
+                            </th>
+
+                            <th class="text-end" onclick="sortTable('dpp')">
+
+                                DPP
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-dpp"></i>
+
+                            </th>
+
+                            <th class="text-end" onclick="sortTable('tax')">
+
+                                Pajak
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-tax"></i>
+
+                            </th>
+
+                            <th class="text-end" onclick="sortTable('total')">
+
+                                Total
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-total"></i>
+
+                            </th>
+
+                            <th class="text-end" onclick="sortTable('remaining')">
+
+                                Sisa
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-remaining"></i>
+
+                            </th>
+
+                            <th onclick="sortTable('status')">
+
+                                Status
+                                <i class="bi bi-chevron-expand sort-icon" id="sort-status"></i>
+
+                            </th>
+
+                            <th class="text-center">
+                                Aksi
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="invoiceTable"></tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- FOOTER -->
+            <div class="d-flex flex-column flex-sm-row
+                    justify-content-between
+                    align-items-sm-center
+                    gap-2
+                    px-3 py-2
+                    border-top">
+
+                <div class="summary" id="dataSummary">
+                    Menampilkan 0 data
+                </div>
+
+                <div class="summary">
+                    Total Piutang:
+                    <strong id="totalRemaining">
+                        Rp0
+                    </strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+
+    <script>
+
+        /* =========================================
+           DATA
+        ========================================= */
+
+        const invoices = [
+
+            {
+                invoice: "INV-001",
+                date: "2026-09-01",
+                client: "PT Maju Jaya",
+                project: "Pembangunan Gudang",
+                dpp: 100000000,
+                tax: 11000000,
+                total: 111000000,
+                remaining: 111000000,
+                status: "BELUM LUNAS"
+            },
+
+            {
+                invoice: "INV-002",
+                date: "2026-08-28",
+                client: "PT Sinar Abadi",
+                project: "Instalasi Panel Listrik",
+                dpp: 75000000,
+                tax: 8250000,
+                total: 83250000,
+                remaining: 40000000,
+                status: "SEBAGIAN"
+            },
+
+            {
+                invoice: "INV-003",
+                date: "2026-08-20",
+                client: "CV Berkah Jaya",
+                project: "Maintenance Genset",
+                dpp: 25000000,
+                tax: 2750000,
+                total: 27750000,
+                remaining: 0,
+                status: "LUNAS"
+            },
+
+            {
+                invoice: "INV-004",
+                date: "2026-08-15",
+                client: "PT Karya Utama",
+                project: "Pembangunan Workshop",
+                dpp: 150000000,
+                tax: 16500000,
+                total: 166500000,
+                remaining: 166500000,
+                status: "BELUM LUNAS"
+            },
+
+            {
+                invoice: "INV-005",
+                date: "2026-08-10",
+                client: "PT Nusantara Teknik",
+                project: "Pengadaan Transformer",
+                dpp: 50000000,
+                tax: 5500000,
+                total: 55500000,
+                remaining: 20000000,
+                status: "SEBAGIAN"
+            },
+
+            {
+                invoice: "INV-006",
+                date: "2026-08-05",
+                client: "CV Sentosa",
+                project: "Perbaikan Panel",
+                dpp: 30000000,
+                tax: 3300000,
+                total: 33300000,
+                remaining: 0,
+                status: "LUNAS"
+            },
+
+            {
+                invoice: "INV-007",
+                date: "2026-07-30",
+                client: "PT Makmur Sejahtera",
+                project: "Instalasi Genset",
+                dpp: 85000000,
+                tax: 9350000,
+                total: 94350000,
+                remaining: 94350000,
+                status: "BELUM LUNAS"
+            }
+
+        ];
+
+
+        /* =========================================
+           STATE
+        ========================================= */
+
+        let filteredData = [...invoices];
+
+        let sortColumn = null;
+        let sortDirection = "asc";
+
+
+        /* =========================================
+           FORMAT RUPIAH
+        ========================================= */
+
+        function rupiah(value) {
+
+            return new Intl.NumberFormat("id-ID", {
+                style: "currency",
+                currency: "IDR",
+                maximumFractionDigits: 0
+            }).format(value);
+
+        }
+
+
+        /* =========================================
+           FORMAT DATE
+        ========================================= */
+
+        function formatDate(date) {
+
+            const d = new Date(date);
+
+            return d.toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+            });
+
+        }
+
+
+        /* =========================================
+           STATUS BADGE
+        ========================================= */
+
+        function statusBadge(status) {
+
+            if (status === "LUNAS") {
+
+                return `
+                <span class="badge text-bg-success status-badge">
+                    Lunas
+                </span>
+            `;
+
+            }
+
+            if (status === "SEBAGIAN") {
+
+                return `
+                <span class="badge text-bg-info status-badge">
+                    Sebagian
+                </span>
+            `;
+
+            }
+
+            return `
+            <span class="badge text-bg-warning status-badge">
+                Belum Lunas
+            </span>
+        `;
+
+        }
+
+
+        /* =========================================
+           RENDER TABLE
+        ========================================= */
+
+        function renderTable() {
+
+            const tbody = document.getElementById("invoiceTable");
+
+            tbody.innerHTML = "";
+
+
+            if (filteredData.length === 0) {
+
+                tbody.innerHTML = `
+                <tr>
+                    <td colspan="10"
+                        class="text-center text-muted py-5">
+
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+
+                        Tidak ada data ditemukan
+
+                    </td>
+                </tr>
+            `;
+
+                updateSummary();
+
+                return;
+            }
+
+
+            filteredData.forEach(row => {
+
+                tbody.innerHTML += `
+
+                <tr>
+
+                    <td class="fw-semibold">
+                        ${row.invoice}
+                    </td>
+
+                    <td>
+                        ${formatDate(row.date)}
+                    </td>
+
+                    <td>
+                        ${row.client}
+                    </td>
+
+                    <td>
+                        ${row.project}
+                    </td>
+
+                    <td class="text-end">
+                        ${rupiah(row.dpp)}
+                    </td>
+
+                    <td class="text-end">
+                        ${rupiah(row.tax)}
+                    </td>
+
+                    <td class="text-end fw-semibold">
+                        ${rupiah(row.total)}
+                    </td>
+
+                    <td class="text-end fw-semibold">
+                        ${rupiah(row.remaining)}
+                    </td>
+
+                    <td>
+                        ${statusBadge(row.status)}
+                    </td>
+
+                    <td class="text-center">
+
+                        <div class="d-flex justify-content-center gap-1">
+
+                            <button
+                                class="btn btn-outline-secondary
+                                       btn-sm action-btn"
+                                title="Detail"
+                                onclick="viewInvoice('${row.invoice}')">
+
+                                <i class="bi bi-eye"></i>
+
+                            </button>
+
+                            <button
+                                class="btn btn-outline-primary
+                                       btn-sm action-btn"
+                                title="Edit"
+                                onclick="editInvoice('${row.invoice}')">
+
+                                <i class="bi bi-pencil"></i>
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            });
+
+
+            updateSummary();
+
+        }
+
+
+        /* =========================================
+           SEARCH + FILTER
+        ========================================= */
+
+        function applyFilter() {
+
+            const search =
+                document.getElementById("searchInput")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+            const status =
+                document.getElementById("statusFilter")
+                    .value;
+
+
+            filteredData = invoices.filter(row => {
+
+                const matchesSearch =
+
+                    row.invoice.toLowerCase().includes(search) ||
+
+                    row.client.toLowerCase().includes(search) ||
+
+                    row.project.toLowerCase().includes(search);
+
+
+                const matchesStatus =
+
+                    !status ||
+                    row.status === status;
+
+
+                return matchesSearch && matchesStatus;
+
+            });
+
+
+            renderTable();
+
+        }
+
+
+        /* =========================================
+           SORT
+        ========================================= */
+
+        function sortTable(column) {
+
+            if (sortColumn === column) {
+
+                sortDirection =
+                    sortDirection === "asc"
+                        ? "desc"
+                        : "asc";
+
+            } else {
+
+                sortColumn = column;
+                sortDirection = "asc";
+
+            }
+
+
+            filteredData.sort((a, b) => {
+
+                let valueA = a[column];
+                let valueB = b[column];
+
+
+                if (column === "date") {
+
+                    valueA = new Date(valueA);
+                    valueB = new Date(valueB);
+
+                }
+
+
+                if (typeof valueA === "string") {
+
+                    valueA = valueA.toLowerCase();
+                    valueB = valueB.toLowerCase();
+
+                }
+
+
+                if (valueA < valueB) {
+
+                    return sortDirection === "asc"
+                        ? -1
+                        : 1;
+
+                }
+
+
+                if (valueA > valueB) {
+
+                    return sortDirection === "asc"
+                        ? 1
+                        : -1;
+
+                }
+
+
+                return 0;
+
+            });
+
+
+            updateSortIcons();
+
+            renderTable();
+
+        }
+
+
+        /* =========================================
+           SORT ICON
+        ========================================= */
+
+        function updateSortIcons() {
+
+            document
+                .querySelectorAll(".sort-icon")
+                .forEach(icon => {
+
+                    icon.className =
+                        "bi bi-chevron-expand sort-icon";
+
+                });
+
+
+            if (!sortColumn) return;
+
+
+            const icon =
+                document.getElementById(
+                    "sort-" + sortColumn
+                );
+
+
+            if (!icon) return;
+
+
+            icon.className =
+                sortDirection === "asc"
+                    ? "bi bi-chevron-up sort-icon sort-active"
+                    : "bi bi-chevron-down sort-icon sort-active";
+
+        }
+
+
+        /* =========================================
+           SUMMARY
+        ========================================= */
+
+        function updateSummary() {
+
+            const count = filteredData.length;
+
+
+            document.getElementById("dataSummary")
+                .innerHTML = `
+                Menampilkan
+                <strong>${count}</strong>
+                data
+            `;
+
+
+            const totalRemaining =
+                filteredData.reduce(
+                    (sum, row) =>
+                        sum + row.remaining,
+                    0
+                );
+
+
+            document.getElementById("totalRemaining")
+                .textContent =
+                rupiah(totalRemaining);
+
+        }
+
+
+        /* =========================================
+           ACTION
+        ========================================= */
+
+        function newInvoice() {
+
+            alert("Form Invoice baru");
+
+        }
+
+
+        function viewInvoice(invoice) {
+
+            alert("Detail " + invoice);
+
+        }
+
+
+        function editInvoice(invoice) {
+
+            alert("Edit " + invoice);
+
+        }
+
+
+        /* =========================================
+           INITIAL LOAD
+        ========================================= */
+
+        renderTable();
+
+    </script>
+
+</body>
+
+</html>
+```

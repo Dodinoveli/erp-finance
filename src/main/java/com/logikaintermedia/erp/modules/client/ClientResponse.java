@@ -1,6 +1,7 @@
 package com.logikaintermedia.erp.modules.client;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 import lombok.Data;
@@ -31,13 +32,13 @@ public class ClientResponse {
 
     private UUID companyId;
 
-    private LocalDateTime clientCreatedAt;
+    private OffsetDateTime clientCreatedAt;
     private UUID clientCreatedBy;
 
-    private LocalDateTime clientUpdatedAt;
+    private OffsetDateTime clientUpdatedAt;
     private UUID clientUpdatedBy;
 
-    private LocalDateTime clientDeletedAt;
+    private OffsetDateTime clientDeletedAt;
 
     private String clientBankName;
     private String clientAccountNumber;

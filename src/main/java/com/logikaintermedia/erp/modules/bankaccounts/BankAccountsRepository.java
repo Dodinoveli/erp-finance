@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
+
 @Repository
 public class BankAccountsRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
@@ -33,7 +35,7 @@ public class BankAccountsRepository {
                 .addValue("isDefault", acc.getIsDefault())
                 .addValue("isActive", acc.getIsActive())
                 .addValue("companyId", acc.getCompanyId())
-                .addValue("coaId", acc.getCoaId())
+                .addValue("account_id", acc.getAccountId())
                 .addValue("createdAt", acc.getCreatedAt())
                 .addValue("updatedAt", acc.getUpdatedAt())
                 .addValue("userId", acc.getUserId())
@@ -45,13 +47,13 @@ public class BankAccountsRepository {
                 INSERT INTO bank_accounts(
                 	bank_account_id, account_code, account_name, account_type,
                     bank_name, bank_branch, account_number, account_holder, currency,
-                    opening_balance, is_default, is_active, company_id, coa_id,
+                    opening_balance, is_default, is_active, company_id, account_id,
                     created_at, updated_at, user_id, deleted_at
                     )
                     VALUES(
                         :bankAccountId, :accountCode, :accountName, :accountType,
                         :bankName, :bankBranch, :accountNumber, :accountHolder, :currency,
-                        :openingBalance, :isDefault, :isActive, :companyId, :coaId,
+                        :openingBalance, :isDefault, :isActive, :companyId, :accountId,
                         :createdAt, :updatedAt, :userId, :deletedAt
                         );
                                 """;
@@ -68,7 +70,7 @@ public class BankAccountsRepository {
                     bank_branch = :bankBranch,
                     account_number = :accountNumber,
                     account_holder = :accountHolder,
-                    coa_id = :coaId,
+                    account_id = :accountId,
                     is_active = :isActive,
                     updated_at = :updatedAt
                 where bank_account_id = :bankAccountId
@@ -81,83 +83,51 @@ public class BankAccountsRepository {
     public List<BankAccounts> findBankAccountsById(UUID companyId) {
         String sql = """
                 select
-                    bank_accounts.bank_account_id,
-                    bank_accounts.account_code,
-                    bank_accounts.account_name,
-                    bank_accounts.account_type,
-                    bank_accounts.bank_name,
-                    bank_accounts.bank_branch,
-                    bank_accounts.account_number,
-                    bank_accounts.account_holder,
-                    bank_accounts.is_active,
-                    chart_of_accounts.coa_id,
-                    chart_of_accounts.name
+                    *
                 from bank_accounts
                     inner join chart_of_accounts
-                    on chart_of_accounts.coa_id= bank_accounts.coa_id
+                    on chart_of_accounts.account_id= bank_accounts.account_id
                 where bank_accounts.company_id = :companyId
                                 """;
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("companyId", companyId);
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+
         return jdbcTemplate.query(sql,
                 params,
-                new BeanPropertyRowMapper<>(BankAccounts.class));
+                new BankAccountsMapper());
     }
 
     public BankAccounts findDetailById(UUID bankAccountId) {
         String sql = """
                 select
-                    bank_accounts.bank_account_id,
-                    bank_accounts.account_code,
-                    bank_accounts.account_name,
-                    bank_accounts.account_type,
-                    bank_accounts.bank_name,
-                    bank_accounts.bank_branch,
-                    bank_accounts.account_number,
-                    bank_accounts.account_holder,
-                    bank_accounts.is_active,
-                    chart_of_accounts.coa_id,
-                    chart_of_accounts.name
+                    *
                 from bank_accounts
                     inner join chart_of_accounts
-                    on chart_of_accounts.coa_id= bank_accounts.coa_id
+                    on chart_of_accounts.account_id= bank_accounts.account_id
                 where bank_accounts.bank_account_id = :bankAccountId
                                 """;
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("bankAccountId", bankAccountId);
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("bankAccountId", bankAccountId);
         return jdbcTemplate.queryForObject(sql,
                 params,
-                new BeanPropertyRowMapper<>(BankAccounts.class));
+                new BankAccountsMapper());
     }
 
-    public List<CoaAccounts> findCoaById(UUID companyId) {
-        String sql = """
-                select * from chart_of_accounts
-                where coa_code in (:cd1, :cd2)
-                and company_id = :companyId
-                """;
 
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("cd1", "1.1.01");
-        params.put("cd2", "1.1.02");
-        params.put("companyId", companyId);
-        return jdbcTemplate.query(sql,
-                params,
-                new BeanPropertyRowMapper<>(CoaAccounts.class));
-    }
-
-    public List<CoaAccounts> findCoaByName(UUID companyId, String keyword) {
+    public List<ChartOfAccounts> findCoaByName(UUID companyId, String keyword) {
         String sql = """
-                select coa_id, name from chart_of_accounts
-                where lower(name) like lower(:keyword)
+                select account_id, account_name from chart_of_accounts
+                where lower(account_name) like lower(:keyword)
                 and company_id = :companyId
                  """;
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("keyword", keyword + "%");
-        params.put("companyId", companyId);
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("keyword", keyword + "%");
+        params.addValue("companyId", companyId);
         return jdbcTemplate.query(sql,
                 params,
-                new BeanPropertyRowMapper<>(CoaAccounts.class));
+                new BeanPropertyRowMapper<>(ChartOfAccounts.class));
     }
 
 }

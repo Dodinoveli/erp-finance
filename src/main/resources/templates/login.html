@@ -403,7 +403,7 @@
                     <span>Kawal Laba</span>
                 </div>
 
-                <h1>Kelola proyek.<br>Jaga laba.</h1>
+                <h1>Kelola Proyek, Kawal Laba.<br>Kendalikan Setiap Rupiah.</h1>
                 <p>
                     Satu dashboard untuk mengontrol keuangan, proyek,
                     pengadaan, persediaan, dan laporan perusahaan kontraktor.
@@ -428,7 +428,7 @@
                 </div>
 
                 <div class="field">
-                    <label>UserName</label>
+                    <label>User name</label>
                     <div class="input-wrap">
                         <span class="input-icon">✉</span>
                         <input id="userName" type="text" placeholder="nama@perusahaan.com" autocomplete="email"
@@ -454,7 +454,7 @@
                     <a href="#" class="forgot">Lupa password?</a>
                 </div>
 
-                <button class="login-btn" onclick="login()">Masuk ke Dashboard →</button>
+                <button class="login-btn" onclick="login()">Login</button>
 
                 <div class="divider">atau</div>
 
@@ -505,14 +505,14 @@
                 return;
             }
 
-            // Swal.fire({
-            //   title: "Mencoba Masuk...",
-            //   allowOutsideClick: false,
-            //   showConfirmButton: false,
-            //   didOpen: () => {
-            //     Swal.showLoading();
-            //   },
-            // });
+            Swal.fire({
+                title: "Mencoba Masuk...",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                },
+            });
 
             try {
                 const res = await fetch("/api/auth/login", {
@@ -524,35 +524,35 @@
 
                 if (!res.ok) {
                     const errorData = await res.json();
-                    // Swal.fire({
-                    //   icon: "error",
-                    //   title: "Akses Ditolak",
-                    //   text: errorData.message || "Kredensial tidak valid",
-                    //   confirmButtonColor: "#2563eb",
-                    // });
-                    alert("Username atau password salah, Masukan yang benar");
+                    Swal.fire({
+                        icon: "error",
+                        title: "Akses Ditolak",
+                        text: errorData.message || "Username atau password salah, Masukan yang benar",
+                        confirmButtonColor: "#2563eb",
+                    });
+                    // alert("Username atau password salah, Masukan yang benar");
                     return;
                 } else {
-                    window.location.href = "/dashboard";
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Akses Login Berhasil di verifikasi',
+                        text: 'Membuka dashboard Anda...',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = "/dashboard";
+                    });
+
                 }
 
-                // Swal.fire({
-                //     icon: 'success',
-                //     title: 'Akses Login Berhasil di verifikasi',
-                //     text: 'Membuka dashboard Anda...',
-                //     timer: 2000,
-                //     showConfirmButton: false
-                // }).then(() => {
 
-                // });
             } catch (error) {
-                //   Swal.fire({
-                //     icon: "error",
-                //     title: "Masalah Koneksi",
-                //     text: "Gagal terhubung ke pusat data.",
-                //     confirmButtonColor: "#2563eb",
-                //   });
-                alert("Gagal terhubung ke pusat data");
+                Swal.fire({
+                    icon: "error",
+                    title: "Masalah Koneksi",
+                    text: "Gagal terhubung ke pusat data.",
+                    confirmButtonColor: "#2563eb",
+                });
             }
         }
 

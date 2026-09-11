@@ -4,12 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.logikaintermedia.erp.jwt.AuthUserPrincipal;
 import com.logikaintermedia.erp.utility.ApiResponse;
-import com.logikaintermedia.erp.utility.CursorResponse;
+import com.logikaintermedia.erp.utility.DataCountResponse;
+import com.logikaintermedia.erp.utility.DataTableResponse;
 import com.logikaintermedia.erp.validation.OnCreate;
 import com.logikaintermedia.erp.validation.OnUpdate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import org.springframework.beans.BeanUtils;
@@ -35,31 +33,45 @@ public class ClientController {
         this.service = service;
     }
 
+    // @PreAuthorize("hasRole('Owner')")
+    // @GetMapping
+    // public ResponseEntity<ApiResponse<CursorResponse<ClientResponse>>> findById(
+    // @AuthenticationPrincipal AuthUserPrincipal user,
+    // @RequestParam(required = false) String keyword,
+    // @RequestParam(required = false) LocalDateTime lastCreatedAt,
+    // @RequestParam(required = false) UUID lastId,
+    // @RequestParam(defaultValue = "12") int limit) {
+    // UUID companyId = user.getCompanyId();
+    // System.out.println("keyword = " + keyword);
+    // System.out.println("lastCreatedAt = " + lastCreatedAt);
+    // System.out.println("lastId = " + lastId);
+    // System.out.println("companyId = " + companyId);
+    // CursorResponse<ClientResponse> response = service.findById(companyId,
+    // keyword, lastCreatedAt, lastId, limit);
+
+    // return ResponseEntity.ok(ApiResponse.success("Berhasil", response));
+    // }
+
     @PreAuthorize("hasRole('Owner')")
     @GetMapping
-    public ResponseEntity<ApiResponse<CursorResponse<ClientResponse>>> findById(
+    public ResponseEntity<DataTableResponse<ClientResponse>> getClients(
             @AuthenticationPrincipal AuthUserPrincipal user,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) LocalDateTime lastCreatedAt,
-            @RequestParam(required = false) UUID lastId,
-            @RequestParam(defaultValue = "13") int limit) {
-        UUID companyId = user.getCompanyId();
-        System.out.println("keyword = " + keyword);
-        System.out.println("lastCreatedAt = " + lastCreatedAt);
-        System.out.println("lastId = " + lastId);
-        System.out.println("companyId = " + companyId);
-        CursorResponse<ClientResponse> response = service.findById(companyId, keyword, lastCreatedAt, lastId, limit);
-
-        return ResponseEntity.ok(ApiResponse.success("Berhasil", response));
+            @RequestParam(defaultValue = "0") int draw,
+            @RequestParam(defaultValue = "0") int start,
+            @RequestParam(defaultValue = "10") int length,
+            @RequestParam(required = false) String keyword) {
+        System.out.println("KEYWORD = [" + keyword + "]");
+        DataTableResponse<ClientResponse> response = service.getClients(user.getCompanyId(), draw, start, length,
+                keyword);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/generate-code")
-    public ResponseEntity<?> generateCode(@AuthenticationPrincipal AuthUserPrincipal user) {
-        String clientCode = service.generateCode(user.getCompanyId());
-        Map<String, String> data = new HashMap<>();
-        data.put("clientCode", clientCode);
-        return ResponseEntity.ok(ApiResponse.success("Berhasil", data));
+    @GetMapping("/total-new")
+    public ResponseEntity<DataCountResponse<Client>> getTotal(
+            @AuthenticationPrincipal AuthUserPrincipal user) {
+        DataCountResponse<Client> response = service.getTotal(user.getCompanyId());
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('Owner')")

@@ -1,0 +1,195 @@
+{
+  "configurations": [
+    {
+      "args": [],
+      "confidence": "native",
+      "cwd": ".",
+      "disabled": false,
+      "env": {},
+      "execution": "application",
+      "extensions": {
+        "java": {
+          "source": "src/main/java/com/logikaintermedia/erp/ErpFinanceApplication.java"
+        },
+        "maven": {
+          "mainClass": "com.logikaintermedia.erp.ErpFinanceApplication",
+          "module": "."
+        }
+      },
+      "id": "java-main:com.logikaintermedia.erp.ErpFinanceApplication",
+      "name": "ErpFinanceApplication",
+      "provider": "java.main",
+      "source": "src/main/java/com/logikaintermedia/erp/ErpFinanceApplication.java",
+      "toolchains": {
+        "java": "project-jdk",
+        "maven": "project-maven"
+      }
+    },
+    {
+      "args": [],
+      "confidence": "native",
+      "cwd": ".",
+      "debug": {
+        "adapter": "jdwp"
+      },
+      "disabled": false,
+      "env": {},
+      "execution": "application",
+      "extensions": {
+        "maven": {
+          "module": "."
+        }
+      },
+      "id": "current-file",
+      "name": "Current File",
+      "provider": "java.current-file",
+      "toolchains": {
+        "java": "project-jdk"
+      }
+    },
+    {
+      "args": [],
+      "confidence": "declared",
+      "cwd": ".",
+      "debug": {
+        "adapter": "jdwp"
+      },
+      "disabled": false,
+      "env": {},
+      "execution": "service",
+      "extensions": {
+        "maven": {
+          "mainClass": "com.logikaintermedia.erp.ErpFinanceApplication",
+          "module": "."
+        }
+      },
+      "id": "spring-boot.maven:kawal-laba",
+      "name": "kawal-laba",
+      "provider": "spring-boot.maven",
+      "source": "pom.xml",
+      "toolchains": {
+        "java": "project-jdk",
+        "maven": "project-maven"
+      }
+    }
+  ],
+  "generator": {
+    "fingerprint": "sha256:1f7fb8820b2cc43480df9648696d69fb97bfc37dfc3a3cfe6ffa895c96064a6e",
+    "inputs": {
+      ".mvn/wrapper/maven-wrapper.properties": "sha256:b0ffaf47bfff05e4f8d05fdc32936382b3dff70efc6e8a480c42ae49aa04dc93",
+      "mvnw": "sha256:cae96cef89ebea3531221f4ae17c23cf8edf67d00eae8306d4186ae1bbed4d02",
+      "pom.xml": "sha256:3b2554ba0dd9dc3f099b69296552e90eb530ce904de4001162d29135b4efeebc",
+      "src/main/java/com/logikaintermedia/erp/ErpFinanceApplication.java": "sha256:54a43f7e04da04b6436408bce9ee94c4a19de68ddaf7f6498011da218dbdb930",
+      "src/main/java/com/logikaintermedia/erp/Page.java": "sha256:6e9c810274e2863c35ddbaffe65ff2249854bde761186bd1a5b4761be3d041d1",
+      "src/main/java/com/logikaintermedia/erp/config/SecurityConfig.java": "sha256:b90363020faf47843ce33e0892d99a4465c141accc7a8c455e75284745b7e52c",
+      "src/main/java/com/logikaintermedia/erp/controller/BankAccountPageController.java": "sha256:3d42368db5d76032d8175c72acbd4ec0d3f4900a4d81c937846877df8370141e",
+      "src/main/java/com/logikaintermedia/erp/controller/ChartOfAccountsPageController.java": "sha256:9275109435616cafa5598aaa68a2ea9bb1ff3ac92a4ae37de4f2b2cb369177fb",
+      "src/main/java/com/logikaintermedia/erp/controller/ChartOfAccountsTemplatesPageController.java": "sha256:ccd0bae0305fa7f5bf39b9dae6c79f20d6a4330c1caf77e169bc19280e15e265",
+      "src/main/java/com/logikaintermedia/erp/controller/ClientPageController.java": "sha256:53f80de7a7d2bbfbbe22ddf0222d80f4068cc58eb66dfaa9864a98e4aa907ef0",
+      "src/main/java/com/logikaintermedia/erp/controller/CompanyPageController.java": "sha256:8a5d636739c4083892fb7ec163f97aef7969e184eb24b6106ee139131c51e1e6",
+      "src/main/java/com/logikaintermedia/erp/controller/ProjectPageController.java": "sha256:16242b6f7559959ef17aab4a504d041ab7ed5f0b1bf6334bb2aaf2f3084c30e8",
+      "src/main/java/com/logikaintermedia/erp/controller/SupplierPageController.java": "sha256:955b5209ef0d819aee90beba427477faf76742bb8970ef44ba2d75ab1cc458aa",
+      "src/main/java/com/logikaintermedia/erp/encryption/EncryptionUtil.java": "sha256:8bf25a510efc4b4db662864339045fd2ae4924d7dc7c3dde015e9856db8e9ab2",
+      "src/main/java/com/logikaintermedia/erp/jwt/AuthException.java": "sha256:9ad9f03f95c7aca15ce15408932ab38f44f853859bc7a27816ee0839a050071d",
+      "src/main/java/com/logikaintermedia/erp/jwt/AuthResult.java": "sha256:4cfa516a40f042b946bd2efdb1dc56eb4a12f0e0e8e9c3d86a7c2ea6c5741045",
+      "src/main/java/com/logikaintermedia/erp/jwt/AuthUserPrincipal.java": "sha256:526f9153a56046c4797c3f79a5996a4a9ed83259d97f94e5ce8e12e7f165a5fe",
+      "src/main/java/com/logikaintermedia/erp/jwt/CookieUtil.java": "sha256:f9ca7e2859555a81200669c3bfc916ea85d5ef7ead6006ec63f354e479712a01",
+      "src/main/java/com/logikaintermedia/erp/jwt/JwtAuthenticationFilter.java": "sha256:72c2d4123223deba28efc62219abecc71e6fdcd218366a8ce1496b31867dbecb",
+      "src/main/java/com/logikaintermedia/erp/jwt/JwtConfig.java": "sha256:dcc25412dfd7ee9dcc0897bca25082684118991f63a28175130984a92dbe475a",
+      "src/main/java/com/logikaintermedia/erp/jwt/JwtUtil.java": "sha256:d5f750606fa8aaed8e3e60cae23f216554c323e1fd6ea3fae4e0945ac8109a47",
+      "src/main/java/com/logikaintermedia/erp/jwt/TokenResolver.java": "sha256:ac8d48ca87124007d9774c68e8b2bb8178117559c3817d91990328010f60109f",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/AccountType.java": "sha256:b330b15c281e6afa4d42c0f904e8c341f85efe3ccd6ebacd73b1ea8dc8428b0c",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccounstController.java": "sha256:751efdeabb646752380c4010e885fdbb381f12257f10ff4ff6ebc3efcca7493b",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccounts.java": "sha256:c7fdca16afa74c881311103889afb1fd842e29f9c114c45434824149c6d02f93",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccountsMapper.java": "sha256:dd0b539ef3a030e15cd21e5bb2b71572891e0e20b4c9a3508ce40573ea36084c",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccountsRepository.java": "sha256:eb7bf02101f42405ec08c423df8a4931ea46aef55612d9644c1520bb0fca9df2",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccountsRequest.java": "sha256:8a3b4790284003bd21d28f353bb43f913a20da100ab7818a63e3ae5f515bae01",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccountsResponse.java": "sha256:bcb1a324146ddf47f06117c1640c67184cf31fb78c85a74ef62dc79d917008f9",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/BankAccountsService.java": "sha256:83fa26d6c7b1753a93dc48c9e102e320a6c0f2d97a5bc2373f116c85477dfcfb",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/CoaAccounts.java": "sha256:64c602e76a98ef26cb984a7c6285d580a7e920835999346242530c0128a95ca7",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/CoaAccountsRequest.java": "sha256:247a1cdc58fb00d5475429d9c438b3d5dee3444c1ea4456e1a3875cd44fac7a1",
+      "src/main/java/com/logikaintermedia/erp/modules/bankaccounts/CoaAccountsResponse.java": "sha256:825ea5a6141945a2e6792ada19d6df2f7961e11bd16fdcbf8888e0ca43f7e622",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccountRepositoryImpl.java": "sha256:f240c715a72737967641da011f94a84e15d6375937f7f8a8fef3f23e9c7d9f4e",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccounts.java": "sha256:b3d6c009676ee88c48aa6028660e8498aecf4591cb6f7e4f9c7cb1657a263cc0",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccountsController.java": "sha256:eaa1ee2f7d36b861e2593fce42560e3211b38258b844948f9cb10480a164c0f6",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccountsRepository.java": "sha256:018da02bd2991a0ebac530f202ceae66dce1adeb3ed1662d08601f882f823420",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccountsResponse.java": "sha256:60dba78f6ddb721cbf45fb00cc05707b6260e664a8a1c638b23a9e29eec1b55c",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccountsService.java": "sha256:8cee78a8b89d84e58b3abc9e10ebad7998985fd6a3e75a337c34baac6c416ce3",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccounts/ChartOfAccountsServiceImpl.java": "sha256:72859e4aa723f0e43462721b02d6b6634b27e236da294d45fa06b07893438cc6",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccountstemplates/ChartOfAccountsTemplates.java": "sha256:bef24b5c2660d5c31ac7d724d9a787f3fa919f7ef1066354aeccd5fd784c5f92",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccountstemplates/ChartOfAccountsTemplatesController.java": "sha256:b7b527e4c76db4abf1702856d39b5972c5fa93bfe12e8c514dbd8e6a6f61fb4d",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccountstemplates/ChartOfAccountsTemplatesMaper.java": "sha256:165724eda59a43e766d46cd46a257b91e8dcb81fbf7b48a9001e04984b9b322d",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccountstemplates/ChartOfAccountsTemplatesRepository.java": "sha256:d61964a4b02b3c8502170590a93742c7833f91f8aff71cf58e37c60cc0dc4380",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccountstemplates/ChartOfAccountsTemplatesResponse.java": "sha256:05176a56b60e46cf6eebff1a1ddc2e2e8826294801ec46a07c9a14645eb52cb7",
+      "src/main/java/com/logikaintermedia/erp/modules/chartofaccountstemplates/ChartOfAccountsTemplatesService.java": "sha256:0b2772484e2fe518cfdfc5c2e3abbfbf752a3350955424697c1e3db6e053e4f9",
+      "src/main/java/com/logikaintermedia/erp/modules/client/Client.java": "sha256:e2d9f7233c55634f49ad8a23620a98024dd9febd43b1b12b940297d277d57098",
+      "src/main/java/com/logikaintermedia/erp/modules/client/ClientController.java": "sha256:2eb83e6e9c1e6ffc4571faabc77dd5db8e0ec278ca47ca983f2df7fc4ef18c77",
+      "src/main/java/com/logikaintermedia/erp/modules/client/ClientMapper.java": "sha256:26298c34f4a6b457e3f7cbb6b4671c66ec9d99625c62ae5678748e43d6ca50b7",
+      "src/main/java/com/logikaintermedia/erp/modules/client/ClientRepository.java": "sha256:87547d428cb2723018456a2b4a85c4dd2fb41c405aeb93e658b3529c7a9cdc02",
+      "src/main/java/com/logikaintermedia/erp/modules/client/ClientRequest.java": "sha256:88134c627c2877e2a26d190f1557afb8f9f431804868ead3b733030a6fb5df60",
+      "src/main/java/com/logikaintermedia/erp/modules/client/ClientResponse.java": "sha256:a3866e8eb62f0ca3702ec32c25fb0e6770975321b3299e7e967b42dc15677b2a",
+      "src/main/java/com/logikaintermedia/erp/modules/client/ClientService.java": "sha256:5534442a3c2c09f75fe5abf3fcbe5f66d43f6f2615efbd1a8b933a522a98b36e",
+      "src/main/java/com/logikaintermedia/erp/modules/coa/Coa.java": "sha256:7cff151f5ef14c5d9bd86ff6368c832ce56b17ce57d517145928328545c41927",
+      "src/main/java/com/logikaintermedia/erp/modules/coa/CoaController.java": "sha256:f9e82f4a26ced6c73faf3c2c56a9b5dd8263f9afa4d6e8115e674e0715f90744",
+      "src/main/java/com/logikaintermedia/erp/modules/coa/CoaMapper.java": "sha256:7b15c7b6791e17b824931b8527dffe349b289aef1906ef900cf12b3ff625315f",
+      "src/main/java/com/logikaintermedia/erp/modules/coa/CoaRepository.java": "sha256:860014825a7cdfe682c773693b4e2888017b0805b0598d3bccf2f816880bc3a2",
+      "src/main/java/com/logikaintermedia/erp/modules/coa/CoaResponse.java": "sha256:69331f6314bd2e0cf92c34bdcc3d24ff2fb3ee4fe748fbe9c5b63bcda459d345",
+      "src/main/java/com/logikaintermedia/erp/modules/coa/CoaService.java": "sha256:1bc4617ec3214e4df7614772bc3db99a61d59b58b7bac0471123538b256ef9cb",
+      "src/main/java/com/logikaintermedia/erp/modules/coamapping/CoaMapping.java": "sha256:b89947213a54f2503978bd112fa8cfcd7753e0d5efe4b8246178a91ab2fc87ee",
+      "src/main/java/com/logikaintermedia/erp/modules/coamapping/CoaMappingMapper.java": "sha256:aa0cc67b018e80b8c68eb201102db042641ff2369ee3a4da46a458755d9b02be",
+      "src/main/java/com/logikaintermedia/erp/modules/coamapping/CoaMappingRepository.java": "sha256:ddec29dad77ac180a4127968818f86cf201dc3ade2bf85005c65ac5a78a2011a",
+      "src/main/java/com/logikaintermedia/erp/modules/coamapping/CoaMappingRequest.java": "sha256:54f06963243e6e9fe637514a9dd949899a6dc5fcfcddb076cbf170ac73c42fbc",
+      "src/main/java/com/logikaintermedia/erp/modules/coamapping/CoaMappingResponse.java": "sha256:780cad16d7e5142e832010f7c26f09c869e3fb6bcd1925de75d7736f61e4e9a3",
+      "src/main/java/com/logikaintermedia/erp/modules/company/Company.java": "sha256:0eef72a962c5c7de82632e9cf4f6f0e9ed1768aee1a7a06894fa74604f78c8c1",
+      "src/main/java/com/logikaintermedia/erp/modules/company/CompanyController.java": "sha256:571d74b680bcf2be48a2a3a7fb797c3be9ee91a00c45f74c4d3e04cd8b930e49",
+      "src/main/java/com/logikaintermedia/erp/modules/company/CompanyRepository.java": "sha256:5370fd9b86996953d8e480ed38fd2f8593be54d5a841e09b17d1fa8c39c60c7c",
+      "src/main/java/com/logikaintermedia/erp/modules/company/CompanyRequest.java": "sha256:9a272087710c6f7c1cbc13aa421d7561b3927fc71baa10761677b8aa547334a2",
+      "src/main/java/com/logikaintermedia/erp/modules/company/CompanyResponse.java": "sha256:f91f001b4124029bb9a98c216f330acc12671c791a9724a68055b0feac132c16",
+      "src/main/java/com/logikaintermedia/erp/modules/company/CompanyService.java": "sha256:b9768a1fba5ddfedc4635283d246d6b565a60adf29af847ab4e5f5286a0cf515",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/Employees.java": "sha256:c0e25884fd33eefd728ce9bfb5a12ff1b18886f8873ce3b0f8c327c4cdb45533",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/EmployeesController.java": "sha256:7f236784790e8ed398e5bbcd1a704dfe7388ba8f3b6213e1ead478b76635fd2d",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/EmployeesMapper.java": "sha256:914fe24de9b005d9aea78f17d5a33de3eebcdb69b81b065c5101850cb05bd6aa",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/EmployeesRepository.java": "sha256:e8d267dbfd19e6098ad90c6f02f3c8b535b10e99443b3f05c8b5d0f2bca9416e",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/EmployeesRequest.java": "sha256:f8f66afad86db8f0f677af69f8b9d46ff90ef16b842b0a71e271dea8e78b7222",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/EmployeesResponse.java": "sha256:82b4f43f4553d84696ad5f51717d574fb9c0d755df34fbcfdce6ad88e944df6f",
+      "src/main/java/com/logikaintermedia/erp/modules/employees/EmployeesService.java": "sha256:cd62dc6ffb8bc7f66b396f246680b0d84a107c9bc8daa8afe54b2c40bd77415d",
+      "src/main/java/com/logikaintermedia/erp/modules/project/Proyek.java": "sha256:c365a07d6dadfd0a767cdbfc38a37dc34b66807eca31c959fa5edacebfa5ced2",
+      "src/main/java/com/logikaintermedia/erp/modules/project/ProyekController.java": "sha256:f32d6e6b3a6e90598100291997bc9e34adf05e6f8cdc0ed703f05bfe18d2d7f0",
+      "src/main/java/com/logikaintermedia/erp/modules/project/ProyekMapper.java": "sha256:41c21f73802b255da27e718b651bcf4db0d648eefb8e506fab1a0ce10476f206",
+      "src/main/java/com/logikaintermedia/erp/modules/project/ProyekRepository.java": "sha256:de5169470607d4db92cf334e6fd1770e7b3df6287242b20b48427d755f665dae",
+      "src/main/java/com/logikaintermedia/erp/modules/project/ProyekRequest.java": "sha256:2dffcd3cc33c88ed45aa9ca97de7e169c73bde22370373d641956587f6a4dc73",
+      "src/main/java/com/logikaintermedia/erp/modules/project/ProyekResponse.java": "sha256:c7ccc7073d6458301b6908e370275ff50c5e28eb627b1c6250b54efca29c32b9",
+      "src/main/java/com/logikaintermedia/erp/modules/project/ProyekService.java": "sha256:a0cc14df6f853e628b985b69d159d49715cf396b385f1225873f9b9bd0607596",
+      "src/main/java/com/logikaintermedia/erp/modules/refreshtoken/RefreshToken.java": "sha256:1b313dd4afeb027e8e684dde08b63cac69e0f1f5ae9f54e7291060866289556b",
+      "src/main/java/com/logikaintermedia/erp/modules/refreshtoken/RefreshTokenRepository.java": "sha256:6d48e9409e61624f23a0040f3d39165e2322a679688cbc3062d88f8f7171ebba",
+      "src/main/java/com/logikaintermedia/erp/modules/refreshtoken/RefreshTokenRequest.java": "sha256:d473bb1a1ce24b48022f8bbba7bc8efb6e071debb31a6f84404544ca356231a7",
+      "src/main/java/com/logikaintermedia/erp/modules/refreshtoken/RefreshTokenService.java": "sha256:c9e345d1da6290ded88a9ac76245846565411fa060bdc1e6c58d8379286843d8",
+      "src/main/java/com/logikaintermedia/erp/modules/shared/service/RateLimitingService.java": "sha256:ed1a8fe29bbde7265285bfaf1ec4ef72dd91eec4377f17d863f400b6a64a2fde",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/Supplier.java": "sha256:87b9a08e0b40b1d061d156552a60b53c1d2f0cafb78df02701b6dcbe68fd323f",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/SupplierController.java": "sha256:35c65ecae4afbb67be5d93e67854728d7c149edeadaaac1aee4a333f6c89db46",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/SupplierMapper.java": "sha256:4f1a7ac9093f3f023e6694cd772d68cf9c320b51e3081b3a646736c98885594f",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/SupplierRepository.java": "sha256:02436620f09be74f2933b93dba2f79f93dc449f3f6f8592b621c28a59a122e81",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/SupplierRequest.java": "sha256:c6c0b239591973b923e0f13eb921d3b7c63da0eac0c7c803dc70914d19342c37",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/SupplierResponse.java": "sha256:f0fd7848e9b38ff117f943e70bb2a5707b7648b83ff013e48421dcdde94abf4d",
+      "src/main/java/com/logikaintermedia/erp/modules/supplier/SupplierService.java": "sha256:0b6dfb9cfb80693eb194dd6843eafee7daf70c848ca9c93a039ab438770fad13",
+      "src/main/java/com/logikaintermedia/erp/modules/user/User.java": "sha256:0848e1c264edab49ec71dad66738fc72f8928e1eca9997a27e25269fbbf3dfc7",
+      "src/main/java/com/logikaintermedia/erp/modules/user/UserController.java": "sha256:1f104a6f5d085bb779523eeb4f29b1c45e20a056dba08be3ce98246c50cee003",
+      "src/main/java/com/logikaintermedia/erp/modules/user/UserRepository.java": "sha256:2ca172c38118d7b0102bd6c0b284adb608bf7e14938f411816b46a6679b0715c",
+      "src/main/java/com/logikaintermedia/erp/modules/user/UserRequest.java": "sha256:a6a9f7101170990569112752a96578cdd4cbbb333216c5575aa15170360c7d48",
+      "src/main/java/com/logikaintermedia/erp/modules/user/UserResponse.java": "sha256:fa2df87551a451e2a336194b28d27153983c647d35280d8db41ed2f8d9884ff8",
+      "src/main/java/com/logikaintermedia/erp/modules/user/UserService.java": "sha256:04883addbdd8163f977304035974505fb21ae0e68ff00d170ab1a2bc59df9e42",
+      "src/main/java/com/logikaintermedia/erp/utility/ApiResponse.java": "sha256:194e91804b210f54f8822516c201551b19281ac6ebc346fed2a3fe4d6e52955d",
+      "src/main/java/com/logikaintermedia/erp/utility/CursorResponse.java": "sha256:8b0ff378bd7f22dbe8aef02c9b5ea2817a4b20776ec4ce322206db3b4aca53fa",
+      "src/main/java/com/logikaintermedia/erp/utility/HasCursor.java": "sha256:c5a5b34ff6a8cfffb5a727192b229d599eda9c3152e422e6262f65effd9d4665",
+      "src/main/java/com/logikaintermedia/erp/validation/ErrorConfig.java": "sha256:352961c0ad62060cb8441df62a0aa9e65603eba88c5362df98aa7a1640165983",
+      "src/main/java/com/logikaintermedia/erp/validation/GlobalExceptionHandler.java": "sha256:3965f04829b9c96d74c7e3d1babc8c771a4513f7f3258f19615881f46154557b",
+      "src/main/java/com/logikaintermedia/erp/validation/HtmlCleanupDeserializer.java": "sha256:73f0d6cd28b3dce3c96e5f8ef2094653b7707b6ada69efef566592a859aeeaef",
+      "src/main/java/com/logikaintermedia/erp/validation/OnCreate.java": "sha256:830aa0c984eda2af1e4bfebf798554b391963e251147bc960c974ffaf4434f7a",
+      "src/main/java/com/logikaintermedia/erp/validation/OnUpdate.java": "sha256:2fafec5f44dbdddc7d08a10964c8262e1f842da93710fa128f1a0b9594d59fb1",
+      "src/main/java/com/logikaintermedia/erp/validation/StringToBigDecimalConverter.java": "sha256:2ccdd06dfb36071699597cd36dcc89ff562032d2ed5ea3daa022c36f4ffa50e6",
+      "src/main/java/com/logikaintermedia/erp/validation/XssURLCleanupAdvice.java": "sha256:3bbc35434a3b9b6cd7b6d69d9fa43d198abdeaf29b5f7ffba4f22ec9fb807b36",
+      "src/test/java/com/logikaintermedia/erp/ErpFinanceApplicationTests.java": "sha256:6efd16790e8a80716117b3b3df0ced6cb18bd1afd0d2623bdd5e37ca1eb1c6da"
+    }
+  },
+  "version": 2
+}

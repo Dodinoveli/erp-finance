@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="card p-1">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="transactioncode" class="table table-hover table-striped mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Kode Transaksi</th>
+                                    <th scope="col">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3 pt-2 border-top text-muted small">
+                        <div class="mb-2">
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Kode transaksi</strong> digunakan sebagai identitas perusahaan dan
+                            membantu sistem membuat nomor otomatis untuk invoice, proyek, purchase order,
+                            surat jalan, dan dokumen lainnya.
+                        </div>
+                        <div class="mb-2">
+                            <strong>Contoh:</strong>
+                            <span class="fw-semibold">JAB/INV/2026/07/1</span>
+                        </div>
+
+                        <ul class="mb-2 ps-4">
+                            <li><strong>JAB</strong> → kode perusahaan (PT Jaya Abadi)</li>
+                            <li><strong>INV</strong> → kode jenis dokumen (Invoice)</li>
+                            <li><strong>2026</strong> → tahun transaksi</li>
+                            <li><strong>07</strong> → bulan transaksi (Juli)</li>
+                            <li><strong>1</strong> → nomor urut transaksi</li>
+                        </ul>
+
+                        <div>
+                            Kode perusahaan dapat menggunakan <strong>2–3 karakter</strong> yang mudah
+                            dikenali, misalnya <strong>JAB</strong> untuk PT Jaya Abadi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+        <script th:inline="javascript">
+            var table = new DataTable("#transactioncode", {
+                paging: false,
+                searching: false,
+                ordering: false,
+                ajax: {
+                    url: "/api/v1/transactioncode",
+                    dataSrc: function (res) {
+                        return res.data ? [res.data] : [];
+                    }
+                },
+                columns: [
+                    { data: "companycode" },
+                    {
+                        data: null,
+                        render: function (data, type, row) {
+                            return `
+                            <a href="/transactioncode/edit/${row.companyid}"
+                            hx-get="/transactioncode/edit/${row.companyid}"
+                            hx-target="#page-content"
+                            hx-push-url="true"
+                            hx-indicator="#loading"
+                            class="btn btn-outline-secondary btn-sm action-btn"
+                            title="Lihat Detail"
+                            style="text-decoration:none">
+                            <i class="bi bi-pencil-square"></i>
+                            </a>`;
+
+                        }
+                    }
+                ]
+            });
+            table.on("draw", function () {
+                htmx.process(document.querySelector("#transactioncode tbody"));
+            });
+        </script>
+    </div>
+</body>
+
+</html>

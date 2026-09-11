@@ -1,0 +1,21 @@
+{
+  "toolchains": {
+    "project-jdk": {
+      "java": null,
+      "minimumVersion": "21",
+      "preferredVendor": null,
+      "type": "java",
+      "version": null,
+      "wrapper": null
+    },
+    "project-maven": {
+      "java": "project-jdk",
+      "minimumVersion": null,
+      "preferredVendor": null,
+      "type": "maven",
+      "version": "3.9.14",
+      "wrapper": "./mvnw"
+    }
+  },
+  "version": 1
+}

@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/main}">
+
+<body>
+  <div layout:fragment="content" th:fragment="content">
+    <main class="main">
+      <div class="container-fluid py-2">
+        <!-- TABLE CARD -->
+        <div class="row g-3 mb-2">
+          <!-- TOTAL -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body py-2 px-3 d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 text-primary rounded p-2">
+                  <i class="bi bi-people"></i>
+                </div>
+                <div class="ms-2">
+                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Total Supplier
+                  </div>
+                  <div class="fw-semibold fs-5 text-primary" id="total-supplier">
+                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;" -->
+
+          <!-- AKTIF -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body py-2 px-3 d-flex align-items-center">
+                <div class="bg-success bg-opacity-10 text-success rounded p-2">
+                  <i class="bi bi-person-check"></i>
+                </div>
+                <div class="ms-2">
+                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Supplier Aktif
+                  </div>
+                  <div class="fw-semibold fs-5 text-success" id="supplier-aktif">
+                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NONAKTIF -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body py-2 px-3 d-flex align-items-center">
+                <div class="bg-danger bg-opacity-10 text-danger rounded p-2">
+                  <i class="bi bi-person-x"></i>
+                </div>
+                <div class="ms-2">
+                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Nonaktif</div>
+                  <div class="fw-semibold fs-5 text-danger" id="supplier-nonaktif">
+                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BARU -->
+          <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body py-2 px-3 d-flex align-items-center">
+                <div class="bg-warning bg-opacity-10 text-warning rounded p-2">
+                  <i class="bi bi-person-plus"></i>
+                </div>
+                <div class="ms-2">
+                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Supplier Baru
+                  </div>
+                  <div class="fw-semibold fs-5 text-warning" id="supplier-baru">
+                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card border-0 shadow-sm">
+          <!-- TABLE -->
+          <div class="table-responsive">
+            <!-- <table id="supplierTable" class="table table-hover align-middle mb-0 tabledt"> -->
+            <table id="supplierTable" class="table table-hover table-striped mb-0">
+              <thead>
+                <tr>
+                  <th>Kode</th>
+                  <th>Nama</th>
+                  <th>Kontak</th>
+                  <th>Email</th>
+                  <th>Tipe</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="supplier-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script th:inline="javascript">
+      var table = new DataTable("#supplierTable", {
+        ordering: false,
+        processing: true,
+        serverSide: true,
+        columnDefs: [
+          { targets: 0, width: '50px' },   // Kode
+          { targets: 1, width: '200px' },  // Nama
+          { targets: 2, width: '120px' },  // Kontak
+          {
+            targets: 3, width: '120px', type: 'string',
+          }, // telp
+          { targets: 4, width: '150px' },  // email
+          { targets: 5, width: '100px' },  // status
+          { targets: 6, width: '60px' },  // aksi
+        ],
+        layout: {
+          topStart: {
+            pageLength: true,
+          },
+          topEnd: {
+            search: true,
+          },
+        },
+        language: {
+          search: "",
+          searchPlaceholder: "Cari nama...",
+          lengthMenu: "_MENU_ Data Perhalaman",
+          info: "Menampilkan _START_–_END_ dari _TOTAL_ data",
+          infoEmpty: "Tidak ada data",
+          zeroRecords: "Data tidak ditemukan",
+          emptyTable: "Belum ada data",
+          paginate: {
+            first: "«",
+            last: "»",
+            next: "›",
+            previous: "‹",
+          },
+        },
+
+        ajax: async function (data, callback) {
+          console.log("DATATABLES DATA:", data);
+          const keyword = data.search?.value?.trim() || "";
+          const params = new URLSearchParams({
+            draw: data.draw,
+            start: data.start,
+            length: data.length,
+            keyword: data.search?.value?.trim() || "",
+          });
+
+          console.log("KEYWORD JS =", keyword);
+          try {
+            const response = await fetch(`/api/v1/suppliers?${params}`, {
+              credentials: "include",
+            });
+            console.log("RESPONSE:", response);
+            const result = await response.json();
+
+            callback({
+              draw: data.draw,
+              recordsTotal: result.recordsTotal,
+              recordsFiltered: result.recordsFiltered,
+              data: result.data,
+            });
+          } catch (error) {
+            console.error("Gagal mengambil data:", error);
+
+            callback({
+              draw: data.draw,
+              recordsTotal: 0,
+              recordsFiltered: 0,
+              data: [],
+            });
+          }
+        },
+
+        pageLength: 10,
+        lengthMenu: [
+          [10, 25, 50, 100],
+          [10, 25, 50, 100],
+        ],
+        columns: [
+          { data: "supplierCode" },
+          { data: "supplierName" },
+          { data: "supplierContactPerson" },
+          { data: "supplierEmail" },
+          { data: "supplierType" },
+          {
+            data: "supplierIsActive",
+            render: function (data) {
+              return data
+                ? '<span class="badge bg-success">Aktif</span>'
+                : '<span class="badge bg-secondary">Tidak Aktif</span>';
+            },
+          },
+          {
+            data: null,
+            orderable: false,
+            searchable: false,
+            render: function (data, type, row) {
+              return `
+                       <a href="/supplier/detail/${row.supplierId}"
+                         hx-get="/supplier/detail/${row.supplierId}"
+                         hx-target="#page-content"
+                         hx-push-url="true"
+                         hx-indicator="#loading"
+                         class="btn btn-outline-secondary btn-sm action-btn"
+                         title="Lihat Detail"
+                         style="text-decoration:none">
+                           <i class="bi bi-eye"></i>
+                       </a>`;
+            },
+          },
+        ],
+      });
+
+      var searchBox = document.querySelector(
+        "#supplierTable_wrapper .dt-search",
+      );
+
+      if (searchBox && !searchBox.querySelector(".btn-add")) {
+        searchBox.insertAdjacentHTML(
+          "beforeend",
+          `
+        <a href="/supplier/new"
+            class="btn btn-primary btn-sm ms-2 d-inline-flex align-items-center justify-content-center btn-add"
+            hx-get="/supplier/new"
+            hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
+           <i class="bi bi-plus"></i>
+        </a>`,
+        );
+      }
+
+      table.on("draw", function () {
+        htmx.process(document.querySelector("#supplierTable tbody"));
+      });
+
+      async function total() {
+        const url = "/api/v1/suppliers/total-new";
+
+        try {
+          const response = await fetch(url, {
+            method: "GET",
+            credentials: "include",
+          });
+          if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+          }
+          const result = await response.json();
+          document.getElementById("total-supplier").textContent =
+            result.total;
+          document.getElementById("supplier-aktif").textContent =
+            result.totalActive;
+          document.getElementById("supplier-nonaktif").textContent =
+            result.totalInactive;
+          document.getElementById("supplier-baru").textContent =
+            result.totalNew;
+        } catch (error) { }
+      }
+
+      total();
+    </script>
+  </div>
+</body>
+
+</html>

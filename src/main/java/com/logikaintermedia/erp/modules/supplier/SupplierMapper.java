@@ -3,6 +3,8 @@ package com.logikaintermedia.erp.modules.supplier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.NonNull;
 
@@ -17,27 +19,27 @@ public class SupplierMapper implements RowMapper<Supplier> {
         mdl.setSupplierCode(rs.getString("supplier_code"));
         mdl.setSupplierName(rs.getString("supplier_name"));
         mdl.setSupplierType(rs.getString("supplier_type"));
-        mdl.setSupplierNpwp(EncryptionUtil.decrypt(rs.getString("supplier_npwp")));
+        mdl.setSupplierNpwp(EncryptionUtil.decryptSafely(rs.getString("supplier_npwp")));
         mdl.setSupplierAddress(rs.getString("supplier_address"));
         mdl.setSupplierCity(rs.getString("supplier_city"));
         mdl.setSupplierProvince(rs.getString("supplier_province"));
         mdl.setSupplierPostalCode(rs.getString("supplier_postal_code"));
         mdl.setSupplierCountry(rs.getString("supplier_country"));
-        mdl.setSupplierEmail(EncryptionUtil.decrypt(rs.getString("supplier_email")));
+        mdl.setSupplierEmail(EncryptionUtil.decryptSafely(rs.getString("supplier_email")));
         mdl.setSupplierContactPerson(rs.getString("supplier_contact_person"));
-        mdl.setSupplierContactPhone(EncryptionUtil.decrypt(rs.getString("supplier_contact_phone")));
+        mdl.setSupplierContactPhone(EncryptionUtil.decryptSafely(rs.getString("supplier_contact_phone")));
         mdl.setSupplierPaymentTermDays(rs.getInt("supplier_payment_term_days"));
         mdl.setSupplierCreditLimit(rs.getBigDecimal("supplier_credit_limit"));
         mdl.setSupplierBankName(rs.getString("supplier_bank_name"));
-        mdl.setSupplierBankAccountNumber(EncryptionUtil.decrypt(rs.getString("supplier_bank_account_number")));
-        mdl.setSupplierBankAccountName(rs.getString("supplier_bank_account_name"));
+        mdl.setSupplierBankAccountNumber(EncryptionUtil.decryptSafely(rs.getString("supplier_bank_account_number")));
+        mdl.setSupplierBankAccountName(rs.getString("supplier_bank_account_name")); 
         mdl.setSupplierPkp(rs.getObject("supplier_pkp", Boolean.class));
         mdl.setSupplierIsActive(rs.getObject("supplier_is_active", Boolean.class));
         mdl.setCompanyId(rs.getObject("company_id", java.util.UUID.class));
-        mdl.setSupplierCreatedAt(rs.getObject("supplier_created_at", LocalDateTime.class));
-        mdl.setSupplierUpdatedAt(rs.getObject("supplier_updated_at", LocalDateTime.class));
+        mdl.setSupplierCreatedAt(rs.getObject("supplier_created_at", OffsetDateTime.class));
+        mdl.setSupplierUpdatedAt(rs.getObject("supplier_updated_at", OffsetDateTime.class));
         mdl.setUserId(rs.getObject("user_id", java.util.UUID.class));
-        mdl.setSupplierDeletedAt(rs.getObject("supplier_deleted_at", LocalDateTime.class));
+        mdl.setSupplierDeletedAt(rs.getObject("supplier_deleted_at", OffsetDateTime.class));
         return mdl;
     }
 

@@ -1,0 +1,475 @@
+<!doctype html>
+<html
+  lang="id"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/main}"
+>
+  <body>
+    <div layout:fragment="content" th:fragment="content">
+      <main class="main">
+        <div class="container-fluid py-2">
+          <div class="row g-3 mb-2">
+            <!-- TOTAL -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body py-2 px-3 d-flex align-items-center">
+                  <div
+                    class="bg-primary bg-opacity-10 text-primary rounded p-2"
+                  >
+                    <i class="bi bi-people"></i>
+                  </div>
+                  <div class="ms-2">
+                    <div class="text-muted small">Total Client</div>
+                    <div class="fw-semibold fs-5" id="total-client">1.200</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- AKTIF -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body py-2 px-3 d-flex align-items-center">
+                  <div
+                    class="bg-success bg-opacity-10 text-success rounded p-2"
+                  >
+                    <i class="bi bi-person-check"></i>
+                  </div>
+                  <div class="ms-2">
+                    <div class="text-muted small">Client Aktif</div>
+                    <div class="fw-semibold fs-5" id="client-aktif">500</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- NONAKTIF -->
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body py-2 px-3 d-flex align-items-center">
+                  <div class="bg-danger bg-opacity-10 text-danger rounded p-2">
+                    <i class="bi bi-person-x"></i>
+                  </div>
+                  <div class="ms-2">
+                    <div class="text-muted small">Nonaktif</div>
+                    <div class="fw-semibold fs-5" id="client-nonaktif">100</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+              <div class="card border-0 shadow-sm">
+                <div class="card-body py-2 px-3 d-flex align-items-center">
+                  <div
+                    class="bg-warning bg-opacity-10 text-warning rounded p-2"
+                  >
+                    <i class="bi bi-person-plus"></i>
+                  </div>
+                  <div class="ms-2">
+                    <div class="text-muted small">Client Baru</div>
+                    <div class="fw-semibold fs-5" id="client-baru">550</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card border-0 shadow-sm">
+            <!--<div class="card-body py-3">
+                        <div class="row g-3 align-items-center">
+
+                            <div class="col-12 col-md-12">
+                                <div class="d-flex gap-2 align-items-center flex-wrap">
+                                    <div class="input-group" style="flex: 1; min-width: 200px;">
+                                        <div class="position-relative w-100">
+                                            <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-2 text-muted"
+                                                style="font-size: 13px;"></i>
+
+                                            <input type="search" id="searchClient"
+                                                class="form-control form-control-sm ps-4 pe-3"
+                                                placeholder="Search nama...">
+                                        </div>
+                                    </div>
+
+                                    <a th:href="@{/client/new}" class="btn btn-primary btn-sm px-3" hx-get="/client/new"
+                                        hx-target="#page-content" hx-push-url="true" hx-indicator="#loading"
+                                        title="Tambah Client Baru">
+                                        <i class="bi bi-folder-plus"></i>
+                                    </a>
+                                    <button type="button" id="btn-refresh" class="btn btn-success btn-sm px-3"
+                                        style="white-space: nowrap;" title="Refresh Data Client">
+                                        <i class="bi bi-arrow-clockwise"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div> -->
+
+            <!-- TOOLBAR -->
+            <!-- <div class="toolbar">
+
+                            <div class="d-flex flex-column flex-md-row
+                        justify-content-between
+                        gap-2">
+
+                                <div class="toolbar-actions d-flex gap-2">
+
+                                    <select id="statusFilter" class="form-select form-select-sm"
+                                        onchange="applyFilter()">
+
+                                        <option value="">Semua Status</option>
+                                        <option value="BELUM LUNAS">Belum Lunas</option>
+                                        <option value="SEBAGIAN">Sebagian</option>
+                                        <option value="LUNAS">Lunas</option>
+
+                                    </select>
+
+                                </div>
+
+                                <div class="search-box">
+
+                                    <div class="input-group input-group-sm">
+
+                                        <span class="input-group-text bg-white">
+                                            <i class="bi bi-search text-muted"></i>
+                                        </span>
+
+                                        <input type="search" id="searchInput" class="form-control"
+                                            placeholder="Cari invoice, client, proyek...">
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+
+                    </div>-->
+
+            <!-- TABLE -->
+            <div class="table-responsive">
+              <table
+                id="clientTable"
+                class="table table-hover align-middle mb-0 tabledt"
+              >
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Nama</th>
+                    <th>Kontak</th>
+
+                    <th>Email</th>
+
+                    <th>Status</th>
+
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+
+                <tbody id="client-table-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+      <script th:inline="javascript">
+        new DataTable("#clientTable", {
+          processing: true,
+          serverSide: true,
+          layout: {
+            topStart: {
+              pageLength: true,
+            },
+            topEnd: {
+              search: true,
+            },
+          },
+          language: {
+            lengthMenu: "_MENU_ data per halaman",
+          },
+          language: {
+            search: "",
+            searchPlaceholder: "Cari nama...",
+            lengthMenu: "_MENU_ data per halaman",
+            info: "Menampilkan _START_–_END_ dari _TOTAL_ data",
+            infoEmpty: "Tidak ada data",
+            zeroRecords: "Data tidak ditemukan",
+            emptyTable: "Belum ada data",
+            paginate: {
+              first: "«",
+              last: "»",
+              next: "›",
+              previous: "‹",
+            },
+          },
+          ajax: {
+            url: "/api/v1/clients",
+            type: "GET",
+            error: function (xhr) {
+              console.error("Status:", xhr.status);
+              console.error("Response:", xhr.responseText);
+            },
+          },
+          pageLength: 10,
+          lengthMenu: [
+            [10, 25, 50, 100],
+            [10, 25, 50, 100],
+          ],
+          columns: [
+            // { data: null, orderable: false, searchable: false,
+            // render: function (data, type, row, meta) {
+            //     return meta.row + meta.settings._iDisplayStart + 1; } },
+            { data: "clientCode" },
+            { data: "clientName" },
+            { data: "clientContactPerson" },
+            { data: "clientEmail" },
+            { data: "clientIsActive" },
+            {
+              data: null,
+              orderable: false,
+              searchable: false,
+              render: function (data, type, row) {
+                return ` <button type="button"
+                                            class="btn btn-sm btn-light border action-detail">
+                                            <i class="bi bi-eye me-1"></i>
+                                            Lihat
+                                    </button>`;
+              },
+            },
+          ],
+        });
+
+        const searchBox = document.querySelector(
+          "#clientTable_wrapper .dt-search",
+        );
+
+        if (searchBox) {
+          searchBox.insertAdjacentHTML(
+            "beforeend",
+            `
+        <a href="/client/new"
+           class="btn btn-primary btn-sm ms-2" hx-get="/client/new"                                        
+           hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
+            <i class="bi bi-plus-lg me-1"></i>
+            Tambah Klien
+        </a>`,
+          );
+        }
+
+        //  <a th:href="@{/client/new}" class="btn btn-primary btn-sm px-3" hx-get="/client/new"
+        //                                         hx-target="#page-content" hx-push-url="true" hx-indicator="#loading"
+        //                                         title="Tambah Client Baru">
+        //                                         <i class="bi bi-folder-plus"></i>
+        //                                     </a>
+        // import { library } from '/js/utility/library.js';
+        // const clientModel = {
+        //     cursorCreatedAt: null,
+        //     cursorId: null,
+        //     hasNext: true,
+        //     loading: false,
+        //     // limit: 12,
+        //     resizableInit: false,
+        //     allData: [],
+
+        //     setTableHeight: function (id_wrapper, id_table) {
+        //         return library.setTableHeight(id_wrapper, id_table);
+        //     },
+
+        //     init: function () {
+        //         const self = this;
+        //         const wrapperId = document.getElementById("client-wrapper");
+
+        //         this.findById("", true);
+
+        //         this.initScroll(wrapperId); // 🔥 pasang di sini
+        //         this.refResh()
+
+        //         const searchInput = document.getElementById('searchClient');
+        //         if (searchInput) {
+        //             searchInput.addEventListener('input', function (e) {
+        //                 const keyword = e.target.value;
+        //                 console.log("Kata Kunci", keyword)
+        //                 self.findById(keyword, true);
+        //             });
+        //         }
+        //     },
+
+        //     refResh: function () {
+        //         const btnRefresh = document.getElementById("btn-refresh");
+        //         btnRefresh.onclick = () => {
+        //             this.findById("", true);
+        //         }
+        //     },
+
+        //     initScroll: function (wrapper) {
+
+        //         if (!wrapper || wrapper.dataset.scrollInitialized === "true") {
+        //             return;
+        //         }
+
+        //         wrapper.dataset.scrollInitialized = "true";
+
+        //         let lastScrollTop = 0;
+
+        //         wrapper.addEventListener("scroll", () => {
+
+        //             const scrollTop = wrapper.scrollTop;
+
+        //             const isScrollingDown = scrollTop > lastScrollTop;
+
+        //             lastScrollTop = scrollTop;
+
+        //             const nearBottom =
+        //                 scrollTop + wrapper.clientHeight >=
+        //                 wrapper.scrollHeight - 70;
+
+        //             if (
+        //                 isScrollingDown &&
+        //                 nearBottom &&
+        //                 !this.loading &&
+        //                 this.hasNext
+        //             ) {
+        //                 console.log("LOAD NEXT PAGE");
+
+        //                 this.findById("", false);
+        //             }
+
+        //         }, { passive: true });
+        //     },
+
+        //     findById: async function (keyword = "", reset = false) {
+        //         if (this.loading) return;
+        //         if (!this.hasNext && !reset) return;
+        //         const tbody = document.getElementById("client-table-body");
+        //         const statusMsg = "";
+
+        //         if (reset) {
+        //             this.cursorCreatedAt = null;
+        //             this.cursorId = null;
+        //             this.hasNext = true;
+        //             tbody.innerHTML = "";
+        //         }
+
+        //         this.loading = true;
+        //         UI.showSkeleton("client-table-body", 10);
+
+        //         try {
+        //             const params = new URLSearchParams({
+        //                 keyword: keyword
+        //                 // limit: this.limit,
+        //             });
+
+        //             if (this.cursorCreatedAt && this.cursorId) {
+        //                 params.append("lastCreatedAt", this.cursorCreatedAt);
+        //                 params.append("lastId", this.cursorId);
+        //             }
+
+        //             const [json] = await Promise.all([
+        //                 api.get(`/api/v1/clients?${params.toString()}`),
+        //                 new Promise((resolve) => setTimeout(resolve, 1000)),
+        //             ]);
+
+        //             if (json && json.status === "success") {
+        //                 const res = json.data;
+        //                 UI.hideSkeleton();
+
+        //                 const newBatch = res.data;
+        //                 // 🔥 GABUNGKAN DATA: Jika reset, buat baru. Jika scroll, tambah ke belakang.
+        //                 if (reset) {
+        //                     this.allData = newBatch;
+        //                 } else {
+        //                     this.allData = [...(this.allData || []), ...newBatch];
+        //                 }
+
+        //                 // Kirim 'this.allData.length' untuk tahu posisi index awal batch ini
+        //                 const startIndex = reset
+        //                     ? 0
+        //                     : this.allData.length - newBatch.length;
+        //                 this.renderTable(newBatch, reset, startIndex);
+
+        //                 // Update metadata paging dari res
+
+        //                 console.log("res ", res);
+        //                 // console.log("new Batch ", newBatch)
+
+        //                 this.cursorCreatedAt = res.nextCreatedAt;
+        //                 this.cursorId = res.nextId;
+        //                 this.hasNext = res.hasNext;
+
+        //                 console.log(" cursorId =", this.cursorId);
+        //                 console.log(" hasNext =", this.hasNext);
+        //             }
+        //             requestAnimationFrame(() => {
+        //                 this.setTableHeight("client-wrapper", "client");
+        //             });
+        //         } catch (err) {
+        //             tbody.innerHTML = `<tr><td colspan="13" class="text-center text-danger">Error: ${err.message}</td></tr>`;
+        //             UI.hideSkeleton();
+        //         } finally {
+        //             this.loading = false;
+        //             UI.hideSkeleton();
+        //         }
+        //     },
+
+        //     renderTable: function (data, isReset = false, startIndex = 0) {
+        //         const tbody = document.getElementById("client-table-body");
+
+        //         if (!data || data.length === 0) {
+        //             if (isReset) {
+        //                 tbody.innerHTML =
+        //                     '<tr><td colspan="13" class="text-center py-3">No data available</td></tr>';
+        //             }
+        //             return;
+        //         }
+
+        //         if (isReset) {
+        //             tbody.innerHTML = "";
+        //         }
+
+        //         let rowsHtml = "";
+        //         data.forEach((row, i) => {
+        //             var pkp = row.clientIsPkp;
+        //             var status = row.clientIsActive;
+        //             const globalIndex = startIndex + i;
+        //             rowsHtml += `
+        //         <tr class="clickable-row-client" data-index="${globalIndex}" id="row-client-${row.clientId}">
+        //             <td>${row.clientCode}</td>
+        //             <td>${row.clientName}</td>
+        //             <td>${row.clientContactPhone || "-"}</td>
+        //             <td>${row.clientEmail || "-"}</td>
+        //             <td class="text-center">
+        //             ${status === true
+        //                     ? '<span class="status-aktif">Aktif</span>'
+        //                     : '<span class="status-tidak-aktif">Nonaktif</span>'
+        //                 }
+        //             </td>
+        //             <td>
+        //                 <a href="/client/detail/${row.clientId}"
+        //                     hx-get="/client/detail/${row.clientId}"
+        //                     hx-target="#page-content"
+        //                     hx-push-url="true"
+        //                     hx-indicator="#loading"
+        //                    class="btn btn-outline-secondary btn-sm action-btn"
+        //                     title="Lihat Detail"
+        //                     style="text-decoration:none">
+        //                       <i class="bi bi-eye"></i>
+        //                     </a>
+        //             </td>
+
+        //        </tr > `;
+        //         });
+
+        //         tbody.insertAdjacentHTML("beforeend", rowsHtml);
+        //         htmx.process(tbody);
+        //     },
+        // };
+        // window.clientModel = clientModel;
+        // // window.addEventListener("resize", () => {
+        // //     this.setTableHeight("client-wrapper", "client");
+        // // });
+        // clientModel.init();
+      </script>
+    </div>
+  </body>
+</html>

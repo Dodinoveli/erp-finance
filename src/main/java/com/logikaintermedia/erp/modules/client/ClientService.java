@@ -1,24 +1,28 @@
 package com.logikaintermedia.erp.modules.client;
 
+import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.uuid.Generators;
-import com.logikaintermedia.erp.encryption.EncryptionUtil;
 import com.logikaintermedia.erp.utility.CursorResponse;
-import lombok.AllArgsConstructor;
+import com.logikaintermedia.erp.utility.DataCountResponse;
+import com.logikaintermedia.erp.utility.DataTableResponse;
 import lombok.extern.slf4j.Slf4j;
+import com.logikaintermedia.erp.encryption.EncryptionUtil;
 
 @Slf4j
-@AllArgsConstructor
 @Service
 public class ClientService {
     private final ClientRepository repository;
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-    public String generateCode(UUID companyId) {
-        return repository.code(companyId);
+    ClientService(ClientRepository repository) {
+        this.repository = repository;
     }
 
     public Client detailById(UUID clientId) {
@@ -47,7 +51,7 @@ public class ClientService {
             dto.setClientProvince(entity.getClientProvince());
             dto.setClientPostalCode(entity.getClientPostalCode());
             dto.setClientCountry(entity.getClientCountry());
-            dto.setClientEmail(EncryptionUtil.decryptSafely(entity.getClientEmail()));
+            dto.setClientEmail(entity.getClientEmail());
             dto.setClientContactPerson(entity.getClientContactPerson());
             dto.setClientContactPhone(entity.getClientContactPhone());
             dto.setClientIsActive(entity.getClientIsActive());
@@ -66,7 +70,7 @@ public class ClientService {
         }).toList();
 
         // 5. Ambil "Kunci" dari data terakhir (Data ke-10) untuk ambil data 11-20 nanti
-        LocalDateTime nextCreatedAt = null;
+        OffsetDateTime nextCreatedAt = null;
 
         UUID nextId = null;
 
@@ -105,16 +109,16 @@ public class ClientService {
         model.setClientAccountName(dto.getClientAccountName());
 
         // 🔥 AUDIT SYSTEM (WAJIB di backend, bukan dari DTO)
-        model.setClientCreatedAt(LocalDateTime.now());
+        model.setClientCreatedAt(OffsetDateTime.now(ZoneOffset.UTC));
         model.setUserId(userId);
 
         // optional
         model.setClientUpdatedAt(null);
-        // model.setUpdatedBy(OffsetDateTime.now());
         model.setClientDeletedAt(null);
         model.setClientNitku(dto.getClientNitku());
         model.setClientIsPkp(dto.getClientIsPkp());
-        String code = repository.generateClientCode(model.getCompanyId());
+        long count = repository.IntSequenceGenerator(companyId);
+        String code = "CLN-" + count;
         model.setClientCode(code);
         int data = repository.save(model);
 
@@ -145,21 +149,66 @@ public class ClientService {
         model.setClientBankName(dto.getClientBankName());
         model.setClientAccountNumber(dto.getClientAccountNumber());
         model.setClientAccountName(dto.getClientAccountName());
-        model.setClientUpdatedAt(LocalDateTime.now());
+        model.setClientUpdatedAt(OffsetDateTime.now(ZoneOffset.UTC));
         model.setClientNitku(dto.getClientNitku());
         model.setClientIsPkp(dto.getClientIsPkp());
 
         model.setCompanyId(companyId);
         model.setClientId(clientId);
-
-        System.out.println("DEBUG UPDATE - ClientID: " + clientId);
-        System.out.println("DEBUG UPDATE - CompanyID: " + companyId);
-
         int data = repository.update(model);
-        System.err.println("REALLY UPDATED ROWS: " + data);
+        // System.err.println("REALLY UPDATED ROWS: " + data);
         if (data <= 0) {
             throw new IllegalArgumentException("Gagal menyimpan data, silakan coba kembali");
         }
         return model;
+    }
+
+    @Transactional(readOnly = true)
+    public DataTableResponse<ClientResponse> getClients(UUID companyId, int draw, int start, int length,
+            String keyword) {
+        // Validasi pagination
+        if (start < 0) {
+            start = 0;
+        }
+        if (length <= 0) {
+            length = 10;
+        }
+        // Batasi maksimal data per request
+        if (length > 100) {
+            length = 100;
+        }
+        // Bersihkan keyword
+        if (keyword != null) {
+            keyword = keyword.trim();
+            if (keyword.isEmpty()) {
+                keyword = null;
+            }
+        }
+        List<Client> clients = repository.findClientByCompanyId(companyId, start, length, keyword);
+        List<ClientResponse> list = clients.stream().map(entity -> {
+            ClientResponse dto = new ClientResponse();
+            dto.setClientId(entity.getClientId());
+            dto.setClientName(entity.getClientName());
+            dto.setClientCode(entity.getClientCode());
+            dto.setClientContactPerson(entity.getClientContactPerson());
+            dto.setClientEmail(EncryptionUtil.decryptSafely(entity.getClientEmail()));
+            dto.setClientContactPhone(EncryptionUtil.decryptSafely(entity.getClientContactPhone()));
+            dto.setClientIsActive(entity.getClientIsActive());
+            return dto;
+        }).toList();
+        // Total semua client
+        long recordsTotal = repository.countAll(companyId);
+        // Total client setelah filter/search
+        long recordsFiltered = repository.countFiltered(companyId, keyword);
+        return new DataTableResponse<>(draw, recordsTotal, recordsFiltered, list);
+    }
+
+    @Transactional(readOnly = true)
+    public DataCountResponse<Client> getTotal(UUID companyId) {
+        int total = repository.countTotalByCompanyId(companyId);
+        int totalActive = repository.countTotalActiveByCompanyId(companyId);
+        int totalInactive = repository.countTotalInactiveByCompanyId(companyId);
+        int totalNew = repository.countTotalNewByCompanyId(companyId);
+        return new DataCountResponse<>(total, totalActive, totalInactive, totalNew);
     }
 }

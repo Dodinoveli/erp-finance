@@ -1,6 +1,7 @@
 package com.logikaintermedia.erp.utility;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,7 @@ public class CursorResponse<T> {
      * selanjutnya.
      */
     private List<T> data;
-    private LocalDateTime nextCreatedAt;
+    private OffsetDateTime nextCreatedAt;
     private UUID nextId;
     private boolean hasNext;
 

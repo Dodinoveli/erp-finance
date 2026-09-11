@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/main}">
+
+<body>
+  <div layout:fragment="content" th:fragment="content">
+    <main class="main">
+      <div class="container-fluid">
+        <div class="detail-card mt-2">
+          <div class="detail-header">
+            <div class="detail-heading">
+              <div class="detail-title">
+                <h1 th:text="${supplier.supplierName}"></h1>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <div class="card-heading">
+            <div class="card-heading-icon"><i class="bi bi-people"></i></div>
+
+            <h2>Informasi Supplier</h2>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label"> Kontak </span>
+              <div class="info-value" th:text="${supplier.supplierContactPerson}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Email </span>
+              <div class="info-value" th:text="${supplier.supplierEmail}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Telepon </span>
+              <div class="info-value" th:text="${supplier.supplierContactPhone}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Dibuat </span>
+              <div class="info-value" th:text="${#temporals.format(supplier.supplierCreatedAt,'dd MMMM yyyy')}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Alamat </span>
+              <div class="info-value normal" th:text="${supplier.supplierAddress}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Status </span>
+
+              <div class="info-value normal">
+                <!-- Jika clientIsActive = true -->
+                <b>
+                  <span th:if="${supplier.supplierIsActive}" class="status-aktif">Aktif</span></b>
+                <!-- Jika clientIsActive = false -->
+                <b><span th:unless="${supplier.supplierIsActive}" class="status-tidak-aktif">Nonaktif</span></b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-card">
+          <div class="card-heading">
+            <div class="card-heading-icon">
+              <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <h2>Informasi Pajak (Coretax)</h2>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label"> Tipe Identitas </span>
+              <div class="info-value">NPWP (PKP)</div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> NPWP </span>
+              <div class="info-value" th:text="${supplier.supplierNpwp}"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="three-column">
+          <!-- BUSINESS -->
+          <div class="small-card">
+            <div class="card-heading">
+              <div class="card-heading-icon">
+                <i class="bi bi-building"></i>
+              </div>
+              <h2>Informasi Bisnis</h2>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Kategori Supplier </span>
+              <div class="info-value" th:text="${supplier.supplierType}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Mata Uang </span>
+              <div class="info-value">IDR - Rupiah</div>
+            </div>
+          </div>
+
+          <div class="small-card">
+            <div class="card-heading">
+              <div class="card-heading-icon">
+                <i class="bi bi-bank"></i>
+              </div>
+              <h2>Informasi Bank</h2>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Nama Bank </span>
+              <div class="info-value" th:text="${supplier.supplierBankName}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> No. Rekening </span>
+              <div class="info-value" th:text="${supplier.supplierBankAccountNumber}"></div>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label"> Atas Nama </span>
+              <div class="info-value" th:text="${supplier.supplierBankAccountName}"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <a th:href="@{/supplier}" class="btn btn-light" hx-get="/supplier" hx-target="#page-content"
+            hx-push-url="true" hx-indicator="#loading">
+            <i class="bi bi-arrow-left"></i> Kembali ke Daftar
+          </a>
+          <a th:href="@{/supplier/edit/{id}(id=${supplier.supplierId})}" class="btn btn-warning"
+            th:hx-get="@{/supplier/edit/{id}(id=${supplier.supplierId})}" hx-target="#page-content" hx-push-url="true"
+            hx-indicator="#loading"><i class="bi bi-pencil-square"></i> Edit
+          </a>
+          <button type="button" class="btn btn-danger">
+            <i class="bi bi-eye-slash"></i> Nonaktifkan
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

@@ -67,23 +67,25 @@ public class SecurityConfig {
                                 .sessionManagement(sess -> sess
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // wajib JWT
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("/", "/register", "/login", "/css/**", "/js/**")
+                                                .requestMatchers("/", "/register", "/login", "/css/**", "/js/**",
+                                                                "/access-denied")
                                                 .permitAll()
-                                                // auth register dan login
+                                                // Endpoint yang dapat diakses tanpa login
                                                 .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                                                .requestMatchers(HttpMethod.POST, "/api/company").permitAll()
-                                                // lainnya harus login
+                                                // .requestMatchers(HttpMethod.POST, "/api/company").permitAll()
+
+                                                // Semua endpoint lainnya wajib login
                                                 .anyRequest().authenticated())
                                 // TAMBAHKAN DI SINI
                                 .exceptionHandling(exception -> exception
-                                                // JWT tidak ada / tidak valid
+                                                // Belum login / JWT tidak ada atau tidak valid
                                                 .authenticationEntryPoint((request, response, authException) -> {
                                                         response.sendRedirect("/login");
                                                 })
                                                 // Sudah login tetapi tidak punya permission/role
                                                 .accessDeniedHandler((request, response, accessDeniedException) -> {
-                                                        response.sendRedirect("/login");
+                                                        response.sendRedirect("/access-denied");
                                                 }))
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .formLogin(form -> form.disable())

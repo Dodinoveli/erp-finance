@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="container-fluid mt-2">
+                <form id="formProject" th:object="${project}">
+                    <div class="card p-1">
+                        <div class="card-body">
+                            <input type="hidden" id="project_id" name="projectId" th:field="*{projectId}" />
+                            <div class="row g-3">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Kode (readonly) </label>
+                                        <div class="form-field">
+                                            <input type="text" class="form-control input-underline bg-secondary-subtle"
+                                                id="project_code" name="projectCode" readonly
+                                                th:field="*{projectCode}" />
+                                            <small class="text-danger" id="err-projectCode"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">PO NUMBER/ SPK</label>
+                                        <div class="form-field">
+                                            <input type="text" class="form-control  input-underline" id="project_po"
+                                                name="projectPo" th:field="*{projectPo}"
+                                                placeholder="Contoh: PO/2026/08/0142, sesuaikan dengan no po anda">
+                                            <small class="text-danger" id="err-projectPo"> </small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Tanggal</label>
+                                        <div class="form-field">
+                                            <input type="date" id="po_date" name="poDate"
+                                                class="form-control input-underline"
+                                                th:value="${#temporals.format(project.poDate, 'yyyy-MM-dd')}">
+                                            <small class="text-danger" id="err-poDate"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Nama</label>
+                                        <div class="form-field">
+                                            <input type="text" id="name" name="name"
+                                                class="form-control input-underline" th:field="*{name}">
+                                            <small class="text-danger" id="err-name"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Klien</label>
+                                        <div class="form-field">
+                                            <select id="client_id" name="clientId" class="form-control input-underline"
+                                                th:field="*{clientId}" onchange="projectModel.loadClients()">
+                                                <option th:value="${project.clientId}" th:text="${project.clientName}">
+                                                </option>
+                                            </select>
+                                            <small class="text-danger" id="err-clientId"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="lbl-normal">Deskripsi</label>
+                                <div class="form-field">
+                                    <textarea name="description" id="description" class="form-control input-underline"
+                                        th:field="*{description}" rows="1"
+                                        placeholder="Contoh: Pekerjaan Pembuatan gudang"></textarea>
+                                    <small class="text-danger" id="err-name"></small>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Jenis Proyek <span
+                                                class="text-danger">*</span></label>
+                                        <div class="form-field">
+                                            <select id="project_type" name="projectType" th:field="*{projectType}"
+                                                class="form-select select-underline">
+                                                <option value="">-- Pilih Jenis Proyek --</option>
+                                                <option value="Konstruksi">Konstruksi & Bangunan</option>
+                                                <option value="Sipil">Sipil & Infrastruktur</option>
+                                                <option value="Elektrikal">Mekanikal & Elektrikal (MEP)</option>
+                                                <option value="Pengadaan">Pengadaan Barang (Procurement)</option>
+                                                <option value="Konsultansi">Konsultansi & Perencanaan</option>
+                                                <option value="Renovasi">Renovasi & Perawatan (Maintenance)</option>
+                                                <option value="IT">Teknologi Informasi (IT)</option>
+                                                <option value="Multi-Disiplin">Multi-Disiplin / EPC (Campuran)</option>
+                                                <option value="General">General / Lain-lain</option>
+                                            </select>
+                                            <small class="text-danger" id="err-projectType"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label class="lbl-normal">Lokasi</label>
+                                        <div class="form-field">
+                                            <input type="text" id="location" name="location" th:field="*{location}"
+                                                class="form-control input-underline" placeholder="Lampung" />
+                                            <small class="text-danger" id="err-location"></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="lbl-normal">Nilai Kontrak</label>
+                                <div class="form-field">
+                                    <input type="text" id="contract_value" name="contractValue"
+                                        th:field="*{contractValue}" class="form-control input-underline"
+                                        placeholder="100.000.000" />
+                                    <small class="text-danger" id="err-contractValue"></small>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="lbl-normal">Termasuk PPN 12% ? <span class="text-danger">*</span></label>
+                                <div class="form-field">
+                                    <select id="tax_type" name="taxType" class="form-select select-underline"
+                                        th:field="*{taxType}">
+                                        <option value="">-- Pilih Skema PPN --</option>
+                                        <option value=" EXCLUSIVE">Nilai Kontrak BELUM termasuk PPN (Exclusive)
+                                        </option>
+                                        <option value="INCLUSIVE">Nilai Kontrak SUDAH termasuk PPN (Inclusive)
+                                        </option>
+                                        <option value="NON_PPN">Nilai Kontrak NON PPN </option>
+                                    </select>
+                                    <small class="text-danger" id="err-taxType"></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class=" detail-actions">
+                            <button type="submit" class="btn btn-simpan">
+                                <i class="bi bi-floppy"></i> Simpan
+                            </button>
+                            <a th:href="@{/project}" class="btn btn-batal" th:hx-get="@{/project}"
+                                hx-target="#page-content" hx-push-url="true" hx-indicator="#loading"><i
+                                    class="bi bi-x-lg"></i> Batal
+                            </a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+        <div th:replace="~{fragments/footer :: footer}">
+        </div>
+        <script th:src="@{/js/utility/dashboard.js}"></script>
+
+        <script type="module" th:inline="javascript">
+            const projectModel = {
+                clientsLoaded: false,
+
+                init: function () {
+                    this.bindEvents();
+                    this.bindClientEvents();
+                },
+
+                bindEvents: function () {
+                    const self = this;
+                    // self.showClient();
+                    const form = document.getElementById("formProject");
+
+                    if (form.dataset.bound === "true") return
+                    form.dataset.bound = "true";
+
+                    form.addEventListener("submit", (e) => {
+                        e.preventDefault();
+                        this.updateProject(form);
+                    });
+                },
+
+                bindClientEvents: function () {
+                    const select = document.getElementById("client_id");
+                    if (!select) {
+                        return;
+                    }
+                    select.addEventListener("focus", () => {
+                        this.loadClients();
+                    });
+                },
+
+                loadClients: async function () {
+                    console.log("jalankan klient ")
+                    if (this.clientsLoaded) {
+                        return;
+                    }
+                    const selectElement = document.getElementById('client_id');
+                    const currentClientId = selectElement.value;
+
+                    try {
+                        const url = "/api/v1/project/clients";
+                        const response = await fetch(url);
+
+                        if (!response.ok) {
+                            throw new Error(`Response status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        console.log(result);
+
+                        if (result.status === "success") {
+
+                            if (!selectElement) {
+                                return;
+                            }
+
+                            const client = result.data;
+                            selectElement.innerHTML = "";
+                            client.forEach(client => {
+                                const option = document.createElement('option');
+                                option.value = client.clientId;
+                                option.textContent = `${client.clientName}`;
+                                if (String(client.clientId) === String(currentClientId)) {
+                                    option.selected = true;
+                                }
+
+                                selectElement.appendChild(option);
+                            });
+                            this.clientsLoaded = true;
+                        }
+                    } catch (e) {
+                        console.log("error project")
+                    }
+                },
+
+                updateProject: async function (formEl) {
+                    const formData = new FormData(formEl);
+                    const id = formData.get("projectId");
+                    const payload = Object.fromEntries(formData.entries());
+                    this.showErrors({}, formEl);
+                    Toast.loading("Menyimpan data...");
+                    try {
+                        const url = `/api/v1/project/${id}`;
+                        // const result = await api.put(`/api/v1/project/${id}`, payload, "Menyimpan Data...");
+                        const response = await fetch(url, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            credentials: "include",
+                            body: JSON.stringify(payload)
+                        });
+
+                        var result = await response.json();
+                        if (!response.ok) {
+                            throw {
+                                status: response.status,
+                                message: result?.message || "Gagal menyimpan data",
+                                errors: result?.errors,
+                                data: result,
+                            };
+                        }
+                        await Toast.success(result.message, "Berhasil", 2000);
+
+                        setTimeout(() => {
+                            var url = `/project/detail/${id}`;
+                            htmx
+                                .ajax("GET", url, {
+                                    target: "#page-content",
+                                    swap: "innerHTML",
+                                    indicator: "#loading",
+                                })
+                                .then(() => {
+                                    window.history.pushState({}, "", url);
+                                });
+                        }, 500);
+
+                        return result;
+                    } catch (err) {
+                        const errors = err?.errors || err?.data?.errors;
+                        if (errors) {
+                            this.showErrors(errors, formEl);
+                            Toast.error(
+                                err.message,
+                                "Gagal Menyimpan data, periksa inputan",
+                                3000,
+                            );
+                        }
+                        throw err;
+                    }
+                },
+
+                showErrors: function (errors, formEl) {
+                    if (!formEl) return; // 🔥 guard biar gak error lagi
+
+                    // 🔥 reset hanya di form ini
+                    formEl
+                        .querySelectorAll(".is-invalid")
+                        .forEach((i) => i.classList.remove("is-invalid"));
+
+                    formEl
+                        .querySelectorAll('[id^="err-"]')
+                        .forEach((e) => (e.innerText = ""));
+
+                    // 🔥 set error
+                    for (const field in errors) {
+                        const input = formEl.querySelector(`[name = "${field}"]`);
+                        const errorEl = formEl.querySelector("#err-" + field);
+
+                        if (input) input.classList.add("is-invalid");
+                        if (errorEl) errorEl.innerText = errors[field];
+                    }
+                },
+            };
+
+            window.projectModel = projectModel;
+            projectModel.init();
+        </script>
+    </div>
+</body>
+
+</html>

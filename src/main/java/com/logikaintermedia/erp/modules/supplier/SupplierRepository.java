@@ -1,13 +1,10 @@
 package com.logikaintermedia.erp.modules.supplier;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.DataClassRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -112,104 +109,182 @@ public class SupplierRepository {
         }
     }
 
-    public List<Supplier> findById(UUID companyId, String keyword, LocalDateTime lastCreatedAt, UUID lastId,
-            int limit) {
-        Map<String, Object> params = new LinkedHashMap<>();
-        params.put("companyId", companyId);
-        params.put("limit", limit);
-
-        boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
-        if (hasKeyword) {
-            params.put("keyword", keyword + "%");
-        }
+    public long generateSupplierCode(UUID companyId) {
         String sql = """
-                SELECT
-                    supplier_id,
-                    supplier_code,
-                    supplier_name,
-                    supplier_contact_phone,
-                    supplier_email,
-                    supplier_is_active,
-                    supplier_created_at
-                FROM suppliers WHERE company_id = :companyId
+                     UPDATE company_sequences
+                         SET current_value = current_value + 1
+                     WHERE company_id = :companyId
+                         AND sequence_type = 'SUPPLIER'
+                         RETURNING current_value;
                 """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
 
-        if (hasKeyword) {
-            // query ini hanya lambat jika datanya sudah 100.000 baris di bawah itu cepat
-            // AND (supplier_name ILIKE CONCAT('%', :keyword, '%'))
-            sql += " AND (supplier_name ILIKE CONCAT('%', :keyword, '%'))";
+        Long result = jdbc.queryForObject(sql, params, Long.class);
+        if (result == null) {
+            throw new IllegalStateException("Gagal mendapatkan nomor SUPPLIER untuk company: " + companyId);
         }
-
-        if (lastCreatedAt != null && lastId != null) {
-            sql += """
-                        AND (
-                            supplier_created_at < :lastCreatedAt
-                            OR (supplier_created_at = :lastCreatedAt AND supplier_id < :lastId)
-                        )
-                    """;
-            params.put("lastCreatedAt", lastCreatedAt);
-            params.put("lastId", lastId);
-        }
-
-        sql += " ORDER BY supplier_created_at DESC, supplier_id DESC LIMIT :limit ";
-        List<Supplier> result = jdbc.query(sql, params, new DataClassRowMapper<>(Supplier.class));
         return result;
     }
 
-    public String generateCode(UUID companyId) {
+    public List<Supplier> findSupplierByCompanyId(UUID companyId,
+            int start,
+            int length,
+            String keyword) {
         String sql = """
-                SELECT supplier_code
-                FROM suppliers
-                WHERE company_id = :companyId
+                select * from suppliers where company_id = :companyId
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("start", start);
+        params.addValue("length", length);
+        if (keyword != null && !keyword.isBlank()) {
+            sql += """
+                    AND (
+                            supplier_name ILIKE :keyword
+                            OR supplier_code ILIKE :keyword
+                            OR supplier_contact_person ILIKE :keyword
+                            OR supplier_email ILIKE :keyword
+                        )
+                    """;
+            params.addValue("keyword", "%" + keyword.trim() + "%");
+        }
+        sql += """
                 ORDER BY supplier_code DESC
-                LIMIT 1
+                LIMIT :length OFFSET :start
                 """;
         try {
-            Map<String, Object> params = new LinkedHashMap<>();
-            params.put("companyId", companyId);
-            String lastCode = jdbc.queryForObject(sql, params, String.class);
-
-            if (lastCode != null && lastCode.startsWith("SP-")) {
-                int number = Integer.parseInt(lastCode.substring(3));
-                number++;
-                return String.format("SP-%05d", number);
-            }
-        } catch (EmptyResultDataAccessException e) {
-            return "SP-00001";
+            List<Supplier> result = jdbc.query(sql, params, new SupplierMapper());
+            return result;
         } catch (Exception e) {
-            System.err.println("Error generating code: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
         }
-        return "SP-00001";
     }
 
-    public String generateSupplierCode(UUID companyId) {
-        String lastCode = null;
-        // 1. Ambil kode terakhir dengan LOCK (FOR UPDATE)
-        String sqlGetLast = """
-                SELECT supplier_code FROM suppliers
+    @SuppressWarnings("null")
+    public long countAll(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*)
+                FROM suppliers
                 WHERE company_id = :companyId
-                ORDER BY supplier_code DESC
-                LIMIT 1 FOR UPDATE
                 """;
-        try {
-            Map<String, Object> data = new LinkedHashMap<>();
-            data.put("companyId", companyId);
-            lastCode = jdbc.queryForObject(sqlGetLast, data, String.class);
-        } catch (EmptyResultDataAccessException e) {
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result : 0;
+    }
+
+    @SuppressWarnings("null")
+    public long countFiltered(
+            UUID companyId,
+            String keyword) {
+
+        StringBuilder sql = new StringBuilder("""
+                SELECT COUNT(*)
+                FROM suppliers
+                WHERE company_id = :companyId
+                """);
+
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("companyId", companyId);
+
+        if (keyword != null && !keyword.isBlank()) {
+            sql.append("""
+                    AND (
+                            supplier_name ILIKE :keyword
+                            OR supplier_code ILIKE :keyword
+                            OR supplier_contact_person ILIKE :keyword
+                            OR supplier_email ILIKE :keyword
+                        )
+                    """);
+
+            params.addValue("keyword", "%" + keyword.trim() + "%");
         }
 
-        // 2. Logika increment nomor urut
-        int newNumber = 1;
-        if (lastCode != null && lastCode.startsWith("SP-")) {
-            try {
-                // Mengambil angka setelah "SP-"
-                newNumber = Integer.parseInt(lastCode.substring(3)) + 1;
-            } catch (NumberFormatException e) {
-                newNumber = 1; // Fallback jika format kode rusak
-            }
-        }
+        Long result = jdbc.queryForObject(
+                sql.toString(),
+                params,
+                Long.class);
 
-        return String.format("SP-%05d", newNumber);
+        return result != null ? result : 0;
+    }
+
+    // untuk dashboard
+    @SuppressWarnings("null")
+    public int countTotalByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as count
+                FROM suppliers
+                WHERE company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
+
+    //
+    @SuppressWarnings("null")
+    public int countTotalActiveByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as count_active
+                    FROM suppliers
+                where supplier_is_active = true
+                and company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
+
+    @SuppressWarnings("null")
+    public int countTotalInactiveByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as count_active
+                    FROM suppliers
+                where supplier_is_active = false
+                and company_id = :companyId
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
+    }
+
+    @SuppressWarnings("null")
+    public int countTotalNewByCompanyId(UUID companyId) {
+
+        String sql = """
+                SELECT COUNT(*) as total_new
+                    FROM suppliers
+                WHERE company_id = :companyId
+                    and supplier_created_at  >= CURRENT_TIMESTAMP - INTERVAL '7 days'
+                """;
+
+        Long result = jdbc.queryForObject(
+                sql,
+                Map.of("companyId", companyId),
+                Long.class);
+
+        return result != null ? result.intValue() : 0;
     }
 
     public Supplier detailById(UUID id) {

@@ -2,6 +2,8 @@ package com.logikaintermedia.erp.modules.bankaccounts;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.logikaintermedia.erp.validation.OnCreate;
@@ -41,17 +43,15 @@ public class BankAccountsRequest {
     private Boolean isActive = true;
 
     @NotNull(message = "Coa wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-    private UUID coaId;
+    private UUID accountId;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private OffsetDateTime createdAt = OffsetDateTime.now(ZoneOffset.UTC);
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private OffsetDateTime updatedAt = OffsetDateTime.now(ZoneOffset.UTC);
 
     // private UUID userId;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime deletedAt = LocalDateTime.now();
+
+    private OffsetDateTime deletedAt = OffsetDateTime.now(ZoneOffset.UTC);
 
     @AssertTrue(message = "Nama Bank wajib untuk tipe akun BANK", groups = { OnCreate.class,
             OnUpdate.class })

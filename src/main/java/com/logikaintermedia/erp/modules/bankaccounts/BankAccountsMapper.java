@@ -3,10 +3,13 @@ package com.logikaintermedia.erp.modules.bankaccounts;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 
 public class BankAccountsMapper implements RowMapper<BankAccounts> {
 
@@ -18,12 +21,6 @@ public class BankAccountsMapper implements RowMapper<BankAccounts> {
         account.setBankAccountId((UUID) rs.getObject("bank_account_id"));
         account.setAccountCode(rs.getString("account_code"));
         account.setAccountName(rs.getString("account_name"));
-
-        // Konversi String ke Enum
-        // String accountTypeStr = rs.getString("account_type");
-        // if (accountTypeStr != null) {
-        // account.setAccountType(AccountType.valueOf(accountTypeStr));
-        // }
         account.setAccountType(rs.getString("account_type"));
         account.setBankName(rs.getString("bank_name"));
         account.setBankBranch(rs.getString("bank_branch"));
@@ -34,11 +31,13 @@ public class BankAccountsMapper implements RowMapper<BankAccounts> {
         account.setIsDefault(rs.getBoolean("is_default"));
         account.setIsActive(rs.getBoolean("is_active"));
         account.setCompanyId((UUID) rs.getObject("company_id"));
-        account.setCoaId((UUID) rs.getObject("coa_id"));
+        account.setAccountId((UUID) rs.getObject("account_id"));
+        ChartOfAccounts coa = new ChartOfAccounts();
+        coa.setAccountName(rs.getString("account_name"));
         account.setUserId((UUID) rs.getObject("user_id"));
-        account.setCreatedAt(rs.getObject("created_at", LocalDateTime.class));
-        account.setUpdatedAt(rs.getObject("updated_at", LocalDateTime.class));
-        account.setDeletedAt(rs.getObject("deleted_at", LocalDateTime.class));
+        account.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+        account.setUpdatedAt(rs.getObject("updated_at", OffsetDateTime.class));
+        account.setDeletedAt(rs.getObject("deleted_at", OffsetDateTime.class));
 
         return account;
     }

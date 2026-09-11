@@ -1,8 +1,11 @@
 package com.logikaintermedia.erp.modules.bankaccounts;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
+
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
+
 import lombok.Data;
 
 @Data
@@ -20,11 +23,12 @@ public class BankAccountsResponse {
     private Boolean isDefault = false;
     private Boolean isActive;
     // private UUID companyId;
-    private UUID coaId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    // private UUID AccountId;
+    private  ChartOfAccounts coa;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
     // private UUID userId;
-    private LocalDateTime deletedAt;
+    private OffsetDateTime deletedAt;
     private String name;
 
 }

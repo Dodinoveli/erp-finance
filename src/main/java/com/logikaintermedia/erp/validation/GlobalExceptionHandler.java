@@ -19,6 +19,19 @@ import lombok.extern.slf4j.Slf4j;
 public class GlobalExceptionHandler {
         private ErrorConfig errorConfig;
 
+        //Handler spesifik untuk IllegalArgumentException
+        @ExceptionHandler(IllegalArgumentException.class)
+        public ResponseEntity<ApiResponse<?>> handleIllegalArgument(IllegalArgumentException ex) {
+                log.warn("IllegalArgument: {}", ex.getMessage());
+                
+                return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.error(
+                        HttpStatus.BAD_REQUEST,
+                        ex.getMessage()  // Pesan error Anda
+                ));
+        }
+
         // =========================
         // 1. VALIDATION ERROR (@Valid)
         // =========================
@@ -31,11 +44,12 @@ public class GlobalExceptionHandler {
                                 .badRequest()
                                 .body(ApiResponse.error(
                                                 HttpStatus.BAD_REQUEST,
-                                                "Validasi gagal",
+                                                "Data tidak valid. Silakan periksa kembali input Anda.",
                                                 errors));
         }
 
         // 2. DATABASE UNIQUE CONSTRAINT (Versi Baru pakai YAML)
+        @SuppressWarnings("null")
         @ExceptionHandler(DataIntegrityViolationException.class)
         public ResponseEntity<ApiResponse<?>> handleDataIntegrity(DataIntegrityViolationException ex) {
                 String detail = ex.getMostSpecificCause().getMessage();

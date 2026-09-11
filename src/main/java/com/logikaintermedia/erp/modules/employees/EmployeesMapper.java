@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.NonNull;
@@ -37,9 +38,9 @@ public class EmployeesMapper implements RowMapper<Employees> {
         emp.setEmployeeBankAccountName(rs.getString("employee_bank_account_name"));
         emp.setEmployeeIsActive(rs.getBoolean("employee_is_active"));
         emp.setCompanyId(rs.getObject("company_id", UUID.class));
-        emp.setEmployeeCreatedAt(rs.getObject("employee_created_at", LocalDateTime.class));
-        emp.setEmployeeUpdatedAt(rs.getObject("employee_updated_at", LocalDateTime.class));
-        emp.setEmployeeDeletedAt(rs.getObject("employee_deleted_at", LocalDateTime.class));
+        emp.setEmployeeCreatedAt(rs.getObject("employee_created_at", OffsetDateTime.class));
+        emp.setEmployeeUpdatedAt(rs.getObject("employee_updated_at", OffsetDateTime.class));
+        emp.setEmployeeDeletedAt(rs.getObject("employee_deleted_at", OffsetDateTime.class));
         emp.setUserId(rs.getObject("user_id", UUID.class));
         return emp;
     }

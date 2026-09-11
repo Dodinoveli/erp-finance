@@ -1,6 +1,11 @@
-<header class="top" th:fragment="navbar">
+<header class="top" th:fragment="navbar" xmlns:th="http://www.thymeleaf.org">
     <div style="display:flex;align-items:center;gap:12px"><button class="mobile" id="open">☰</button>
-        <div class="crumb"><b th:text="${pageTitle}">Dashboard</b></div>
+        <div class="crumb">
+            <!-- <b th:text="${pageTitle}">Dashboard</b> -->
+            <b id="page-title" class="mb-1" th:text="${pageTitle}">Dashboard</b>
+            <!-- <p class="text-muted mb-0" th:text="${pageDescription}"> -->
+            </p>
+        </div>
     </div>
     <div class="right">
         <!-- <input class="search" placeholder="Cari proyek, invoice, supplier...">

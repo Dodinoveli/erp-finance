@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.logikaintermedia.erp.jwt.AuthUserPrincipal;
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccountsResponse;
 import com.logikaintermedia.erp.utility.ApiResponse;
 import com.logikaintermedia.erp.validation.OnCreate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,11 +32,11 @@ public class BankAccounstController {
 
     @PreAuthorize("hasRole('Owner')")
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<CoaAccountsResponse>>> findCoaByName(
+    public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>> findCoaByName(
             @RequestParam(required = false) String keyword,
             @AuthenticationPrincipal AuthUserPrincipal principal) {
         UUID companyId = principal.getCompanyId();
-        List<CoaAccountsResponse> data = service.findCoaByName(companyId, keyword);
+        List<ChartOfAccountsResponse> data = service.findCoaByName(companyId, keyword);
         return ResponseEntity.ok(ApiResponse.success("success", data));
     }
 

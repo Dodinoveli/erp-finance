@@ -1,39 +1,37 @@
 // ======================================================
 // 🍞 TOAST LOADING & NOTIFICATION HELPER
 // ======================================================
+
 const Toast = Swal.mixin({
   toast: true,
-  position: 'top-end',
+  position: "top-end",
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
+
   didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer);
-    toast.addEventListener('mouseleave', Swal.resumeTimer);
-  }
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
 });
 
 let toastLoadingInstance = null;
 
 function showToastLoading(text = "Memproses...") {
-  // Close existing toast loading if any
   if (toastLoadingInstance) {
     Swal.close();
     toastLoadingInstance = null;
   }
 
-
   Toast.fire({
     title: text,
     showConfirmButton: false,
     timer: null,
-    willOpen: () => {
+    didOpen: () => {
       Swal.showLoading();
-    }
-  }).then(() => {
-    toastLoadingInstance = null;
+    },
   });
-  
+
   toastLoadingInstance = true;
 }
 
@@ -45,8 +43,9 @@ function hideToastLoading() {
 }
 
 // ======================================================
-// 🔄 GLOBAL LOADING COUNTER (ANTI FLICKER)
+// 🔄 GLOBAL LOADING COUNTER
 // ======================================================
+
 let loadingCounter = 0;
 
 function startLoading(text = "Memproses...") {
@@ -68,17 +67,23 @@ function stopLoading() {
 // ======================================================
 // 🌐 BASE URL DINAMIS
 // ======================================================
-let isRefreshing = false;
-let refreshPromise = null;
+
 const API_BASE_URL =
   `${window.location.protocol}//${window.location.hostname}` +
   `${window.location.port ? ":" + window.location.port : ""}`;
 
 // ======================================================
-// 🚨 HANDLE RESPONSE (HARDENED) Jangan lagi logout di 401
+// 🔐 REFRESH STATE
 // ======================================================
+
+let refreshPromise = null;
+
+// ======================================================
+// 🚨 HANDLE RESPONSE
+// ======================================================
+
 async function handleResponse(response) {
-  // 🔐 auto logout jika unauthorized
+  // 403 = unauthorized / forbidden
   if (response.status === 403) {
     window.location.href = "/login";
     throw new Error("Session expired");
@@ -93,13 +98,17 @@ async function handleResponse(response) {
       data = await response.json();
     } else {
       const text = await response.text();
+
       data = text ? { message: text } : null;
     }
   } catch {
     data = null;
   }
 
-  // ❌ HTTP error
+  // ==================================================
+  // ❌ HTTP ERROR
+  // ==================================================
+
   if (!response.ok) {
     const message =
       data?.message ||
@@ -107,106 +116,149 @@ async function handleResponse(response) {
       response.statusText ||
       "Terjadi kesalahan pada server";
 
-    const err = new Error(message);
-    err.data = data;
-    err.status = response.status;
-    throw err;
+    const error = new Error(message);
+
+    error.data = data;
+    error.status = response.status;
+
+    throw error;
   }
 
-  // 📭 No Content
-  if (response.status === 204) return null;
+  // ==================================================
+  // 📭 NO CONTENT
+  // ==================================================
+
+  if (response.status === 204) {
+    return null;
+  }
 
   return data;
 }
 
 // ======================================================
-// 🌐 CORE FETCH (WRAPPER UTAMA)
+// 🔄 REFRESH TOKEN
 // ======================================================
+
+async function doRefresh() {
+  if (!refreshPromise) {
+    refreshPromise = fetch(API_BASE_URL + "/api/auth/refresh", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error("Refresh gagal");
+        }
+
+        try {
+          return await response.json();
+        } catch {
+          return {};
+        }
+      })
+      .finally(() => {
+        refreshPromise = null;
+      });
+  }
+
+  return refreshPromise;
+}
+
+// ======================================================
+// 🌐 CORE FETCH
+// ======================================================
+
 async function apiFetch(url, options = {}) {
   const controller = new AbortController();
+
   const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+  // ==================================================
+  // HEADERS
+  // ==================================================
 
   const headers = {
     ...(options.headers || {}),
   };
 
-  // ⚠️ jangan set JSON kalau FormData
-  if (!(options.body instanceof FormData)) {
-    headers["Content-Type"] = "application/json";
+  // JSON hanya jika ada body dan bukan FormData
+  if (options.body && !(options.body instanceof FormData)) {
+    headers["Content-Type"] = headers["Content-Type"] || "application/json";
   }
+
+  // ==================================================
+  // LOADING
+  // ==================================================
 
   const useLoading = options.loadingText !== false;
 
   if (useLoading) {
-    startLoading(options.loadingText);
+    startLoading(options.loadingText || "Memproses...");
   }
 
   try {
-    let response = await fetch(API_BASE_URL + url, {
+    const requestOptions = {
       ...options,
       headers,
-      credentials: "include", // 🔥 JWT cookie
+      credentials: "include",
       signal: controller.signal,
-    });
+    };
 
-    // ======================================================
-    // 🔥 AUTO REFRESH HANDLE 401
-    // ======================================================
-    if (response.status === 401 && !url.includes("api/auth/refresh")) {
+    delete requestOptions.loadingText;
+
+    // ==================================================
+    // 🔍 DEBUG
+    // ==================================================
+
+    console.log(`${requestOptions.method || "GET"} ${API_BASE_URL}${url}`);
+
+    // ==================================================
+    // 🚀 REQUEST
+    // ==================================================
+
+    let response = await fetch(API_BASE_URL + url, requestOptions);
+
+    // ==================================================
+    // 🔥 401 → REFRESH → RETRY
+    // ==================================================
+
+    if (response.status === 401 && !url.includes("/api/auth/refresh")) {
       console.warn("401 detected → trying refresh...");
-      
-      // 🔥 Toast info
-      Toast.fire({
-        icon: 'info',
-        title: 'Session expired, refreshing...',
-        timer: 2000
-      });
 
       try {
-        if (!isRefreshing) {
-          isRefreshing = true;
-          await doRefresh();
-          isRefreshing = false;
-        } else {
-          await refreshPromise;
-        }
+        await doRefresh();
 
-        // 🔁 retry request setelah refresh
-        response = await fetch(API_BASE_URL + url, {
-          ...options,
-          headers,
-          credentials: "include",
-          signal: controller.signal,
-        });
-      } catch (err) {
+        // retry request
+        response = await fetch(API_BASE_URL + url, requestOptions);
+      } catch (error) {
         console.error("Refresh gagal → redirect login");
-        
-        // 🔥 Toast error
+
         Toast.fire({
-          icon: 'error',
-          title: 'Session expired',
-          text: 'Please login again'
+          icon: "error",
+          title: "Session expired",
+          text: "Please login again",
         });
-        
+
         setTimeout(() => {
           window.location.href = "/login";
         }, 1500);
-        
-        throw err;
+
+        throw error;
       }
     }
-    // ======================================================
-    // 🔥 NORMAL HANDLE RESPONSE
-    // ======================================================
+
+    // ==================================================
+    // 📦 RESPONSE
+    // ==================================================
+
     return await handleResponse(response);
-  } catch (err) {
-    if (err.name === "AbortError") {
+  } catch (error) {
+    if (error.name === "AbortError") {
       throw new Error("Request timeout (30s)");
     }
 
-    // 🔥 jangan bungkus ulang error dari server
-    if (err instanceof Error) {
-      throw err;
+    if (error instanceof Error) {
+      throw error;
     }
 
     throw new Error("Network error");
@@ -219,88 +271,88 @@ async function apiFetch(url, options = {}) {
   }
 }
 
-async function apiFetchGet(url, options = {}) {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+// ======================================================
+// 🔎 BUILD QUERY STRING
+// ======================================================
 
-  const headers = {
-    ...(options.headers || {}),
-  };
+function buildQueryString(params = {}) {
+  const query = new URLSearchParams();
 
-  // ⚠️ jangan set JSON kalau FormData
-  if (!(options.body instanceof FormData)) {
-    headers["Content-Type"] = "application/json";
-  }
-
-  try {
-    const response = await fetch(API_BASE_URL + url, {
-      ...options,
-      headers,
-      credentials: "include", // 🔥 JWT cookie
-      signal: controller.signal,
-    });
-
-    return await handleResponse(response);
-  } catch (err) {
-    if (err.name === "AbortError") {
-      throw new Error("Request timeout (30s)");
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== null && value !== undefined) {
+      query.append(key, String(value));
     }
+  });
 
-    // 🔥 jangan bungkus ulang error dari server
-    if (err instanceof Error) {
-      throw err;
-    }
-
-    throw new Error("Network error");
-  } finally {
-    clearTimeout(timeoutId);
-  }
+  return query.toString();
 }
 
 // ======================================================
 // 🚀 PUBLIC HTTP API
 // ======================================================
+
 window.api = {
-  get: (url) =>
-    apiFetchGet(url, {
+  // ==================================================
+  // GET
+  // ==================================================
+
+  get: function (url, params = {}) {
+    const queryString = buildQueryString(params);
+
+    if (queryString) {
+      url += (url.includes("?") ? "&" : "?") + queryString;
+    }
+
+    console.log("========== API GET ==========");
+
+    console.log("URL:", API_BASE_URL + url);
+
+    console.log("PARAMS:", params);
+
+    console.log("=============================");
+
+    return apiFetch(url, {
       method: "GET",
-    }),
+      loadingText: false,
+    });
+  },
 
-  post: (url, data, text) =>
-    apiFetch(url, {
+  // ==================================================
+  // POST
+  // ==================================================
+
+  post: function (url, data, text) {
+    return apiFetch(url, {
       method: "POST",
-      body: data instanceof FormData ? data : JSON.stringify(data),
-      loadingText: text,
-    }),
 
-  put: (url, data, text) =>
-    apiFetch(url, {
+      body: data instanceof FormData ? data : JSON.stringify(data),
+
+      loadingText: text,
+    });
+  },
+
+  // ==================================================
+  // PUT
+  // ==================================================
+
+  put: function (url, data, text) {
+    return apiFetch(url, {
       method: "PUT",
-      body: data instanceof FormData ? data : JSON.stringify(data),
-      loadingText: text,
-    }),
 
-  delete: (url, text) =>
-    apiFetch(url, {
+      body: data instanceof FormData ? data : JSON.stringify(data),
+
+      loadingText: text,
+    });
+  },
+
+  // ==================================================
+  // DELETE
+  // ==================================================
+
+  delete: function (url, text) {
+    return apiFetch(url, {
       method: "DELETE",
       loadingText: text,
-    }),
+    });
+  },
 };
-
-async function doRefresh() {
-  if (!refreshPromise) {
-    refreshPromise = fetch(API_BASE_URL + "/api/auth/refresh", {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Refresh gagal");
-        return res.json().catch(() => ({}));
-      })
-      .finally(() => {
-        refreshPromise = null;
-      });
-  }
-
-  return refreshPromise;
-}

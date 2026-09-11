@@ -12,8 +12,6 @@ import lombok.Data;
 @Data
 public class ClientRequest {
         private UUID clientId;
-
-        @NotBlank(message = "Kode client wajib diisi", groups = { OnCreate.class, OnUpdate.class })
         private String clientCode;
 
         @NotBlank(message = "Nama wajib diisi", groups = { OnCreate.class, OnUpdate.class })

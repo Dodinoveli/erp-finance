@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class Page {
@@ -34,11 +36,14 @@ public class Page {
 
     @PreAuthorize("hasRole('Owner')")
     @GetMapping("/dashboard")
-    public String index(Model model) {
-        String title = "Dashboard";
-        // pageTitle
-        model.addAttribute("pageTitle", title);
-        return "dashboard";
+    public String index(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+            HttpServletResponse response) {
+        model.addAttribute("pageTitle", "Dashboard");
+        if ("true".equals(hxRequest)) {
+            response.setHeader("X-Page-Title", "Dashboard");
+            return "content/dashboard/dashboard :: content";
+        }
+        return "content/dashboard/dashboard";
     }
 
     // public String index(@RequestParam(value = "page", required = false) String

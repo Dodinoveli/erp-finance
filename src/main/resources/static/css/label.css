@@ -1,0 +1,155 @@
+    
+.lbl-normal {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px !important;
+    font-weight: 500 !important;                   /* ← Ganti dari normal ke 500 biar lebih jelas */
+    color: #495057 !important;
+    text-transform: none !important;
+    letter-spacing: .02em !important;
+    margin-bottom: 4px !important;                  /* ← Tambah jarak sama input */
+    display: block !important;                 /* ← Biar di atas input */
+}
+
+/* ========================================== */
+        /* ===== INPUT UNDERLINE - DIUBAH! ===== */
+        /* ========================================== */
+        .input-underline {
+             font-family: 'Inter', sans-serif;
+            background: transparent !important;
+            border: none !important;
+            border-bottom: 2px solid #dce0e8 !important;
+            border-radius: 0 !important;
+            padding: 8px 0 6px 0 !important;
+            font-size: 14px !important;
+            color: #1a2332 !important;
+            transition: all 0.3s ease !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        
+        .input-underline::placeholder {
+            color: #8a9aa8 !important;  /* Lebih gelap dari sebelumnya #b0bcca */
+            font-weight: 400 !important; /* Sedikit lebih tebal */
+            font-size: 13.5px !important;
+            opacity: 1 !important; /* Biar ga tembus */
+        }
+        
+        .input-underline:hover {
+            border-bottom-color: #a8b5c9 !important;
+        }
+        
+        .input-underline:focus {
+            border-bottom-color: #0d6efd !important;
+            border-bottom-width: 2.5px !important;
+        }
+
+/* ========================================== */
+        /* ===== SELECT UNDERLINE - DIUBAH! ===== */
+        /* ========================================== */
+        .select-underline {
+            background: transparent !important;
+            border: none !important;
+            border-bottom: 2px solid #dce0e8 !important;
+            border-radius: 0 !important;
+            padding: 8px 0 6px 0 !important;
+            font-size: 14px !important;
+            color: #1a2332 !important;
+            transition: all 0.3s ease !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239aaec3' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 0 center !important;
+            padding-right: 20px !important;
+            cursor: pointer !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        .select-underline:hover {
+            border-bottom-color: #a8b5c9 !important;
+        }
+        
+        .select-underline:focus {
+            border-bottom-color: #0d6efd !important;
+            border-bottom-width: 2.5px !important;
+        }
+
+/* ========================================== */
+/* TOMBOL SIMPAN & BATAL - PREMIUM */
+/* ========================================== */
+
+.detail-actions {
+    padding-top: 20px;
+    margin-top: 12px;
+    border-top: 1px solid #edf2f7;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.btn-simpan {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 32px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: #fff !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 14px rgba(102, 126, 234, 0.35) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.btn-simpan:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.45) !important;
+    color: #fff !important;
+}
+
+.btn-simpan:active {
+    transform: scale(0.96) !important;
+}
+
+.btn-batal {
+    background: transparent !important;
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 8px !important;
+    padding: 10px 32px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: #64748b !important;
+    transition: all 0.3s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+.btn-batal:hover {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+    transform: translateY(-3px) !important;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.btn-batal:active {
+    transform: scale(0.96) !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+    .detail-actions {
+        flex-direction: column;
+        gap: 10px !important;
+    }
+    
+    .detail-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 12px !important;
+    }
+}
+

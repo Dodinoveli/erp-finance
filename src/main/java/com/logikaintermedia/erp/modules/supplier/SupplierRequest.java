@@ -2,6 +2,7 @@ package com.logikaintermedia.erp.modules.supplier;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.logikaintermedia.erp.validation.OnCreate;
@@ -15,8 +16,6 @@ import lombok.Data;
 @Data
 public class SupplierRequest {
         private UUID supplierId;
-
-        @NotBlank(message = "supplierCode wajib diisi", groups = { OnCreate.class, OnUpdate.class })
         private String supplierCode;
 
         @NotBlank(message = "Nama wajib diisi", groups = { OnCreate.class, OnUpdate.class })
@@ -74,15 +73,15 @@ public class SupplierRequest {
         private UUID companyId;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-        private LocalDateTime supplierCreatedAt;
+        private OffsetDateTime supplierCreatedAt;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-        private LocalDateTime supplierUpdatedAt;
+        private OffsetDateTime supplierUpdatedAt;
 
         UUID userId;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-        private LocalDateTime supplierDeletedAt;
+        private OffsetDateTime supplierDeletedAt;
 
         public void setSupplierNpwp(String supplierNpwp) {
                 this.supplierNpwp = (supplierNpwp == null || supplierNpwp.isBlank()) ? null : supplierNpwp;

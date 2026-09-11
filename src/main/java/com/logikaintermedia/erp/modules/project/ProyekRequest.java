@@ -2,10 +2,10 @@ package com.logikaintermedia.erp.modules.project;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.UUID;
 import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.logikaintermedia.erp.validation.OnCreate;
 import com.logikaintermedia.erp.validation.OnUpdate;
 import jakarta.validation.constraints.DecimalMin;
@@ -16,64 +16,63 @@ import lombok.Data;
 @Data
 public class ProyekRequest {
 
-    private UUID projectId;
+        private UUID projectId;
 
-    @NotBlank(message = "No PO/ SPK wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private String projectCode;
+        private String projectCode;
 
-    @NotBlank(message = "Judul Proyek wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private String name;
+        @NotBlank(message = "No PO/ SPK wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private String projectPo;
 
-    @NotBlank(message = "Deskripsi wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private String description;
+        @NotBlank(message = "Judul Proyek wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private String name;
 
-    @NotNull(message = "Klien/ Pelanggan wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private UUID clientId;
+        @NotBlank(message = "Deskripsi wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private String description;
 
-    @NotBlank(message = "Jenis Proyek wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private String projectType;
+        @NotNull(message = "Klien/ Pelanggan wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private UUID clientId;
 
-    @NotNull(message = "Nilai Kontrak wajib diisi", groups = { OnCreate.class,
-            OnUpdate.class })
-    @DecimalMin(value = "0.01", message = "Nilai Kontrok harus lebih dari 0", groups = {
-            OnCreate.class,
-            OnUpdate.class })
-    private BigDecimal contractValue;
+        @NotBlank(message = "Jenis Proyek wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private String projectType;
 
-    private BigDecimal dpp;
+        @NotNull(message = "Nilai Kontrak wajib diisi", groups = { OnCreate.class,
+                        OnUpdate.class })
+        @DecimalMin(value = "0.01", message = "Nilai Kontrok harus lebih dari 0", groups = {
+                        OnCreate.class,
+                        OnUpdate.class })
+        private BigDecimal contractValue;
 
-    @NotBlank(message = "Lokasi wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private String location;
+        private BigDecimal dpp;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime createdAt = LocalDateTime.now();
+        @NotBlank(message = "Lokasi wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private String location;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-    private LocalDateTime updatedAt = LocalDateTime.now();
-    private UUID companyId;
-    private UUID userId;
+        private OffsetDateTime createdAt = OffsetDateTime.now(ZoneOffset.UTC);
+        private OffsetDateTime updatedAt = OffsetDateTime.now(ZoneOffset.UTC);
+        private UUID companyId;
+        private UUID userId;
 
-    @NotBlank(message = "Skema PPN wajib di isi", groups = { OnCreate.class, OnUpdate.class })
-    private String taxType;
+        @NotBlank(message = "Skema PPN wajib di isi", groups = { OnCreate.class, OnUpdate.class })
+        private String taxType;
 
-    private BigDecimal vatRate;
+        private BigDecimal vatRate;
 
-    @NotNull(message = "PO Date wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate poDate;
+        @NotNull(message = "PO Date wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        private LocalDate poDate;
 
-    private BigDecimal totallTax;
-    private BigDecimal totalAmount;
+        private BigDecimal totallTax;
+        private BigDecimal totalAmount;
 
-    // detail
-    // private UUID detailId;
-    // // private UUID projectId;
-    // private String itemName;
-    // private String descriptiond;
-    // private BigDecimal volume;
-    // private String unit;
-    // private BigDecimal unitPrice;
-    // private BigDecimal discountPercent;
-    // private BigDecimal discountAmount;
-    // private BigDecimal totalPrice;
+        // detail
+        // private UUID detailId;
+        // // private UUID projectId;
+        // private String itemName;
+        // private String descriptiond;
+        // private BigDecimal volume;
+        // private String unit;
+        // private BigDecimal unitPrice;
+        // private BigDecimal discountPercent;
+        // private BigDecimal discountAmount;
+        // private BigDecimal totalPrice;
 }
