@@ -151,9 +151,5 @@ management:
       exposure:
         include: metrics,health,info
 
-# 13. --- TELEGRAM BOT SETTINGS ---
-#telegram:
-#  bot:
-#   token: "8446749326:AAEiLKlpw2McfKDR5jmiXbIoWbxMsrosfd4" # Masukkan token di sini
-#    username: AmankanLabaBot
+
 
