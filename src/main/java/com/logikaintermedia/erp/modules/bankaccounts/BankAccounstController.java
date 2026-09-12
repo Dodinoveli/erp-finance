@@ -30,26 +30,36 @@ public class BankAccounstController {
         this.service = service;
     }
 
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>> findCoaByName(
-            @RequestParam(required = false) String keyword,
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        UUID companyId = principal.getCompanyId();
-        List<ChartOfAccountsResponse> data = service.findCoaByName(companyId, keyword);
-        return ResponseEntity.ok(ApiResponse.success("success", data));
-    }
-
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @GetMapping
-    public ResponseEntity<?> findBankAccounts(
+    public ResponseEntity<?> findBankAccountsByCompanyId(
             @AuthenticationPrincipal AuthUserPrincipal principal) {
         UUID companyId = principal.getCompanyId();
-        List<BankAccountsResponse> response = service.findBankAccountById(companyId);
+        List<BankAccountsResponse> response = service.findBankAccountsByCompanyId(companyId);
         return ResponseEntity.ok(ApiResponse.success("success", response));
     }
 
-    @PreAuthorize("hasRole('Owner')")
+    // mengambil dan menampilkan  kategori akun Kas dan bank bedasarkan companies id 
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping("/find-cash-an-bank-accounts-by-company-id")
+    public ResponseEntity<?> findCashAndBankAccountsByCompanyId(
+            @AuthenticationPrincipal AuthUserPrincipal principal) {
+        UUID companyId = principal.getCompanyId();
+        List<ChartOfAccountsResponse> response = service.findCashAndBankAccountsByCompanyId(companyId);
+        return ResponseEntity.ok(ApiResponse.success("success", response));
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping("/find-coa-byparent-id/search")
+    public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>> findCoaByparentId(
+            @RequestParam(required = false) UUID parentId,
+            @AuthenticationPrincipal AuthUserPrincipal principal) {
+        UUID companyId = principal.getCompanyId();
+        List<ChartOfAccountsResponse> data = service.findCoaByparentId(companyId, parentId);
+        return ResponseEntity.ok(ApiResponse.success("success", data));
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PostMapping
     public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody BankAccountsRequest entity,
             @AuthenticationPrincipal AuthUserPrincipal principal) {
@@ -58,7 +68,7 @@ public class BankAccounstController {
     }
 
     @SuppressWarnings("null")
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Validated(OnCreate.class) @RequestBody BankAccountsRequest entity,
             @PathVariable UUID id,

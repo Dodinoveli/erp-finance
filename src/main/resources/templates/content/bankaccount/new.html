@@ -10,7 +10,7 @@
                     <div class="card p-1">
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="lbl-normal">Kode</label>
                                     <div class="form-field">
                                         <input type="text" class="form-control input-underline" id="account_code"
@@ -18,8 +18,6 @@
                                             class="text-danger" id="err-accountCode"> </small>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="lbl-normal">Nama AKun</label>
                                     <div class="form-field">
@@ -29,18 +27,26 @@
                                         <small class="text-danger" id="err-accountName"></small>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row g-3">
                                 <div class="col-md-6">
                                     <label class="lbl-normal">Tipe Akun</label>
                                     <div class="form-field">
                                         <select id="account_type" name="accountType"
                                             class="form-select select-underline" aria-label="Default select example">
-                                            <option value="">-- Pilih --</option>
-                                            <option value="CASH">KAS</option>
-                                            <option value="BANK">Bank</option>
                                         </select>
                                         <small class="text-danger" id="err-accountType"></small>
                                     </div>
-                                    <input type="hidden" id="account_id" name="accountId" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="lbl-normal">Sub Akun</label>
+                                    <div class="form-field">
+                                        <select id="account_id" name="accountId" class="form-select select-underline"
+                                            aria-label="Default select example">
+                                        </select>
+                                        <small class="text-danger" id="err-accountId"></small>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row g-3">
@@ -84,18 +90,16 @@
                     </div>
 
                     <div class="detail-actions">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-simpan">
                             Simpan
                         </button>
-                        <a th:href="@{/bankaccount}" class="btn btn-danger">Batal
+                        <a th:href="@{/bankaccount}" class="btn btn-batal" hx-get="/bankaccount"
+                            hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">Batal
                         </a>
                     </div>
                 </form>
             </div>
         </main>
-        <div th:replace="~{fragments/footer :: footer}">
-        </div>
-        <script th:src="@{/js/utility/dashboard.js}"></script>
 
         <script type="module" th:inline="javascript">
             const bankAccontsNew = {
@@ -106,6 +110,7 @@
 
                 bindEvents: function () {
                     const self = this;
+                    self.showCoa();
                     const accountType = document.getElementById("account_type");
                     const bankName = document.getElementById("bank_name");
                     const bankBranch = document.getElementById("bank_branch");
@@ -126,12 +131,12 @@
 
                     if (accountType) {
                         accountType.addEventListener("change", function () {
-                            let val = this.value;
-                            if (val === "CASH") {
-                                // alert(val) #d9d1d1
+                            let txt = this.options[this.selectedIndex].text;
+                            let parentId = this.value;
+                            console.log("Nilai txt ", txt)
+                            if (parentId !== null && txt === "KAS") {
                                 bankName.readOnly = true;
                                 bankName.style.background = "#d9d1d1";
-
                                 bankBranch.readOnly = true;
                                 bankBranch.style.background = "#d9d1d1";
 
@@ -160,30 +165,65 @@
                                 accountHolder.style.background = "#ffff";
                             }
 
-                            self.showCoa(val);
+                            self.showSubCoa(parentId);
                         });
                     }
                 },
 
-                showCoa: async function (keyword) {
+                showCoa: async function () {
+                    const url = "/api/v1/bankaccounts/find-cash-an-bank-accounts-by-company-id";
+                    try {
+                        // const params = new URLSearchParams({
+                        // keyword: keyword,
+                        // });
+                        const response = await fetch(url);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+
+                        const result = await response.json();
+                        if (result.status === "success") {
+                            const selectElement = document.getElementById('account_type');
+                            selectElement.innerHTML = '<option value="">-- Pilih Tipe Akun --</option>';
+                            const coaList = result.data;
+                            coaList.forEach(ac => {
+                                const option = document.createElement('option');
+                                option.value = ac.accountId;
+                                option.textContent = ac.accountName;
+                                selectElement.appendChild(option);
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
+                },
+
+                showSubCoa: async function (parentId) {
+                    const url = "/api/v1/bankaccounts/find-coa-byparent-id/search";
                     try {
                         const params = new URLSearchParams({
-                            keyword: keyword,
+                            parentId: parentId,
                         });
-                        const json = await fetch(`/api/v1/bankaccounts/search?keyword=${keyword.toString()}`);
-                        if (json.status === "success" && json.code === 200) {
-                            console.log("Hasillllllll = ", json.data);
-
-                            if (json.data.length > 0) {
-                                document.getElementById("account_id").value = json.data[0].accountId;
-                                // document.getElementById("coa_name").value = json.data[0].name;
-                            } else {
-                                // alert("")
-                                document.getElementById("account_id").value = "";
-                                // document.getElementById("coa_name").value = "";
-                            }
+                        const response = await fetch(`${url}?${params}`);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
                         }
-                    } catch (error) { }
+
+                        const result = await response.json();
+                        if (result.status === "success") {
+                            const selectElement = document.getElementById('account_id');
+                            selectElement.innerHTML = '<option value="">-- Pilih Sub Akun --</option>';
+                            const coaList = result.data;
+                            coaList.forEach(ac => {
+                                const option = document.createElement('option');
+                                option.value = ac.accountId;
+                                option.textContent = ac.accountName;
+                                selectElement.appendChild(option);
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error)
+                    }
                 },
 
                 createBankAccount: async function (formEl) {

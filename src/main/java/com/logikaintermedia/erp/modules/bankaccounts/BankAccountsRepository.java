@@ -1,15 +1,12 @@
 package com.logikaintermedia.erp.modules.bankaccounts;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
-
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 
 @Repository
@@ -80,7 +77,7 @@ public class BankAccountsRepository {
         return jdbcTemplate.update(sql, toParams(accounts));
     }
 
-    public List<BankAccounts> findBankAccountsById(UUID companyId) {
+    public List<BankAccounts> findBankAccountsByCompanyId(UUID companyId) {
         String sql = """
                 select
                     *
@@ -114,17 +111,36 @@ public class BankAccountsRepository {
                 new BankAccountsMapper());
     }
 
-
-    public List<ChartOfAccounts> findCoaByName(UUID companyId, String keyword) {
+    // mengambil dan menampilkan  kategori akun Kas dan bank bedasarkan companies id 
+    public List<ChartOfAccounts>  findCashAndBankAccountsByCompanyId(UUID id){
         String sql = """
-                select account_id, account_name from chart_of_accounts
-                where lower(account_name) like lower(:keyword)
-                and company_id = :companyId
-                 """;
-
+            select * from chart_of_accounts 
+                where account_name 
+            IN ('KAS','BANK') and company_id = :companyId
+        """;
         MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("keyword", keyword + "%");
+        params.addValue("companyId", id);
+        return jdbcTemplate.query(sql,
+                params,
+                new BeanPropertyRowMapper<>(ChartOfAccounts.class));
+    }
+
+    // mengambil COA bedasarkan parent_id saat combok di klik
+    public List<ChartOfAccounts> findCoaByparentId(UUID companyId, UUID parentId) {
+        String sql = """
+                SELECT
+                    c.*,
+                    p.account_code AS parent_code,
+                    p.account_name AS parent_name
+                FROM chart_of_accounts c
+                LEFT JOIN chart_of_accounts p
+                    ON p.account_id = c.parent_id
+                WHERE c.parent_id = :parentId
+                and c.company_id = :companyId
+                 """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("companyId", companyId);
+        params.addValue("parentId",parentId);
         return jdbcTemplate.query(sql,
                 params,
                 new BeanPropertyRowMapper<>(ChartOfAccounts.class));

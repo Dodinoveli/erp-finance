@@ -1,4 +1,4 @@
-const sideChoices = document.querySelectorAll('.side-color');
+var sideChoices = document.querySelectorAll('.side-color');
         function applySidebarColor(choice) {
             document.documentElement.style.setProperty('--side', choice.dataset.side);
             document.documentElement.style.setProperty('--side2', choice.dataset.side2);

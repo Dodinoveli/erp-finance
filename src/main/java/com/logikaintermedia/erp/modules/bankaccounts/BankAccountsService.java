@@ -23,8 +23,9 @@ public class BankAccountsService {
         return repository.findDetailById(id);
     }
 
-    public List<BankAccountsResponse> findBankAccountById(UUID companyId) {
-        List<BankAccounts> bankAccountsList = repository.findBankAccountsById(companyId);
+    @Transactional
+    public List<BankAccountsResponse> findBankAccountsByCompanyId(UUID companyId) {
+        List<BankAccounts> bankAccountsList = repository.findBankAccountsByCompanyId(companyId);
 
         if (bankAccountsList.isEmpty()) {
             return null;
@@ -110,29 +111,41 @@ public class BankAccountsService {
         return accounts;
     }
 
-    public List<ChartOfAccountsResponse> findCoaByName(UUID companyId, String keyword) {
-        if (keyword.equalsIgnoreCase("CASH")) {
-            keyword = "Kas";
-        }
-
-        List<ChartOfAccounts> coaList = repository.findCoaByName(companyId, keyword);
-        System.out.println("Keyword pencarian ========== " + keyword);
-        List<ChartOfAccountsResponse> responseList = new ArrayList<>();
-        if (keyword.isBlank()) {
-            if (coaList.isEmpty()) {
-                return Collections.emptyList();
-            }
-        } else {
-
+    // mengambil dan menampilkan  kategori akun Kas dan bank bedasarkan companies id 
+    @Transactional
+    public List<ChartOfAccountsResponse>findCashAndBankAccountsByCompanyId(UUID companyId){
+            List<ChartOfAccounts> coaList = repository.findCashAndBankAccountsByCompanyId(companyId);
+            List<ChartOfAccountsResponse> responseList = new ArrayList<>();
             for (ChartOfAccounts coa : coaList) {
-            ChartOfAccountsResponse response =
-            new ChartOfAccountsResponse(coa);
+                ChartOfAccountsResponse response =
+                new ChartOfAccountsResponse(coa);
             responseList.add(response);
         }
+        return responseList;
+    }
 
+    public List<ChartOfAccountsResponse> findCoaByparentId(UUID companyId, UUID parentId) {
+
+        List<ChartOfAccounts> coaList = repository.findCoaByparentId(companyId, parentId);
+        System.out.println("Keyword pencarian ========== " + parentId);
+        List<ChartOfAccountsResponse> responseList = new ArrayList<>();
+            if (parentId==null) {
+                if (coaList.isEmpty()) {
+                    return Collections.emptyList();
+                }
+            } else {
+
+                for (ChartOfAccounts coa : coaList) {
+                ChartOfAccountsResponse response =
+                new ChartOfAccountsResponse(coa);
+                responseList.add(response);
+            }
         }
 
         return responseList;
     }
+
+
+    
 
 }
