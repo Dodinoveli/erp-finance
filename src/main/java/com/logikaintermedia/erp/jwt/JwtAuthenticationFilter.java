@@ -31,6 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.resolver = resolver;
     }
 
+    @SuppressWarnings("null")
     @Override
     protected void doFilterInternal(HttpServletRequest request,
             HttpServletResponse response,
@@ -38,11 +39,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String token = resolver.resolveToken(request);
+        log.info("[JWT] {} tokenPresent={}",
+                request.getRequestURI(),
+                token != null);
+        log.info("[JWT] FILTER MASUK: {}", request.getRequestURI());
 
         try {
             // 1. kalau ada token → validasi
             if (token != null && jwtUtil.validateToken(token)) {
-
+                log.info("[JWT] VALID path={}",
+                        request.getRequestURI());
                 // 2 ambil username dari JWT
                 UUID userId = jwtUtil.extractUserId(token);
                 UUID companyId = jwtUtil.extractCompanyId(token);
@@ -70,6 +76,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 5. set ke security context (INI INTINYA)
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
+                    log.info("[JWT] AUTH SET user={} roles={} path={}",
+                            username,
+                            roles,
+                            request.getRequestURI());
                 }
             }
         } catch (Exception e) {

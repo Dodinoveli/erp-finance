@@ -1,16 +1,26 @@
-// js/utility/library.js (sebagai module)
+// js/utility/library.js
 export const library = {
 
-    // untuk redirect edit selesai 
-    navigate: function (url) {
+    showLoading: function () {
         const loading = document.getElementById("loading");
+        if (!loading) return;
+        loading.style.opacity = "1";
+        loading.style.visibility = "visible";
+        loading.style.pointerEvents = "auto";
+    },
 
-        if (loading) {
-            loading.style.opacity = "1";
-            loading.style.visibility = "visible";
-            loading.style.pointerEvents = "auto";
-        }
+    hideLoading: function () {
+        const loading = document.getElementById("loading");
+        if (!loading) return;
+        loading.style.opacity = "0";
+        loading.style.visibility = "hidden";
+        loading.style.pointerEvents = "none";
+    },
 
+    navigate: function (url) {
+        console.log("[NAVIGATE]", url);
+
+        this.showLoading();
         return htmx.ajax("GET", url, {
             target: "#page-content",
             swap: "innerHTML"
@@ -23,30 +33,38 @@ export const library = {
                 throw error;
             })
             .finally(() => {
-                if (loading) {
-                    loading.style.opacity = "0";
-                    loading.style.visibility = "hidden";
-                    loading.style.pointerEvents = "none";
-                }
+                this.hideLoading();
             });
     },
+    open: function (url) {
+        console.log("[OPEN]", url);
+
+        this.showLoading();
+
+        window.location.href = url;
+    },
+
 
     formatRupiah: function (value) {
-        return new Intl.NumberFormat('id-ID', {
-            style: 'currency',
-            currency: 'IDR',
+
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
             minimumFractionDigits: 0,
             maximumFractionDigits: 2
         }).format(value);
     },
 
     formatDateIndonesia: function (dateString) {
-        if (!dateString) return '-';
+
+        if (!dateString) return "-";
+
         const date = new Date(dateString);
-        return date.toLocaleDateString('id-ID', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
+
+        return date.toLocaleDateString("id-ID", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
         });
     },
 
@@ -72,10 +90,12 @@ export const library = {
 
         // Tidak ada data
         if (totalRows === 0) {
+
             wrapper.style.height = "auto";
             wrapper.style.maxHeight = "none";
             wrapper.style.overflowY = "hidden";
             wrapper.style.overflowX = "auto";
+
             return;
         }
 
@@ -95,25 +115,19 @@ export const library = {
         // Tinggi body maksimal 12 row
         const bodyHeight = rowHeight * maxRows;
 
-        // Tinggi wrapper = header + 12 row
+        // Tinggi wrapper
         const wrapperHeight = headerHeight + bodyHeight;
 
         wrapper.style.height = wrapperHeight + "px";
         wrapper.style.maxHeight = wrapperHeight + "px";
 
-        // Scroll hanya kalau data lebih dari 12
-        // if (totalRows > maxRows) {
-        //     wrapper.style.overflowY = "auto";
-        // } else {
-        //     wrapper.style.overflowY = "hidden";
-        // }
-
-        // Horizontal scroll tetap aktif
+        // Scroll
         wrapper.style.overflowY = "auto";
         wrapper.style.overflowX = "auto";
 
         // Sticky header
         if (thead) {
+
             thead.style.position = "sticky";
             thead.style.top = "0";
             thead.style.zIndex = "10";
@@ -128,5 +142,5 @@ export const library = {
     }
 };
 
-// Tetap set ke window untuk akses global
+// Akses global
 window.library = library;

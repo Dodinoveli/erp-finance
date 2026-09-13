@@ -59,6 +59,14 @@
         visibility 0.15s ease;
     }
 
+    #loading.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+
+
     @media (max-width: 767.98px) {
       #loading {
         /* tetap mengikuti area content */
@@ -73,11 +81,11 @@
       }
     }
 
-    #loading.htmx-request {
+    /* #loading.htmx-request {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-    }
+    } */
 
     .modern-spinner {
       width: 42px;
@@ -110,7 +118,7 @@
   <!-- Isi halaman -->
   <div id="main-content-wrapper">
     <main id="page-content" layout:fragment="content"></main>
-    <div id="loading" class="htmx-indicator">
+    <div id="loading">
       <div class="modern-spinner"></div>
     </div>
   </div>

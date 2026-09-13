@@ -27,18 +27,18 @@ public class UserRepository {
                 .addValue("companyId", model.getCompanyId())
                 .addValue("createdAt", model.getCreatedAt())
                 .addValue("updateAt", model.getUpdatedAt())
-                .addValue("role", model.getRole());
+                .addValue("roles", model.getRoles());
     }
 
     public int insert(User model) {
         String sql = """
                 INSERT INTO public.users(
                 	user_id, username, password, full_name, email,
-                    phone, is_active, company_id, created_at, updated_at, role
+                    phone, is_active, company_id, created_at, updated_at, roles
                     )
                 	VALUES
                     (:userId, :userName, :password, :fullName, :email,
-                    :phone, :isActive, :companyId, :createdAt, :updateAt, :role);
+                    :phone, :isActive, :companyId, :createdAt, :updateAt, :roles);
                                 """;
         return namedParameterJdbcTemplate.update(sql, toParams(model));
     }
@@ -58,7 +58,7 @@ public class UserRepository {
             u.setUserName(rs.getString("username"));
             u.setPassword(rs.getString("password"));
             u.setCompanyId(UUID.fromString(rs.getString("company_id")));
-            u.setRole(rs.getString("roles"));
+            u.setRoles(rs.getString("roles"));
             return u;
         });
 
@@ -85,7 +85,7 @@ public class UserRepository {
             u.setUserName(rs.getString("username"));
             u.setPassword(rs.getString("password"));
             u.setCompanyId(UUID.fromString(rs.getString("company_id")));
-            u.setRole(rs.getString("roles"));
+            u.setRoles(rs.getString("roles"));
             return u;
         });
 

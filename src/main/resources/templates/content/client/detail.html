@@ -287,13 +287,14 @@
 ========================================= -->
 
                 <div class="detail-actions">
-                    <a th:href="@{/client}" class="btn btn-light" hx-get="/client" hx-target="#page-content"
-                        hx-push-url="true" hx-indicator="#loading"> <i class="bi bi-arrow-left"></i> Kembali ke Daftar
-                    </a>
-
-                    <a th:href="@{/client/edit/{id}(id=${client.clientId})}" class="btn btn-warning"
-                        th:hx-get="@{/client/edit/{id}(id=${client.clientId})}" hx-target="#page-content"
-                        hx-push-url="true" hx-indicator="#loading"><i class="bi bi-pencil-square"></i> Edit
+                    <button type="button" class="btn btn-light" th:data-url="@{/client}"
+                        onclick="library.navigate(this.dataset.url)">
+                        <i class="bi bi-arrow-left"></i> Kembali
+                    </button>
+                    <a href="javascript:void(0)" class="btn btn-warning"
+                        th:data-url="@{/client/edit/{id}(id=${client.clientId})}"
+                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+                        <i class="bi bi-pencil-square"></i> Edit
                     </a>
                     <button type="button" class="btn btn-danger">
                         <i class="bi bi-eye-slash"></i> Nonaktifkan

@@ -79,13 +79,41 @@
 /* TOMBOL SIMPAN & BATAL - PREMIUM */
 /* ========================================== */
 
-.detail-actions {
-    padding-top: 20px;
-    margin-top: 12px;
-    border-top: 1px solid #edf2f7;
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+.detail-actions-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+
+    padding: 6px 12px;
+    /* min-width: 32px; */
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 5px;
+
+    background: linear-gradient(135deg, #8614f8, #6f12d9);
+    color: #fff;
+
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+
+    box-shadow: 0 3px 8px rgba(111, 18, 217, 0.22);
+
+    transition: all 0.2s ease;
+}
+
+.detail-actions-btn:hover {
+    color: #fff;
+    background: linear-gradient(135deg, #7810e8, #5f0fc0);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(111, 18, 217, 0.30);
+}
+
+.detail-actions-btn:active {
+    transform: translateY(0);
 }
 
 .btn-simpan {

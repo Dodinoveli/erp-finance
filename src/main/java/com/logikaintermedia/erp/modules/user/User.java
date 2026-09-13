@@ -12,7 +12,7 @@ public class User {
     private String fullName;
     private String email;
     private String phone;
-    private String role;
+    private String roles;
     private Boolean isActive;
     private UUID companyId;
     private OffsetDateTime createdAt;

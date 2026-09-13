@@ -239,8 +239,8 @@
             <button type="submit" class="btn btn-simpan">
               <i class="bi bi-floppy"></i> Simpan
             </button>
-            <a th:href="@{/client}" class="btn btn-batal" hx-get="/client" hx-target="#page-content" hx-push-url="true"
-              hx-indicator="#loading"><i class="bi bi-x-lg"></i> Batal
+            <a th:href="@{/client}" class="btn btn-batal"
+              onclick="event.preventDefault(); library.navigate('/client')"></i> Batal
             </a>
           </div>
         </form>

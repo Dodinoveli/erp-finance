@@ -1,5 +1,5 @@
-export function initClientList() {
-    var table = new DataTable("#clientTable", {
+export function initSupplirList() {
+    var table = new DataTable("#supplierTable", {
         ordering: false,
         processing: true,
         serverSide: true,
@@ -9,8 +9,6 @@ export function initClientList() {
             { targets: 2, width: '120px' },  // Kontak
             {
                 targets: 3, width: '120px', type: 'string',
-                className: 'text-start',
-                orderable: false
             }, // telp
             { targets: 4, width: '150px' },  // email
             { targets: 5, width: '100px' },  // status
@@ -24,7 +22,6 @@ export function initClientList() {
                 search: true,
             },
         },
-
         language: {
             search: "",
             searchPlaceholder: "Cari nama...",
@@ -53,7 +50,7 @@ export function initClientList() {
 
             console.log("KEYWORD JS =", keyword);
             try {
-                const response = await fetch(`/api/v1/clients?${params}`, {
+                const response = await fetch(`/api/v1/suppliers?${params}`, {
                     credentials: "include",
                 });
                 console.log("RESPONSE:", response);
@@ -80,16 +77,16 @@ export function initClientList() {
         pageLength: 10,
         lengthMenu: [
             [10, 25, 50, 100],
-            [10, 25, 50, 100]
+            [10, 25, 50, 100],
         ],
         columns: [
-            { data: "clientCode" },
-            { data: "clientName" },
-            { data: "clientContactPerson" },
-            { data: "clientContactPhone" },
-            { data: "clientEmail" },
+            { data: "supplierCode" },
+            { data: "supplierName" },
+            { data: "supplierContactPerson" },
+            { data: "supplierEmail" },
+            { data: "supplierType" },
             {
-                data: "clientIsActive",
+                data: "supplierIsActive",
                 render: function (data) {
                     return data
                         ? '<span class="badge bg-success">Aktif</span>'
@@ -101,40 +98,44 @@ export function initClientList() {
                 orderable: false,
                 searchable: false,
                 render: function (data, type, row) {
-                    return ` 
-                    <a href="/client/detail/${row.clientId}"
-                    onclick="event.preventDefault(); library.navigate('/client/detail/${row.clientId}')"
+                    return `
+                <a href="/supplier/detail/${row.supplierId}"
+                    hx-get="/supplier/detail/${row.supplierId}"
+                    hx-target="#page-content"
+                    hx-push-url="true"
+                    hx-indicator="#loading"
                     class="detail-actions-btn"
                     title="Lihat Detail">
-                        <i class="bi bi-eye"></i>
-                    </a>`;
+                    <i class="bi bi-eye"></i>
+                </a>`;
                 },
             },
         ],
     });
 
     var searchBox = document.querySelector(
-        "#clientTable_wrapper .dt-search",
+        "#supplierTable_wrapper .dt-search",
     );
 
     if (searchBox && !searchBox.querySelector(".btn-add")) {
         searchBox.insertAdjacentHTML(
             "beforeend",
             `
-        <a href="/client/new"
+        <a href="/supplier/new"
             class="btn btn-primary btn-sm ms-2 d-inline-flex align-items-center justify-content-center btn-add"
-             onclick="event.preventDefault(); library.navigate('/client/new')">
+            hx-get="/supplier/new"
+            hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
            <i class="bi bi-plus"></i>
         </a>`,
         );
     }
 
     table.on("draw", function () {
-        htmx.process(document.querySelector("#clientTable tbody"));
+        htmx.process(document.querySelector("#supplierTable tbody"));
     });
 
     async function total() {
-        const url = "/api/v1/clients/total-new";
+        const url = "/api/v1/suppliers/total-new";
 
         try {
             const response = await fetch(url, {
@@ -145,12 +146,13 @@ export function initClientList() {
                 throw new Error(`Response status: ${response.status}`);
             }
             const result = await response.json();
-            document.getElementById("total-client").textContent = result.total;
-            document.getElementById("client-aktif").textContent =
+            document.getElementById("total-supplier").textContent =
+                result.total;
+            document.getElementById("supplier-aktif").textContent =
                 result.totalActive;
-            document.getElementById("client-nonaktif").textContent =
+            document.getElementById("supplier-nonaktif").textContent =
                 result.totalInactive;
-            document.getElementById("client-baru").textContent =
+            document.getElementById("supplier-baru").textContent =
                 result.totalNew;
         } catch (error) { }
     }

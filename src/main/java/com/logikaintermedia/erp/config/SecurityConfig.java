@@ -73,7 +73,7 @@ public class SecurityConfig {
                                                 // Endpoint yang dapat diakses tanpa login
                                                 .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
                                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                                                // .requestMatchers(HttpMethod.POST, "/api/company").permitAll()
+                                                .requestMatchers(HttpMethod.POST, "/api/company").permitAll()
 
                                                 // Semua endpoint lainnya wajib login
                                                 .anyRequest().authenticated())

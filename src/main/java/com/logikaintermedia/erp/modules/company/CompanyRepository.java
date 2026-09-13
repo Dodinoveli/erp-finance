@@ -41,11 +41,29 @@ public class CompanyRepository {
     public int insert(Company model) {
         String sql = """
                 INSERT INTO public.company(
-                	company_id, legal_name, company_code, npwp, nib, address, city, province, postal_code, country, phone, email, company_type, pkp, base_currency, is_active, created_at, updated_at)
+                	company_id, legal_name, npwp, nib, address, city, province, postal_code, country, phone, email, company_type, pkp, base_currency, is_active, created_at, updated_at)
                 	VALUES (
-                    :companyId, :legalName, :companyCode, :npwp, :nib, :address, :city, :province, :postalCode, :country, :phone, :email, :companyType, :pkp, :baseCurrency, :isActive, :createdAt, :updatedAt);
+                    :companyId, :legalName, :npwp, :nib, :address, :city, :province, :postalCode, :country, :phone, :email, :companyType, :pkp, :baseCurrency, :isActive, :createdAt, :updatedAt);
                                 """;
         return jdbcTemplate.update(sql, toParams(model));
+    }
+
+    public int insertCompanySequences(UUID companyId) {
+        String[] types = { "CLIENT", "SUPPLIER", "PROJECT", "INVOICE", "PAYMENT" };
+
+        String seqSql = """
+                INSERT INTO company_sequences (id, company_id, sequence_type, current_value)
+                VALUES (gen_random_uuid(), :companyId, :sequenceType, 0)
+                """;
+
+        int total = 0;
+        for (String type : types) {
+            MapSqlParameterSource params = new MapSqlParameterSource()
+                    .addValue("companyId", companyId)
+                    .addValue("sequenceType", type);
+            total += jdbcTemplate.update(seqSql, params);
+        }
+        return total;
     }
 
     public String companyCodeById(UUID id) {

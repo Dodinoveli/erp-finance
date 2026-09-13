@@ -13,11 +13,13 @@ import com.logikaintermedia.erp.modules.user.UserRepository;
 public class CompanyService {
     private final CompanyRepository repository;
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public CompanyService(CompanyRepository repository, UserRepository userRepository) {
+    public CompanyService(CompanyRepository repository, UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -59,13 +61,14 @@ public class CompanyService {
         user.setCompanyId(companyId);
         user.setCreatedAt(OffsetDateTime.now());
         user.setUpdatedAt(OffsetDateTime.now());
-        user.setRole("Owner");
+        user.setRoles("Owner");
         int userResult = userRepository.insert(user);
 
         if (userResult <= 0) {
             throw new RuntimeException("Gagal menyimpan user");
         }
 
+        repository.insertCompanySequences(companyId);
         return result;
     }
 

@@ -53,7 +53,7 @@ public class UserService {
                 user.getUserId(),
                 user.getUserName(),
                 user.getCompanyId(),
-                List.of(user.getRole()));
+                List.of(user.getRoles()));
 
         String refreshToken = jwtUtil.generateRefreshToken(user.getUserId(), deviceId);
 

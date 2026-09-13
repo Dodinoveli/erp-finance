@@ -238,9 +238,13 @@
                         <button type="submit" class="btn btn-simpan">
                             <i class="bi bi-floppy"></i> Simpan
                         </button>
-                        <a th:href="@{/client}" class="btn btn-batal" hx-get="/client" hx-target="#page-content"
-                            hx-push-url="true" hx-indicator="#loading"> <i class="bi bi-x-lg"></i> Batal
-                        </a>
+                        <button type="button" class="btn btn-batal" th:data-url="@{/client}"
+                            onclick="library.navigate(this.dataset.url)">
+                            <i class="bi bi-x-circle"></i> Batal
+                        </button>
+                        <!-- <a th:href="@{/client}" class="btn btn-batal" onclick="event.preventDefault(); "> <i
+                                class="bi bi-x-lg"></i> Batal
+                        </a> -->
                     </div>
                 </form>
             </div>
