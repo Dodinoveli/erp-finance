@@ -8,8 +8,8 @@
   <!-- <div class="title">Workspace</div> -->
   <ul class="menu">
     <li>
-      <a class="link active" th:href="@{/dashboard}" hx-get="/dashboard" hx-target="#page-content" hx-push-url="true"
-        hx-indicator="#loading"><i class="bi bi-house"></i>Dashboard</a>
+      <a class="link active" th:href="@{/dashboard}" onclick="event.preventDefault(); library.navigate('/dashboard')"><i
+          class="bi bi-house"></i>Dashboard</a>
     </li>
   </ul>
 
@@ -20,12 +20,15 @@
         <i class="bi bi-database"></i>Master Data <span class="chev">›</span>
       </button>
       <div class="sub">
-        <a th:href="@{/client}" hx-get="/client" hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
+        <a th:href="@{/client}" onclick="event.preventDefault(); library.navigate('/client')">
           Daftar Client
         </a>
-        <a th:href="@{/supplier}" hx-get="/supplier" hx-target="#page-content" hx-push-url="true"
-          hx-indicator="#loading">Daftar Supplier
+
+        <a th:href="@{/supplier}" onclick="event.preventDefault(); library.navigate('/supplier')">Daftar Supplier
         </a>
+        <!-- <a th:href="@{/supplier}" hx-get="/supplier" hx-target="#page-content" hx-push-url="true"
+          hx-indicator="#loading">Daftar Supplier
+        </a> -->
         <!-- <a th:href="@{/perusahaan}">Perusahaan</a> -->
         <!-- <a th:href="@{/client}">Customer/ Client</a>
                 <a th:href="@{/supplier}">Supplier/ Vendor</a> -->
@@ -45,8 +48,7 @@
         <i class="bi bi-buildings-fill"></i>Proyek <span class="chev">›</span>
       </button>
       <div class="sub">
-        <a th:href="@{/project}" hx-get="/project" hx-target="#page-content" hx-push-url="true"
-          hx-indicator="#loading">Daftar Proyek</a>
+        <a th:href="@{/project}" onclick="event.preventDefault(); library.navigate('/project')">Daftar Proyek</a>
 
         <a href="#">Invoice</a>
       </div>
@@ -98,9 +100,13 @@
         <i class="bi bi-journal-text"></i> Akuntansi <span class="chev">›</span>
       </button>
       <div class="sub">
+        <a th:href="@{/chartofaccountstemplates}"
+          onclick="event.preventDefault(); library.navigate('/chartofaccountstemplates')">
+          Coa Template
+        </a>
         <!-- <a th:href="@{/accounttemplates}">Chart of Accounts (COA)</a> -->
-        <a th:href="@{/chartofaccounts}">COA</a>
-        <a th:href="@{/chartofaccounts}">Mapping COA</a>
+        <!-- <a th:href="@{/chartofaccounts}">COA</a> -->
+        <!-- <a th:href="@{/chartofaccounts}">Mapping COA</a> -->
         <a href="#">Jurnal Umum</a>
         <a href="#">Posting Jurnal</a>
         <a href="#">Buku Besar</a>
@@ -141,7 +147,7 @@
       <div class="sub">
         <a th:href="@{/transactioncode}" hx-get="/transactioncode" hx-target="#page-content" hx-push-url="true"
           hx-indicator="#loading">Kode
-          Transaksi</a>
+          Dokumen</a>
       </div>
     </li>
   </ul>

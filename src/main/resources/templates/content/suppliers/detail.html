@@ -135,10 +135,13 @@
             hx-push-url="true" hx-indicator="#loading">
             <i class="bi bi-arrow-left"></i> Kembali ke Daftar
           </a>
-          <a th:href="@{/supplier/edit/{id}(id=${supplier.supplierId})}" class="btn btn-warning"
-            th:hx-get="@{/supplier/edit/{id}(id=${supplier.supplierId})}" hx-target="#page-content" hx-push-url="true"
-            hx-indicator="#loading"><i class="bi bi-pencil-square"></i> Edit
+
+          <a href="javascript:void(0)" class="btn btn-warning"
+            th:data-url="@{/supplier/edit/{id}(id=${supplier.supplierId})}"
+            onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+            <i class="bi bi-pencil-square"></i> Edit
           </a>
+
           <button type="button" class="btn btn-danger">
             <i class="bi bi-eye-slash"></i> Nonaktifkan
           </button>

@@ -1,6 +1,7 @@
 package com.logikaintermedia.erp.modules.chartofaccountstemplates;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,8 +20,8 @@ public class ChartOfAccountsTemplatesResponse {
     private Boolean isPostable;
     private String description;
     private Integer sortOrder;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private OffsetDateTime createdAt;
+    private OffsetDateTime updatedAt;
 
     private UUID accountId;
     private UUID companyId;

@@ -3,6 +3,7 @@ package com.logikaintermedia.erp.modules.chartofaccountstemplates;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.Nullable;
@@ -31,8 +32,8 @@ public class ChartOfAccountsTemplatesMaper implements RowMapper<ChartOfAccountsT
                 .isPostable(rs.getBoolean("is_postable"))
                 .description(rs.getString("description"))
                 .sortOrder(rs.getInt("sort_order"))
-                .createdAt(rs.getObject("created_at", LocalDateTime.class))
-                .updatedAt(rs.getObject("updated_at", LocalDateTime.class))
+                .createdAt(rs.getObject("created_at", OffsetDateTime.class))
+                .updatedAt(rs.getObject("updated_at", OffsetDateTime.class))
                 .build();
 
     }

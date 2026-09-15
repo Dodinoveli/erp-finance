@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+<style>
+    #coa-table .coa-leaf .tabulator-data-tree-control {
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    #coa-table {
+        background-color: white;
+    }
+</style>
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="container-fluid py-1">
+                <!-- TABLE CARD -->
+                <div class="card border-0 shadow-sm">
+                    <!-- TOOLBAR -->
+                    <div class="card-body border-bottom">
+                        <div class="row g-3 align-items-center">
+
+                            <div class="col-12">
+                                <div class="d-flex gap-2 align-items-center flex-wrap">
+
+                                    <!-- BACK -->
+                                    <a th:href="@{/chartofaccounts}" class="btn btn-secondary"
+                                        style="white-space: nowrap;">
+                                        <i class="bi bi-arrow-left"></i>
+                                        Kembali Ke Daftar
+                                    </a>
+
+                                    <!-- INSTALL COA -->
+                                    <button type="button" id="btn-install" class="btn btn-primary"
+                                        style="white-space: nowrap;">
+                                        <i class="bi bi-cloud-arrow-down"></i>
+                                        Install COA
+                                    </button>
+
+                                </div>
+
+                                <div class="mt-2 text-muted small">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Install Chart of Accounts (COA) standar ke perusahaan Anda.
+                                    COA hanya dapat diinstall satu kali dan tidak akan menggandakan akun
+                                    yang sudah tersedia.
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="table-responsive ">
+                        <div id="coa-table"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+
+</html>

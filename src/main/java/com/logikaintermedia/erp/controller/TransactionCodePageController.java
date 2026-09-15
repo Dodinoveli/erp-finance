@@ -25,7 +25,7 @@ public class TransactionCodePageController {
     @GetMapping("/transactioncode")
     public String project(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
             HttpServletResponse response) {
-        String title = " Kode Transaksi";
+        String title = " Kode Dokuemen";
         model.addAttribute("pageTitle", title);
         if ("true".equals(hxRequest)) {
             response.setHeader("X-Page-Title", title);
@@ -39,7 +39,7 @@ public class TransactionCodePageController {
     public String edit(@PathVariable UUID id, Model model,
             @RequestHeader(value = "HX-Request", required = false) String hxRequest,
             HttpServletResponse response) {
-        String title = "Edit Kode Transaksi";
+        String title = "Edit Kode Dokuemen";
         Optional<Map<String, Object>> result = service.companyCodeById(id);
         model.addAttribute("pageTitle", title);
         model.addAttribute("trx", result.get());

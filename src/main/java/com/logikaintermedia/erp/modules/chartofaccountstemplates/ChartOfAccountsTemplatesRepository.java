@@ -1,15 +1,9 @@
 package com.logikaintermedia.erp.modules.chartofaccountstemplates;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 import lombok.extern.slf4j.Slf4j;
 
 @Repository
@@ -20,10 +14,6 @@ public class ChartOfAccountsTemplatesRepository {
     public ChartOfAccountsTemplatesRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
-    // public List<ChartOfAccounts> findAllById(UUID id) {
-
-    // }
 
     public List<ChartOfAccountsTemplates> findAll() {
         String sql = """

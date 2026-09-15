@@ -1,4 +1,4 @@
-
+import { library } from '/js/utility/library.js';
 var clientModelTambah = {
 
     init: function () {
@@ -45,18 +45,8 @@ var clientModelTambah = {
 
             await Toast.success(result.message, "Berhasil!", 2000);
             setTimeout(() => {
-                var url = "/client";
-
-                htmx
-                    .ajax("GET", url, {
-                        target: "#page-content",
-                        swap: "innerHTML",
-                        indicator: "#loading"
-                    })
-                    .then(() => {
-                        window.history.pushState({}, "", url);
-                    });
-            }, 2500);
+                library.navigate(`/client`);
+            }, 1000);
 
             return result;
 

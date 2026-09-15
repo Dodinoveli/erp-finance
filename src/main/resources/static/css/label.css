@@ -1,6 +1,6 @@
     
 .lbl-normal {
-    font-family: 'Inter', sans-serif;
+    font-family: "Roboto", sans-serif;
     font-size: 14px !important;
     font-weight: 500 !important;                   /* ← Ganti dari normal ke 500 biar lebih jelas */
     color: #495057 !important;
@@ -14,7 +14,7 @@
         /* ===== INPUT UNDERLINE - DIUBAH! ===== */
         /* ========================================== */
         .input-underline {
-             font-family: 'Inter', sans-serif;
+            font-family: "Roboto", sans-serif;
             background: transparent !important;
             border: none !important;
             border-bottom: 2px solid #dce0e8 !important;

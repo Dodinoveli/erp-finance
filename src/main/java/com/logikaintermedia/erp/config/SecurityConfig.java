@@ -92,7 +92,7 @@ public class SecurityConfig {
                                 .httpBasic(httpBasic -> httpBasic.disable()); // dimatikan karena pakai jwt bukan
                                                                               // session
 
-                return http.build();
+                return http.build(); 
         }
 
         @Bean

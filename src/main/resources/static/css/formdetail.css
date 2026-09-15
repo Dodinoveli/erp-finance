@@ -165,7 +165,7 @@
         }
 
         .info-label {
-           font-family: 'Inter', sans-serif;
+            font-family: "Roboto", sans-serif;
             display: block;
             font-size: 14px;
             font-weight: 550;
@@ -176,9 +176,9 @@
         }
 
         .info-value {
-           font-family: 'Inter', sans-serif;
+            font-family: "Roboto", sans-serif;
             font-size: 13px;
-           font-weight:normal;
+            font-weight:normal;
 
             color: #101828;
 
@@ -186,7 +186,7 @@
         }
 
         .info-value.normal {
-          font-family: 'Inter', sans-serif;
+            font-family: "Roboto", sans-serif;;
             font-size: 13px;
            font-weight:normal;
 

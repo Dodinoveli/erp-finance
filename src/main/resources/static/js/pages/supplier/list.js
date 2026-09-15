@@ -100,10 +100,7 @@ export function initSupplirList() {
                 render: function (data, type, row) {
                     return `
                 <a href="/supplier/detail/${row.supplierId}"
-                    hx-get="/supplier/detail/${row.supplierId}"
-                    hx-target="#page-content"
-                    hx-push-url="true"
-                    hx-indicator="#loading"
+                    onclick="event.preventDefault(); library.navigate('/supplier/detail/${row.supplierId}')"
                     class="detail-actions-btn"
                     title="Lihat Detail">
                     <i class="bi bi-eye"></i>
@@ -123,8 +120,7 @@ export function initSupplirList() {
             `
         <a href="/supplier/new"
             class="btn btn-primary btn-sm ms-2 d-inline-flex align-items-center justify-content-center btn-add"
-            hx-get="/supplier/new"
-            hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
+            onclick="event.preventDefault(); library.navigate('/supplier/new')">
            <i class="bi bi-plus"></i>
         </a>`,
         );

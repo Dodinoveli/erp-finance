@@ -16,8 +16,12 @@ import { initBankAccountNew } from "./pages/bankaccount/new.js";
 // import { initBankAccountEdit } from "./pages/bankaccount/edit.js";
 // import { initBankAccountDetail } from "./pages/bankaccount/detail.js";
 
+// 3. proyek 
+import { initProjectList } from "./pages/project/list.js";
+import { initProjectNew } from "./pages/project/new.js";
+import { initProjectEdit } from "./pages/project/edit.js";
 
-
+import { initAccountTemplates } from "./pages/accounttemplates/list.js"
 // ==============================
 // GLOBAL HTMX LOADING
 // ==============================
@@ -71,6 +75,25 @@ function initPage() {
     if (document.querySelector("#formBankAccount")) {
         initBankAccountNew();
     }
+
+    // project New
+    if (document.querySelector("#projectTable")) {
+        initProjectList();
+    }
+
+    if (document.querySelector("#formProjectNew")) {
+        initProjectNew();
+    }
+
+    if (document.querySelector("#formProjectEdit")) {
+        initProjectEdit();
+    }
+
+    // accountTemplates
+     if (document.querySelector("#coa-table")) {
+        initAccountTemplates();
+    }
+
 }
 
 // ==============================

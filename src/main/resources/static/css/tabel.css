@@ -13,7 +13,7 @@
 }
 
 .table thead th {
-  font-family: "Inter", sans-serif;
+    font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 800;
   color: #101828;
@@ -21,7 +21,7 @@
   letter-spacing: 0.02em;
 }
 .table tbody tr td {
-  font-family: "Inter", sans-serif;
+    font-family: "Roboto", sans-serif;
   font-size: 13px;
   font-weight: normal;
   color: #101828;
