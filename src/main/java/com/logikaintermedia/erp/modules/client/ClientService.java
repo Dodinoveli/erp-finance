@@ -102,7 +102,7 @@ public class ClientService {
         model.setClientEmail(dto.getClientEmail());
         model.setClientContactPerson(dto.getClientContactPerson());
         model.setClientContactPhone(dto.getClientContactPhone());
-        model.setClientIsActive(dto.getClientIsActive() != null ? dto.getClientIsActive() : true);
+        model.setClientIsActive(true);
         model.setCompanyId(companyId);
         model.setClientBankName(dto.getClientBankName());
         model.setClientAccountNumber(dto.getClientAccountNumber());

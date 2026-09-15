@@ -52,7 +52,7 @@ public class ClientController {
     // return ResponseEntity.ok(ApiResponse.success("Berhasil", response));
     // }
 
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @GetMapping
     public ResponseEntity<DataTableResponse<ClientResponse>> getClients(
             @AuthenticationPrincipal AuthUserPrincipal user,
@@ -66,7 +66,7 @@ public class ClientController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @GetMapping("/total-new")
     public ResponseEntity<DataCountResponse<Client>> getTotal(
             @AuthenticationPrincipal AuthUserPrincipal user) {
@@ -74,7 +74,7 @@ public class ClientController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("hasRole('Owner')")
+     @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PostMapping
     public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody ClientRequest entity,
             @AuthenticationPrincipal AuthUserPrincipal user) {
@@ -84,16 +84,18 @@ public class ClientController {
                 .body(ApiResponse.created("Data Client berhasil disimpan...", result));
     }
 
-    @PreAuthorize("hasRole('Owner')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody ClientRequest entity, @PathVariable UUID id,
             @AuthenticationPrincipal AuthUserPrincipal user) {
         Client data = Objects.requireNonNull(service.updateClient(entity, id, user.getCompanyId()));
-        ClientResponse result = new ClientResponse();
-        BeanUtils.copyProperties(data, result);
+        // ClientResponse result = new ClientResponse();
+        // BeanUtils.copyProperties(data, result);
         return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Data Client berhasil diperbaharui...", result));
+        .ok(ApiResponse.success(
+            "Data Client berhasil diperbaharui...",
+            data
+        ));
     }
 
 }

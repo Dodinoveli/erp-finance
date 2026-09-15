@@ -1833,5 +1833,1239 @@ VALUES
     1
 );
 
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '41100',
+    'PENDAPATAN PROYEK',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '41000'
+    ),
+    3,
+    TRUE,
+    FALSE,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '41101',
+    'Pendapatan Konstruksi',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '41100'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+),
+(
+    gen_random_uuid(),
+    '41102',
+    'Pendapatan Instalasi',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '41100'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    2
+),
+(
+    gen_random_uuid(),
+    '41103',
+    'Pendapatan Pemeliharaan',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '41100'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    3
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '41200',
+    'PENDAPATAN JASA',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '41000'
+    ),
+    3,
+    TRUE,
+    FALSE,
+    NULL,
+    2
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '41201',
+    'Pendapatan Jasa',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '41200'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '42000',
+    'PENDAPATAN LAIN-LAIN',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '40000'
+    ),
+    2,
+    TRUE,
+    FALSE,
+    NULL,
+    2
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '42100',
+    'PENDAPATAN BUNGA',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '42000'
+    ),
+    3,
+    TRUE,
+    FALSE,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '42101',
+    'Pendapatan Bunga',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '42100'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '42200',
+    'PENDAPATAN LAINNYA',
+    'REVENUE',
+    'CREDIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '42000'
+    ),
+    3,
+    TRUE,
+    FALSE,
+    NULL,
+    2
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51000',
+    'BEBAN PROYEK',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '50000'
+    ),
+    2,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51100',
+    'BEBAN MATERIAL',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51000'
+    ),
+    3,
+    FALSE,
+    TRUE,
+    NULL,
+    2
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51101',
+    'Beban Material Proyek',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51100'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+);
+
+update chart_of_accounts_templates set is_header = true , is_postable = false  where account_code ='51000'
+update chart_of_accounts_templates set is_header = true , is_postable = false  where account_code ='51100'
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51200',
+    'BEBAN TENAGA KERJA',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51000'
+    ),
+    3,
+    FALSE,
+    TRUE,
+    NULL,
+    2
+);
+
+update chart_of_accounts_templates set is_header = true , is_postable = false  where account_code ='51200'
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51201',
+    'BEBAN TENAGA KERJA',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51200'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+);
+
+update chart_of_accounts_templates set account_name='Beban Tenaga Kerja'  where account_code ='51201'
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51300',
+    'BEBAN SUBKONTRAKTOR',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51000'
+    ),
+    3,
+    TRUE,
+    FALSE,
+    NULL,
+    3
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51301',
+    'Beban Sub Kontraktor',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51300'
+    ),
+    4,
+    FALSE,
+    TRUE,
+    NULL,
+    1
+);
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51400',
+    'BEBAN SEWA ALAT',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    4
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51401',
+    'Beban Sewa Alat',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51400'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51500',
+    'BEBAN TRANSPORTASI PROYEK',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    5
+);
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51501',
+    'Beban Transportasi Proyek',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51500'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51600',
+    'BEBAN PROYEK LAINNYA',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    6
+);
+
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '51601',
+    'Beban Proyek Lainnya',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '51600'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52000',
+    'BEBAN OPERASIONAL',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '50000'
+    ),
+    2,
+    TRUE,
+    false,
+    NULL,
+    2
+);
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52100',
+    'BEBAN GAJI',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    1
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52101',
+    'Beban Gaji',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52100'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52200',
+    'BEBAN LISTRIK DAN AIR',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    2
+);
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52201',
+    'Beban Listrik dan Air',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52200'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52300',
+    'BEBAN TELEKOMUNIKASI',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    3
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52301',
+    'Beban Telekomunikasi',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52300'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52400',
+    'BEBAN KANTOR',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    4
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52401',
+    'Beban Kantor',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52400'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52500',
+    'BEBAN PENYUSUTAN',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    5
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52501',
+    'Beban Penyusutan',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52500'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52600',
+    'BEBAN PERJALANAN DINAS',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    6
+);
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52601',
+    'Beban Perjalanan Dinas',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52600'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52700',
+    'BEBAN OPERASIONAL LAINNYA',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52000'
+    ),
+    3,
+    TRUE,
+    false,
+    NULL,
+    7
+);
+
+
+INSERT INTO public.chart_of_accounts_templates (
+    template_account_id,
+    account_code,
+    account_name,
+    account_type,
+    normal_balance,
+    parent_template_id,
+    account_level,
+    is_header,
+    is_postable,
+    description,
+    sort_order
+)
+VALUES
+(
+    gen_random_uuid(),
+    '52701',
+    'Beban Operasional Lainnya',
+    'EXPENSE',
+    'DEBIT',
+    (
+        SELECT template_account_id
+        FROM public.chart_of_accounts_templates
+        WHERE account_code = '52700'
+    ),
+    4,
+    false,
+    true,
+    NULL,
+    1
+);
+
+
+
+
+
+
+
 
 
