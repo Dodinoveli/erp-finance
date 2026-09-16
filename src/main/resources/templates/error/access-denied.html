@@ -1,29 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+```
+<title>Akses Ditolak - Kawal Laba</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    body {
+        min-height: 100vh;
+        background: #f6f8fb;
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .access-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+    }
+
+    .access-card {
+        width: 100%;
+        max-width: 520px;
+        background: #fff;
+        border: 1px solid #e9edf3;
+        border-radius: 24px;
+        padding: 42px 36px;
+        text-align: center;
+        box-shadow: 0 15px 45px rgba(30, 41, 59, 0.08);
+    }
+
+    .illustration {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 25px;
+        border-radius: 50%;
+        background: #fff1f2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .illustration::before {
+        content: "";
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        border-radius: 50%;
+        background: #ffe4e6;
+    }
+
+    .shield {
+        position: relative;
+        width: 72px;
+        height: 82px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #e11d48;
+        font-size: 72px;
+        z-index: 1;
+    }
+
+    .lock {
+        position: absolute;
+        right: 22px;
+        bottom: 22px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: #e11d48;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        border: 4px solid white;
+        z-index: 2;
+    }
+
+    .brand {
+        font-size: 14px;
+        font-weight: 700;
+        color: #64748b;
+        letter-spacing: .4px;
+        margin-bottom: 10px;
+    }
+
+    .title {
+        font-size: 30px;
+        font-weight: 750;
+        color: #172033;
+        margin-bottom: 12px;
+    }
+
+    .description {
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.7;
+        max-width: 390px;
+        margin: 0 auto 28px;
+    }
+
+    .btn-home {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border-radius: 12px;
+        padding: 11px 20px;
+        font-weight: 600;
+        box-shadow: 0 6px 15px rgba(13, 110, 253, .18);
+    }
+
+    .back-text {
+        margin-top: 18px;
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    @media (max-width: 576px) {
+        .access-card {
+            padding: 35px 22px;
+            border-radius: 20px;
+        }
+
+        .title {
+            font-size: 25px;
+        }
+
+        .illustration {
+            width: 130px;
+            height: 130px;
+        }
+    }
+</style>
+```
+
 </head>
 
 <body>
-    <div class="text-center py-5">
 
-        <i class="bi bi-shield-lock" style="font-size: 64px;"></i>
+```
+<div class="access-wrapper">
 
-        <h2 class="mt-3">Akses Ditolak</h2>
+    <div class="access-card">
 
-        <p class="text-muted">
-            Anda tidak memiliki izin untuk mengakses halaman ini.
+        <!-- Illustration -->
+        <div class="illustration">
+
+            <div class="shield">
+                <i class="bi bi-shield-fill"></i>
+            </div>
+
+            <div class="lock">
+                <i class="bi bi-lock-fill"></i>
+            </div>
+
+        </div>
+
+        <div class="brand">
+            KAWAL LABA
+        </div>
+
+        <h1 class="title">
+            Akses Ditolak
+        </h1>
+
+        <p class="description">
+            Maaf, akun Anda tidak memiliki izin untuk mengakses
+            halaman ini. Silakan kembali ke dashboard atau hubungi
+            administrator perusahaan Anda.
         </p>
 
-        <a th:href="@{/}" class="btn btn-primary">
-            <i class="bi bi-house"></i>
-            Kembali ke Beranda
+        <a th:href="@{/dashboard}" class="btn btn-primary btn-home">
+            <i class="bi bi-house-door-fill"></i>
+            Kembali ke Dashboard
         </a>
 
+        <div class="back-text">
+            Kawal Laba · Kelola Proyek, Kawal Laba
+        </div>
+
     </div>
+
+</div>
+```
+
 </body>
 
 </html>

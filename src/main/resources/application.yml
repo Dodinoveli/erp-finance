@@ -126,9 +126,12 @@ logging:
     root: INFO
     # Log internal aplikasi kamu
     com.logikaintermedia.erp: DEBUG
+    # Thymeleaf
     org.thymeleaf: DEBUG
+    # Spring Web
     org.springframework:
       web.servlet.view.InternalResourceViewResolver: DEBUG
+      # JDBC
       jdbc.core: DEBUG
       jdbc.datasource: DEBUG
       # TRACE penting untuk melihat pesan "Committing" atau "Rolling back"
@@ -149,6 +152,7 @@ logging:
 management:
   endpoints:
     web:
+      base-path: /actuator
       exposure:
         include: metrics,health,info
 

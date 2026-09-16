@@ -11,7 +11,7 @@ import com.logikaintermedia.erp.modules.client.Client;
 import com.logikaintermedia.erp.modules.client.ClientService;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Controller
+@Controller 
 public class ClientPageController {
     private final ClientService service;
 
@@ -20,6 +20,7 @@ public class ClientPageController {
     }
 
     @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    //@PreAuthorize("hasRole('Admin')")
     @GetMapping("/client")
     public String list(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
             HttpServletResponse response) {

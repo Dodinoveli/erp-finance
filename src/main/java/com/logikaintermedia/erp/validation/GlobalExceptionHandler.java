@@ -1,5 +1,8 @@
 package com.logikaintermedia.erp.validation;
-
+import java.io.IOException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.access.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -93,5 +96,19 @@ public class GlobalExceptionHandler {
                                 ApiResponse.builder()
                                                 .message("Format angka yang anda masukan tidak valid")
                                                 .build());
+        }
+
+        // kalau login tapi tidak punya role, misal role admin coba2 akses owner
+        @ExceptionHandler(AccessDeniedException.class)
+        public void handleAccessDenied(
+                HttpServletRequest request,
+                HttpServletResponse response) throws IOException {
+
+        if ("true".equalsIgnoreCase(request.getHeader("HX-Request"))) {
+                response.setHeader("HX-Redirect", "/access-denied");
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        } else {
+                response.sendRedirect("/access-denied");
+        }
         }
 }

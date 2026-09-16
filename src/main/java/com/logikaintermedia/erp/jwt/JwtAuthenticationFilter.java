@@ -63,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // 3. ambil tokenya masukan ke userPrincipal
                 AuthUserPrincipal principal = new AuthUserPrincipal(userId, username, companyId, roles, deviceId);
 
+               
                 // 4. WAJIB: CONVERT ROLES → AUTHORITIES
                 List<GrantedAuthority> authorities = roles.stream()
                         .map(role -> (GrantedAuthority) new SimpleGrantedAuthority("ROLE_" + role))
@@ -73,6 +74,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         null,
                         authorities);
 
+                // System.out.println("ROLES DARI JWT: " + roles);
+                // System.out.println("AUTHORITIES: " + authorities);
                 // 5. set ke security context (INI INTINYA)
                 if (SecurityContextHolder.getContext().getAuthentication() == null) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
@@ -83,7 +86,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            logger.warn("JWT error silakan periksa ya: " + e.getMessage());
+            //logger.warn("JWT error silakan periksa ya: " + e.getMessage());
+            log.warn("[JWT] Invalid token path={} message={}",
+            request.getRequestURI(),
+            e.getMessage());
         }
 
         filterChain.doFilter(request, response);

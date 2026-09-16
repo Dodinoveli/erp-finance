@@ -2,12 +2,10 @@ package com.logikaintermedia.erp.encryption;
 
 import java.security.SecureRandom;
 import java.util.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
 import lombok.extern.slf4j.Slf4j;
 
 /**

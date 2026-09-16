@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 import com.logikaintermedia.erp.jwt.JwtAuthenticationFilter;
-
+import jakarta.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
@@ -81,12 +81,15 @@ public class SecurityConfig {
                                 .exceptionHandling(exception -> exception
                                                 // Belum login / JWT tidak ada atau tidak valid
                                                 .authenticationEntryPoint((request, response, authException) -> {
-                                                        response.sendRedirect("/login");
-                                                })
-                                                // Sudah login tetapi tidak punya permission/role
-                                                .accessDeniedHandler((request, response, accessDeniedException) -> {
-                                                        response.sendRedirect("/access-denied");
-                                                }))
+                                                        //response.sendRedirect("/login");
+                                                         if ("true".equalsIgnoreCase(request.getHeader("HX-Request"))) {
+                                                                response.setHeader("HX-Redirect", "/login");
+                                                                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                                                        }else{
+                                                                response.sendRedirect("/login");
+                                                        }
+                                                }
+                                                ))
                                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                                 .formLogin(form -> form.disable())
                                 .httpBasic(httpBasic -> httpBasic.disable()); // dimatikan karena pakai jwt bukan
