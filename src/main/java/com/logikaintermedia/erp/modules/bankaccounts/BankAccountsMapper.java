@@ -2,7 +2,6 @@ package com.logikaintermedia.erp.modules.bankaccounts;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,7 +20,7 @@ public class BankAccountsMapper implements RowMapper<BankAccounts> {
         account.setBankAccountId((UUID) rs.getObject("bank_account_id"));
         account.setAccountCode(rs.getString("account_code"));
         account.setAccountName(rs.getString("account_name"));
-        account.setAccountType(rs.getString("account_type"));
+        // account.setAccountType(rs.getString("account_type"));
         account.setBankName(rs.getString("bank_name"));
         account.setBankBranch(rs.getString("bank_branch"));
         account.setAccountNumber(rs.getString("account_number"));
@@ -33,7 +32,12 @@ public class BankAccountsMapper implements RowMapper<BankAccounts> {
         account.setCompanyId((UUID) rs.getObject("company_id"));
         account.setAccountId((UUID) rs.getObject("account_id"));
         ChartOfAccounts coa = new ChartOfAccounts();
-        coa.setAccountName(rs.getString("account_name"));
+        coa.setParentAccountCode(rs.getString("parent_account_code"));
+        coa.setParentAccountName(rs.getString("parent_account_name"));
+        coa.setChildAccountCode(rs.getString("child_account_code"));
+        coa.setChildAccountName(rs.getString("child_account_name"));
+      
+        account.setCoa(coa);
         account.setUserId((UUID) rs.getObject("user_id"));
         account.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
         account.setUpdatedAt(rs.getObject("updated_at", OffsetDateTime.class));

@@ -21,7 +21,8 @@ import { initProjectList } from "./pages/project/list.js";
 import { initProjectNew } from "./pages/project/new.js";
 import { initProjectEdit } from "./pages/project/edit.js";
 
-import { initAccountTemplates } from "./pages/accounttemplates/list.js"
+import { initChartOfAccounts } from "./pages/chartofaccounts/list.js"
+import { initChartOfAccountsTemplates } from "./pages/chartofaccountstemplates/list.js"
 // ==============================
 // GLOBAL HTMX LOADING
 // ==============================
@@ -89,9 +90,13 @@ function initPage() {
         initProjectEdit();
     }
 
+    if (document.querySelector("#coa-table")) {
+        initChartOfAccounts();
+    }
+
     // accountTemplates
-     if (document.querySelector("#coa-table")) {
-        initAccountTemplates();
+    if (document.querySelector("#coa-table-templates")) {
+        initChartOfAccountsTemplates();
     }
 
 }

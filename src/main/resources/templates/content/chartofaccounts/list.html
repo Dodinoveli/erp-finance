@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+<style>
+    #coa-table .coa-leaf .tabulator-data-tree-control {
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    #coa-table {
+        background-color: white;
+    }
+</style>
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="container-fluid py-1">
+                <!-- TABLE CARD -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body border-bottom">
+                        <div class="row g-3 align-items-center">
+
+                            <div class="col-12">
+                                <div class="d-flex gap-2 align-items-center flex-wrap">
+                                    <button type="button" class="btn btn-light" th:data-url="@{/coatemplates}"
+                                        onclick="library.navigate(this.dataset.url)">
+                                        <i class="bi bi-arrow-left"></i> Lihat Coa
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="table-responsive ">
+                        <div id="coa-table"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+
+
+    </div>
+</body>
+
+</html>

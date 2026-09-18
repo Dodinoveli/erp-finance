@@ -5,7 +5,7 @@
 <body>
     <div layout:fragment="content" th:fragment="content">
         <main class="main">
-            <div class="detail-container">
+            <div class="detail-container p-2">
                 <form id="formBankAccount">
                     <div class="card p-1">
                         <div class="card-body">
@@ -29,18 +29,8 @@
                                 </div>
                             </div>
                             <div class="row g-3">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="lbl-normal">Tipe Akun</label>
-                                    <div class="form-field">
-                                        <select id="account_type" name="accountType"
-                                            class="form-select select-underline" aria-label="Default select example">
-                                        </select>
-                                        <small class="text-danger" id="err-accountType"></small>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Sub Akun</label>
                                     <div class="form-field">
                                         <select id="account_id" name="accountId" class="form-select select-underline"
                                             aria-label="Default select example">
@@ -48,6 +38,7 @@
                                         <small class="text-danger" id="err-accountId"></small>
                                     </div>
                                 </div>
+
                             </div>
                             <div class="row g-3">
                                 <div class="col-md-6">
@@ -93,9 +84,10 @@
                         <button type="submit" class="btn btn-simpan">
                             Simpan
                         </button>
-                        <a th:href="@{/bankaccount}" class="btn btn-batal" hx-get="/bankaccount"
-                            hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">Batal
-                        </a>
+
+                        <button type="button" class="btn btn-batal" th:data-url="@{/bankaccount}"
+                            onclick="library.navigate(this.dataset.url)">Batal
+                        </button>
                     </div>
                 </form>
             </div>

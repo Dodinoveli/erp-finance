@@ -39,9 +39,9 @@ public class BankAccounstController {
         return ResponseEntity.ok(ApiResponse.success("success", response));
     }
 
-    // mengambil dan menampilkan  kategori akun Kas dan bank bedasarkan companies id 
+    // mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
     @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/find-cash-an-bank-accounts-by-company-id")
+    @GetMapping("/find-cash-and-bank-accounts-by-company-id")
     public ResponseEntity<?> findCashAndBankAccountsByCompanyId(
             @AuthenticationPrincipal AuthUserPrincipal principal) {
         UUID companyId = principal.getCompanyId();

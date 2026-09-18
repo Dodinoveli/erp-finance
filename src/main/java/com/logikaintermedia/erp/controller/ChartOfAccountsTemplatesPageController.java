@@ -11,15 +11,15 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ChartOfAccountsTemplatesPageController {
 
     @PreAuthorize("hasRole('Owner') or hasRole('admin')")
-    @GetMapping("/chartofaccountstemplates")
+    @GetMapping("/coatemplates")
     public String accountTemplates(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
             HttpServletResponse response) {
         String title = "Chart of Accounts (COA) Templates";
         model.addAttribute("pageTitle", title);
         if ("true".equals(hxRequest)) {
             response.setHeader("X-Page-Title", title);
-            return "content/accounttemplates/list :: content";
+            return "content/chartofaccountstemplates/list :: content";
         }
-        return "content/accounttemplates/list";
+        return "content/chartofaccountstemplates/list";
     }
 }

@@ -22,4 +22,12 @@ public class ChartOfAccounts {
     private UUID accountId;
     private UUID companyId;
 
+    // parent
+    private String parentAccountCode;
+    private String parentAccountName;
+
+    private UUID childAccountId;
+    private String childAccountCode;
+    private String childAccountName;
+
 }

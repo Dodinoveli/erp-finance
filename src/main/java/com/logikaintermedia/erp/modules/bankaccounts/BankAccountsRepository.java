@@ -11,10 +11,10 @@ import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 
 @Repository
 public class BankAccountsRepository {
-    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    public BankAccountsRepository(NamedParameterJdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BankAccountsRepository(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     private @NonNull MapSqlParameterSource toParams(BankAccounts acc) {
@@ -22,7 +22,6 @@ public class BankAccountsRepository {
                 .addValue("bankAccountId", acc.getBankAccountId())
                 .addValue("accountCode", acc.getAccountCode())
                 .addValue("accountName", acc.getAccountName())
-                .addValue("accountType", acc.getAccountType())
                 .addValue("bankName", acc.getBankName())
                 .addValue("bankBranch", acc.getBankBranch())
                 .addValue("accountNumber", acc.getAccountNumber())
@@ -32,7 +31,7 @@ public class BankAccountsRepository {
                 .addValue("isDefault", acc.getIsDefault())
                 .addValue("isActive", acc.getIsActive())
                 .addValue("companyId", acc.getCompanyId())
-                .addValue("account_id", acc.getAccountId())
+                .addValue("accountId", acc.getAccountId())
                 .addValue("createdAt", acc.getCreatedAt())
                 .addValue("updatedAt", acc.getUpdatedAt())
                 .addValue("userId", acc.getUserId())
@@ -42,19 +41,19 @@ public class BankAccountsRepository {
     public int save(BankAccounts accounts) {
         String sql = """
                 INSERT INTO bank_accounts(
-                	bank_account_id, account_code, account_name, account_type,
+                	bank_account_id, account_code, account_name,
                     bank_name, bank_branch, account_number, account_holder, currency,
                     opening_balance, is_default, is_active, company_id, account_id,
                     created_at, updated_at, user_id, deleted_at
                     )
                     VALUES(
-                        :bankAccountId, :accountCode, :accountName, :accountType,
+                        :bankAccountId, :accountCode, :accountName,
                         :bankName, :bankBranch, :accountNumber, :accountHolder, :currency,
                         :openingBalance, :isDefault, :isActive, :companyId, :accountId,
                         :createdAt, :updatedAt, :userId, :deletedAt
                         );
                                 """;
-        return jdbcTemplate.update(sql, toParams(accounts));
+        return namedParameterJdbcTemplate.update(sql, toParams(accounts));
     }
 
     public int update(BankAccounts accounts) {
@@ -69,58 +68,119 @@ public class BankAccountsRepository {
                     account_holder = :accountHolder,
                     account_id = :accountId,
                     is_active = :isActive,
-                    updated_at = :updatedAt
+                    updated_at = :updatedAt,
+                    account_id_detail = :accountIdDetail
                 where bank_account_id = :bankAccountId
                 and company_id = :companyId
                 and user_id = :userId
                         """;
-        return jdbcTemplate.update(sql, toParams(accounts));
+        return namedParameterJdbcTemplate.update(sql, toParams(accounts));
     }
 
     public List<BankAccounts> findBankAccountsByCompanyId(UUID companyId) {
         String sql = """
-                select
-                    *
-                from bank_accounts
-                    inner join chart_of_accounts
-                    on chart_of_accounts.account_id= bank_accounts.account_id
-                where bank_accounts.company_id = :companyId
-                                """;
+                SELECT
+                    ba.bank_account_id,
+                    ba.account_code,
+                    ba.account_name,
+                    ba.bank_name,
+                    ba.bank_branch,
+                    ba.account_number,
+                    ba.account_holder,
+                    ba.currency,
+                    ba.opening_balance,
+                    ba.is_default,
+                    ba.is_active,
+                    ba.company_id,
+                    ba.account_id,
+                    ba.user_id,
+                    ba.created_at,
+                    ba.updated_at,
+                    ba.deleted_at,
+                    parent.account_code AS parent_account_code,
+                    parent.account_name AS parent_account_name,
+                    child.account_code AS child_account_code,
+                    child.account_name AS child_account_name
+                FROM bank_accounts ba
+                LEFT JOIN chart_of_accounts child
+                    ON child.account_id = ba.account_id
+                LEFT JOIN chart_of_accounts parent
+                    ON parent.account_id = child.parent_id
+                WHERE ba.company_id = :companyId
+                AND ba.deleted_at IS NULL;
+                """;
 
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("companyId", companyId);
 
-        return jdbcTemplate.query(sql,
+        return namedParameterJdbcTemplate.query(sql,
                 params,
                 new BankAccountsMapper());
     }
 
-    public BankAccounts findDetailById(UUID bankAccountId) {
+    public BankAccounts findDetailById(UUID bankAccountId, UUID companyId) {
         String sql = """
-                select
-                    *
-                from bank_accounts
-                    inner join chart_of_accounts
-                    on chart_of_accounts.account_id= bank_accounts.account_id
-                where bank_accounts.bank_account_id = :bankAccountId
-                                """;
+                     SELECT
+                        ba.bank_account_id,
+                        ba.account_code,
+                        ba.account_name,
+                        ba.bank_name,
+                        ba.bank_branch,
+                        ba.account_number,
+                        ba.account_holder,
+                        ba.currency,
+                        ba.opening_balance,
+                        ba.is_default,
+                        ba.is_active,
+                        ba.company_id,
+                        ba.account_id,
+                        ba.user_id,
+                        ba.created_at,
+                        ba.updated_at,
+                        ba.deleted_at,
+                        parent.account_code AS parent_account_code,
+                        parent.account_name AS parent_account_name,
+                        child.account_code AS child_account_code,
+                        child.account_name AS child_account_name
+                    FROM bank_accounts ba
+                    LEFT JOIN chart_of_accounts child
+                        ON child.account_id = ba.account_id
+                    LEFT JOIN chart_of_accounts parent
+                        ON parent.account_id = child.parent_id
+                    WHERE  ba.bank_account_id = :bankAccountId and ba.company_id = :companyId
+                """;
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("bankAccountId", bankAccountId);
-        return jdbcTemplate.queryForObject(sql,
+        params.addValue("companyId", companyId);
+        return namedParameterJdbcTemplate.queryForObject(sql,
                 params,
                 new BankAccountsMapper());
     }
 
-    // mengambil dan menampilkan  kategori akun Kas dan bank bedasarkan companies id 
-    public List<ChartOfAccounts>  findCashAndBankAccountsByCompanyId(UUID id){
+    // mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
+    public List<ChartOfAccounts> findCashAndBankAccountsByCompanyId(UUID id) {
         String sql = """
-            select * from chart_of_accounts 
-                where account_name 
-            IN ('KAS','BANK') and company_id = :companyId
-        """;
+                SELECT
+                    parent.account_id,
+                    parent.account_code,
+                    parent.account_name,
+
+                    child.account_id AS child_account_id,
+                    child.account_code AS child_account_code,
+                    child.account_name AS child_account_name
+
+                FROM chart_of_accounts parent
+
+                INNER JOIN chart_of_accounts child
+                    ON child.parent_id = parent.account_id
+
+                WHERE parent.account_name IN ('KAS', 'BANK')
+
+                AND parent.company_id = :companyId
+                                """;
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("companyId", id);
-        return jdbcTemplate.query(sql,
+        return namedParameterJdbcTemplate.query(sql,
                 params,
                 new BeanPropertyRowMapper<>(ChartOfAccounts.class));
     }
@@ -140,8 +200,8 @@ public class BankAccountsRepository {
                  """;
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("companyId", companyId);
-        params.addValue("parentId",parentId);
-        return jdbcTemplate.query(sql,
+        params.addValue("parentId", parentId);
+        return namedParameterJdbcTemplate.query(sql,
                 params,
                 new BeanPropertyRowMapper<>(ChartOfAccounts.class));
     }

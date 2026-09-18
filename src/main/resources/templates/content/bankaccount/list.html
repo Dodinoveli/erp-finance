@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/main}">
+<style>
+    /* Menyembunyikan kotak pencarian DataTables tapi tombol tambah tetap aman */
+    .dt-search {
+        display: none !important;
+    }
+</style>
 
 <body>
     <div layout:fragment="content" th:fragment="content">
@@ -13,12 +19,11 @@
                         <table id="bankTable" class="table table-hover table-striped mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>KODE</th>
-                                    <th>NAMA AKUN</th>
-                                    <th>BANK</th>
-                                    <th>REKENING</th>
-                                    <th>SALDO</th>
-                                    <th>STATUS</th>
+                                    <th>Kode</th>
+                                    <th>Bank Account</th>
+                                    <th>Saldo</th>
+                                    <th>Coa</th>
+                                    <th>Parent</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -28,7 +33,6 @@
                 </div>
             </div>
         </main>
-
     </div>
 </body>
 

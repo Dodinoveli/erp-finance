@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
+
+<body>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="container-fluid py-1">
+                <!-- TABLE CARD -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body border-bottom">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-12">
+                                <div class="d-flex gap-2 align-items-center flex-wrap">
+                                    <button type="button" class="btn btn-light" th:data-url="@{/coa}"
+                                        onclick="library.navigate(this.dataset.url)">
+                                        <i class="bi bi-arrow-left"></i> Kembali
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <span class="fw-semibold">Parent :</span>
+                                <span th:text="${parent.accountCode}">Kas</span> -
+                                <span th:text="${parent.accountName}">Kas</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="width: 150px;">Kode Akun</th>
+                                <th scope="col">Nama Akun</th>
+                            </tr>
+                        </thead>
+                        <tbody id="accountRows">
+                            <tr th:each="account : ${accounts}">
+                                <td>
+                                    <input type="hidden" name="accountId" th:value="${account.accountId}">
+
+                                    <input type="text" name="accountCode" class="form-control form-control-sm"
+                                        th:value="${account.accountCode}" readonly>
+
+                                </td>
+                                <!-- <td th:text="${account.accountName}"></td> -->
+                                <td>
+                                    <input type="text" class="form-control form-control-sm"
+                                        th:value="${account.accountName}" name="accountName">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="addRow">
+                        <i class="bi bi-plus"></i> Baru
+                    </button>
+                </div>
+            </div>
+        </main>
+        <script>
+            document.getElementById('addRow').addEventListener('click', function () {
+                // const codes = [...document.querySelectorAll('input[name="accountCode"]')]
+                //     .map(input => parseInt(input.value))
+                //     .filter(Number.isFinite);
+
+                // const nextCode = codes.length
+                //     ? Math.max(...codes) + 1
+                //     : 1;
+                document.getElementById('accountRows').insertAdjacentHTML('beforeend', `
+                    <tr>
+                        <td>
+                            
+                        </td>
+
+                        <td>
+                            <input type="text"
+                                name="accountName"
+                                class="form-control form-control-sm">
+                        </td>
+
+                        <td>
+                            <button type="button"
+                                    class="btn btn-outline-danger btn-sm"
+                                    onclick="this.closest('tr').remove()">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+        </script>
+    </div>
+
+</body>
+
+</html>

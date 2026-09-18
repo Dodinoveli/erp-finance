@@ -24,9 +24,6 @@ public class BankAccountsRequest {
     @NotBlank(message = "Nama Akun wajib diisi", groups = { OnCreate.class, OnUpdate.class })
     private String accountName;
 
-    @NotBlank(message = "Tipe Akun wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-    private String accountType;
-
     private String bankName;
 
     private String bankBranch;
@@ -53,42 +50,46 @@ public class BankAccountsRequest {
 
     private OffsetDateTime deletedAt = OffsetDateTime.now(ZoneOffset.UTC);
 
-    @AssertTrue(message = "Nama Bank wajib untuk tipe akun BANK", groups = { OnCreate.class,
-            OnUpdate.class })
-    public boolean isBankName() {
-        if ("BANK".equalsIgnoreCase(accountType)) {
-            return bankName != null && !bankName.isBlank();
-        }
-        return true;
-    }
+    // @AssertTrue(message = "Nama Bank wajib untuk tipe akun BANK", groups = {
+    // OnCreate.class,
+    // OnUpdate.class })
+    // public boolean isBankName() {
+    // if ("BANK".equalsIgnoreCase(accountType)) {
+    // return bankName != null && !bankName.isBlank();
+    // }
+    // return true;
+    // }
 
-    @AssertTrue(message = "Cabang wajib untuk tipe akun BANK", groups = { OnCreate.class,
-            OnUpdate.class })
-    public boolean isBankBranch() {
-        if ("BANK".equalsIgnoreCase(accountType)) {
-            return bankBranch != null && !bankBranch.isBlank();
-        }
-        return true;
-    }
+    // @AssertTrue(message = "Cabang wajib untuk tipe akun BANK", groups = {
+    // OnCreate.class,
+    // OnUpdate.class })
+    // public boolean isBankBranch() {
+    // if ("BANK".equalsIgnoreCase(accountType)) {
+    // return bankBranch != null && !bankBranch.isBlank();
+    // }
+    // return true;
+    // }
 
-    @AssertTrue(message = "Pemilik Rekening wajib untuk tipe akun BANK", groups = { OnCreate.class,
-            OnUpdate.class })
-    public boolean isAccountHolder() {
-        if ("BANK".equalsIgnoreCase(accountType)) {
-            return accountHolder != null && !accountHolder.isBlank();
-        }
-        return true;
-    }
+    // @AssertTrue(message = "Pemilik Rekening wajib untuk tipe akun BANK", groups =
+    // { OnCreate.class,
+    // OnUpdate.class })
+    // public boolean isAccountHolder() {
+    // if ("BANK".equalsIgnoreCase(accountType)) {
+    // return accountHolder != null && !accountHolder.isBlank();
+    // }
+    // return true;
+    // }
 
-    @AssertTrue(message = "Nomor rekening wajib diisi, harus angka dan minimal 10 digit untuk tipe akun BANK", groups = {
-            OnCreate.class,
-            OnUpdate.class })
-    public boolean isAccountNumber() {
-        if ("BANK".equalsIgnoreCase(accountType)) {
-            return accountNumber != null && !accountNumber.isBlank()
-                    && accountNumber.matches("\\d{10,}");
-        }
-        return true;
-    }
+    // @AssertTrue(message = "Nomor rekening wajib diisi, harus angka dan minimal 10
+    // digit untuk tipe akun BANK", groups = {
+    // OnCreate.class,
+    // OnUpdate.class })
+    // public boolean isAccountNumber() {
+    // if ("BANK".equalsIgnoreCase(accountType)) {
+    // return accountNumber != null && !accountNumber.isBlank()
+    // && accountNumber.matches("\\d{10,}");
+    // }
+    // return true;
+    // }
 
 }

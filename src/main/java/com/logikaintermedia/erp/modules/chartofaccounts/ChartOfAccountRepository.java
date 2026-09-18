@@ -13,14 +13,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Repository
 @Slf4j
-public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
+public class ChartOfAccountRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public ChartOfAccountRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public ChartOfAccountRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public List<ChartOfAccounts> findAllByCompanyId(UUID companyId) {
         String sql = """
                 SELECT
@@ -29,7 +28,7 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
                     account_level, is_header, is_postable,
                     description, sort_order, created_at,
                     updated_at, template_account_id
-                FROM public.chart_of_accounts_new
+                FROM public.chart_of_accounts
                 where company_id = :companyId
                 ORDER BY parent_id NULLS FIRST,
                 sort_order, account_code;
@@ -45,20 +44,22 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
         }
     }
 
-    @Override
-    public List<ChartOfAccounts> findByParentId(UUID parentId) {
+    // mengambil coa bedasarkan parentId, untuk menampilkan detail
+    public List<ChartOfAccounts> findByParentId(UUID parentId, UUID companyId) {
         String sql = """
                 SELECT
                     c.*,
                     p.account_code AS parent_code,
                     p.account_name AS parent_name
-                FROM chart_of_accounts_new c
-                LEFT JOIN chart_of_accounts_new p
+                FROM chart_of_accounts c
+                LEFT JOIN chart_of_accounts p
                     ON p.account_id = c.parent_id
                 WHERE c.parent_id = :parentId
+                and c.company_id= :companyId
                                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("parentId", parentId);
+                .addValue("parentId", parentId)
+                .addValue("companyId", companyId);
         try {
             return jdbcTemplate.query(sql, params, new BeanPropertyRowMapper<>(ChartOfAccounts.class));
         } catch (DataAccessException e) {
@@ -67,12 +68,31 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
         }
     }
 
-    @Override
+    // untuk ambil data coa bedasarkan id
+    public ChartOfAccounts findById(UUID accountId, UUID companyId) {
+        String sql = """
+                SELECT
+                   *
+                FROM chart_of_accounts
+                WHERE account_id = :accountId
+                and company_id = :companyId
+                                """;
+        MapSqlParameterSource params = new MapSqlParameterSource()
+                .addValue("accountId", accountId)
+                .addValue("companyId", companyId);
+        try {
+            return jdbcTemplate.queryForObject(sql, params, new BeanPropertyRowMapper<>(ChartOfAccounts.class));
+        } catch (DataAccessException e) {
+            log.error("Error fetching all account by accountId : {}", e.getMessage(), e);
+            throw new RuntimeException("Failed to fetch account accountId", e);
+        }
+    }
+
     public int initializeCompanyCoa(UUID companyId) {
         // Cek apakah COA perusahaan sudah pernah di-install
         String checkSql = """
                 SELECT COUNT(*)
-                FROM public.chart_of_accounts_new
+                FROM public.chart_of_accounts
                 WHERE company_id = :companyId
                 """;
 
@@ -80,7 +100,7 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
                 .addValue("companyId", companyId);
 
         String insertSql = """
-                INSERT INTO public.chart_of_accounts_new (
+                INSERT INTO public.chart_of_accounts (
                     account_id,
                     template_account_id,
                     account_code,
@@ -116,7 +136,7 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
                 FROM public.chart_of_accounts_templates t
                 WHERE NOT EXISTS (
                     SELECT 1
-                    FROM public.chart_of_accounts_new n
+                    FROM public.chart_of_accounts n
                     WHERE n.company_id = :companyId
                       AND n.account_code = t.account_code
                 )
@@ -125,10 +145,10 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
                 .addValue("companyId", companyId);
 
         String updateParentSql = """
-                UPDATE public.chart_of_accounts_new AS child
+                UPDATE public.chart_of_accounts AS child
                 SET parent_id = parent.account_id
                 FROM public.chart_of_accounts_templates AS t,
-                     public.chart_of_accounts_new AS parent
+                     public.chart_of_accounts AS parent
                 WHERE child.template_account_id = t.template_account_id
                   AND parent.template_account_id = t.parent_template_id
                   AND parent.company_id = child.company_id
@@ -143,7 +163,7 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
             // Jika sudah ada COA, jangan install lagi
             if (count != null && count > 0) {
                 throw new IllegalArgumentException(
-                        "Chart of Accounts untuk perusahaan ini sudah di-install");
+                        "Chart of Accounts sudah di-install");
             }
 
             int insertedRows = jdbcTemplate.update(insertSql, params);
@@ -156,15 +176,13 @@ public class ChartOfAccountRepositoryImpl implements ChartOfAccountsRepository {
         }
     }
 
-    @Override
     public int save(ChartOfAccounts account) {
-        // TODO Auto-generated method stub
+
         return 0;
     }
 
-    @Override
     public int update(ChartOfAccounts account) {
-        // TODO Auto-generated method stub
+
         return 0;
     }
 

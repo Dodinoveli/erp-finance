@@ -19,8 +19,8 @@ public class BankAccountsService {
         this.repository = repository;
     }
 
-    public BankAccounts findDetailById(UUID id) {
-        return repository.findDetailById(id);
+    public BankAccounts findDetailById(UUID bankAccountId, UUID companyId) {
+        return repository.findDetailById(bankAccountId, companyId);
     }
 
     @Transactional
@@ -38,14 +38,14 @@ public class BankAccountsService {
             response.setBankAccountId(bac.getBankAccountId());
             response.setAccountCode(bac.getAccountCode());
             response.setAccountName(bac.getAccountName());
-            response.setAccountType(bac.getAccountType());
-            response.setBankName(bac.getBankName());
-            response.setBankBranch(bac.getBankBranch());
-            response.setAccountNumber(bac.getAccountNumber());
-            response.setAccountHolder(bac.getAccountHolder());
-            response.setIsActive(bac.getIsActive());
+            response.setOpeningBalance(bac.getOpeningBalance());
+            // private String parentAccountCode;
+            // private String parentAccountName;
+            // private String childAccountCode;
+            // private String childAccountName;
             accounts.setAccountId(bac.getAccountId());
             accounts.setAccountName(bac.getAccountName());
+            accounts.setParentAccountCode(bac.getParentAccountCode());
             response.setCoa(bac.getCoa());
             responseList.add(response);
         }
@@ -58,7 +58,6 @@ public class BankAccountsService {
         accounts.setBankAccountId(Generators.timeBasedEpochRandomGenerator().generate());
         accounts.setAccountCode(request.getAccountCode());
         accounts.setAccountName(request.getAccountName());
-        accounts.setAccountType(request.getAccountType());
         accounts.setBankName(request.getBankName());
         accounts.setBankBranch(request.getBankBranch());
         accounts.setAccountNumber(request.getAccountNumber());
@@ -87,7 +86,7 @@ public class BankAccountsService {
 
         accounts.setAccountCode(request.getAccountCode());
         accounts.setAccountName(request.getAccountName());
-        accounts.setAccountType(request.getAccountType());
+        // accounts.setAccountType(request.getAccountType());
         accounts.setBankName(request.getBankName());
         accounts.setBankBranch(request.getBankBranch());
         accounts.setAccountNumber(request.getAccountNumber());
@@ -111,14 +110,13 @@ public class BankAccountsService {
         return accounts;
     }
 
-    // mengambil dan menampilkan  kategori akun Kas dan bank bedasarkan companies id 
+    // mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
     @Transactional
-    public List<ChartOfAccountsResponse>findCashAndBankAccountsByCompanyId(UUID companyId){
-            List<ChartOfAccounts> coaList = repository.findCashAndBankAccountsByCompanyId(companyId);
-            List<ChartOfAccountsResponse> responseList = new ArrayList<>();
-            for (ChartOfAccounts coa : coaList) {
-                ChartOfAccountsResponse response =
-                new ChartOfAccountsResponse(coa);
+    public List<ChartOfAccountsResponse> findCashAndBankAccountsByCompanyId(UUID companyId) {
+        List<ChartOfAccounts> coaList = repository.findCashAndBankAccountsByCompanyId(companyId);
+        List<ChartOfAccountsResponse> responseList = new ArrayList<>();
+        for (ChartOfAccounts coa : coaList) {
+            ChartOfAccountsResponse response = new ChartOfAccountsResponse(coa);
             responseList.add(response);
         }
         return responseList;
@@ -129,23 +127,19 @@ public class BankAccountsService {
         List<ChartOfAccounts> coaList = repository.findCoaByparentId(companyId, parentId);
         System.out.println("Keyword pencarian ========== " + parentId);
         List<ChartOfAccountsResponse> responseList = new ArrayList<>();
-            if (parentId==null) {
-                if (coaList.isEmpty()) {
-                    return Collections.emptyList();
-                }
-            } else {
+        if (parentId == null) {
+            if (coaList.isEmpty()) {
+                return Collections.emptyList();
+            }
+        } else {
 
-                for (ChartOfAccounts coa : coaList) {
-                ChartOfAccountsResponse response =
-                new ChartOfAccountsResponse(coa);
+            for (ChartOfAccounts coa : coaList) {
+                ChartOfAccountsResponse response = new ChartOfAccountsResponse(coa);
                 responseList.add(response);
             }
         }
 
         return responseList;
     }
-
-
-    
 
 }

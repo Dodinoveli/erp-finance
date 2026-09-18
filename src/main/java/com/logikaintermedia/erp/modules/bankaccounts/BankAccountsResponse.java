@@ -13,7 +13,6 @@ public class BankAccountsResponse {
     private UUID bankAccountId;
     private String accountCode;
     private String accountName;
-    private String accountType;
     private String bankName;
     private String bankBranch;
     private String accountNumber;
@@ -31,4 +30,9 @@ public class BankAccountsResponse {
     private OffsetDateTime deletedAt;
     private String name;
 
+    private String parentAccountCode;
+    private String parentAccountName;
+    private String childAccountCode;
+    private String childAccountName;
+    
 }

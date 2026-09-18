@@ -87,7 +87,8 @@
       </button>
       <div class="sub">
         <a th:href="@{/bankaccount}" hx-get="/bankaccount" hx-target="#page-content" hx-push-url="true"
-          hx-indicator="#loading">Daftar Kas & Bank</a>
+          hx-indicator="#loading">Kas & Bank</a>
+        <a href="#">Setoran Modal</a>
         <a href="#">Penerimaan Kas</a>
         <a href="#">Pengeluaran Kas</a>
         <a href="#">Daftar Piutang</a>
@@ -100,11 +101,10 @@
         <i class="bi bi-journal-text"></i> Akuntansi <span class="chev">›</span>
       </button>
       <div class="sub">
-        <a th:href="@{/chartofaccountstemplates}"
-          onclick="event.preventDefault(); library.navigate('/chartofaccountstemplates')">
+        <a th:href="@{/coatemplates}" onclick="event.preventDefault(); library.navigate('/coatemplates')">
           Coa Template
         </a>
-        <!-- <a th:href="@{/accounttemplates}">Chart of Accounts (COA)</a> -->
+        <a th:href="@{/coa}" onclick="event.preventDefault(); library.navigate('/coa')">Chart of Accounts</a>
         <!-- <a th:href="@{/chartofaccounts}">COA</a> -->
         <!-- <a th:href="@{/chartofaccounts}">Mapping COA</a> -->
         <a href="#">Jurnal Umum</a>
@@ -149,8 +149,8 @@
           hx-indicator="#loading">Kode
           Dokumen</a>
 
-          <a th:href="@{/}" hx-get="/" hx-target="#page-content" hx-push-url="true"
-          hx-indicator="#loading">Mapping Akun</a>
+        <a th:href="@{/}" hx-get="/" hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">Mapping
+          Akun</a>
       </div>
     </li>
   </ul>

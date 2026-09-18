@@ -13,7 +13,6 @@ public class BankAccounts {
     private UUID bankAccountId;
     private String accountCode;
     private String accountName;
-    private String accountType;
     private String bankName;
     private String bankBranch;
     private String accountNumber;
@@ -23,15 +22,21 @@ public class BankAccounts {
     private Boolean isDefault = false;
     private Boolean isActive = true;
     private UUID companyId;
-    
+
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
     private UUID userId;
     private OffsetDateTime deletedAt;
 
-
     // relasi ke tabel joa
     private UUID accountId;
     // hasil json
-    private  ChartOfAccounts coa;
+    private ChartOfAccounts coa;
+
+    private String parentAccountCode;
+    private String parentAccountName;
+    private String childAccountCode;
+    private String childAccountName;
+
+
 }

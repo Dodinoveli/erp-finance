@@ -8,7 +8,7 @@ const bankAccountNew = {
     bindEvents: function () {
         const self = this;
         self.showCoa();
-        const accountType = document.getElementById("account_type");
+        const accountId = document.getElementById("account_id");
         const bankName = document.getElementById("bank_name");
         const bankBranch = document.getElementById("bank_branch");
         const accountNumber = document.getElementById("account_number");
@@ -26,8 +26,8 @@ const bankAccountNew = {
             console.warn("Elemen #formBankAccount tidak ditemukan di DOM saat init!");
         }
 
-        if (accountType) {
-            accountType.addEventListener("change", function () {
+        if (accountId) {
+            accountId.addEventListener("change", function () {
                 let txt = this.options[this.selectedIndex].text;
                 let parentId = this.value;
                 console.log("Nilai txt ", txt)
@@ -68,7 +68,7 @@ const bankAccountNew = {
     },
 
     showCoa: async function () {
-        const url = "/api/v1/bankaccounts/find-cash-an-bank-accounts-by-company-id";
+        const url = "/api/v1/bankaccounts/find-cash-and-bank-accounts-by-company-id";
         try {
             // const params = new URLSearchParams({
             // keyword: keyword,
@@ -80,13 +80,13 @@ const bankAccountNew = {
 
             const result = await response.json();
             if (result.status === "success") {
-                const selectElement = document.getElementById('account_type');
+                const selectElement = document.getElementById('account_id');
                 selectElement.innerHTML = '<option value="">-- Pilih Tipe Akun --</option>';
                 const coaList = result.data;
                 coaList.forEach(ac => {
                     const option = document.createElement('option');
-                    option.value = ac.accountId;
-                    option.textContent = ac.accountName;
+                    option.value = ac.childAccountId;
+                    option.textContent = ac.childAccountCode + '-' + ac.childAccountName;
                     selectElement.appendChild(option);
                 });
             }
@@ -108,7 +108,7 @@ const bankAccountNew = {
 
             const result = await response.json();
             if (result.status === "success") {
-                const selectElement = document.getElementById('account_id');
+                const selectElement = document.getElementById('account_id_detail');
                 selectElement.innerHTML = '<option value="">-- Pilih Sub Akun --</option>';
                 const coaList = result.data;
                 coaList.forEach(ac => {

@@ -5,19 +5,22 @@ export function initBankAccountList() {
         paging: false,
         ordering: false,
         processing: true,
-        serverSide: true,
+        serverSide: false,
+
         columnDefs: [
             { targets: 0, width: '50px' },   // Kode
-            { targets: 1, width: '200px' },  // Nama
-            { targets: 2, width: '120px' },  // Kontak
+            { targets: 1, width: '120px' },  // BankAccount
             {
-                targets: 3, width: '120px', type: 'string',
+                targets: 2, width: '100px', type: 'string',
                 className: 'text-start',
                 orderable: false
-            }, // telp
-            { targets: 4, width: '150px' },  // email
-            { targets: 5, width: '100px' },  // status
-            { targets: 6, width: '60px' },  // aksi
+            },  // Coa
+            {
+                targets: 3, width: '120px'
+            }, // parent
+            { targets: 4, width: '120px' },  // Aksi
+            { targets: 5, width: '60px' }  // Aksi
+
         ],
         layout: {
             topStart: {
@@ -41,12 +44,6 @@ export function initBankAccountList() {
         ajax: async function (data, callback) {
             console.log("DATATABLES DATA:", data);
             const keyword = data.search?.value?.trim() || "";
-            // const params = new URLSearchParams({
-            //     draw: data.draw,
-            //     keyword: data.search?.value?.trim() || "",
-            // });
-
-            // console.log("KEYWORD JS =", keyword);
             try {
                 const response = await fetch(`/api/v1/bankaccounts`, {
                     credentials: "include",
@@ -75,29 +72,34 @@ export function initBankAccountList() {
         columns: [
             { data: "accountCode" },
             { data: "accountName" },
-            { data: "bankName" },
-            { data: "accountNumber" },
-            { data: "normalBalance" },
+            { data: "openingBalance" },
             {
-                data: "isActive",
-                render: function (data) {
-                    return data
-                        ? '<span class="badge bg-success">Aktif</span>'
-                        : '<span class="badge bg-secondary">Tidak Aktif</span>';
-                },
+                data: null,
+                render: (data, type, row) =>
+                    `${row.coa.childAccountCode} - ${row.coa.childAccountName}`
             },
+            {
+                data: null,
+                render: (data, type, row) =>
+                    `${row.coa.parentAccountCode} - ${row.coa.parentAccountName}`
+            },
+            // {
+            //     data: "isActive",
+            //     render: function (data) {
+            //         return data
+            //             ? '<span class="badge bg-success">Aktif</span>'
+            //             : '<span class="badge bg-secondary">Tidak Aktif</span>';
+            //     },
+            // },
             {
                 data: null,
                 orderable: false,
                 searchable: false,
                 render: function (data, type, row) {
                     return ` 
-                <a href="/client/detail/${row.clientId}"
-                  hx-get="/client/detail/${row.clientId}"
-                  hx-target="#page-content"
-                  hx-push-url="true"
-                  hx-indicator="#loading"
-                  class="btn btn-primary btn-sm"
+                <a href="/bankaccount/detail/${row.bankAccountId}"
+                onclick="event.preventDefault(); library.navigate('/bankaccount/detail/${row.bankAccountId}')"
+                  class="detail-actions-btn"
                   title="Lihat Detail"
                   style="text-decoration:none">
                     <i class="bi bi-eye"></i>
@@ -117,8 +119,7 @@ export function initBankAccountList() {
             `
                     <a href="/bankaccount/new"
                         class="btn btn-primary btn-sm ms-2 d-inline-flex align-items-center justify-content-center btn-add"
-                        hx-get="/bankaccount/new"
-                        hx-target="#page-content" hx-push-url="true" hx-indicator="#loading">
+                        onclick="event.preventDefault(); library.navigate('/bankaccount/new')">
                     <i class="bi bi-plus"></i>
                     </a>`,
         );

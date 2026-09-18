@@ -1,112 +1,77 @@
 <!DOCTYPE html>
-<div th:replace="~{fragments/head :: head('Detail Akun Bank')}"></div>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main}">
 
 <body>
-    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
-    <main class="main">
-        <div th:replace="~{fragments/navbar :: navbar}"></div>
-        <div class="detail-container">
-            <div class="detail-header">
-                <div class="detail-heading">
-                    <div class="detail-title">
-                        <h1 th:text="${accounts.accountName}">
-                        </h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="detail-card">
-                <div class="card-heading">
-                    <div class="card-heading-icon">👤</div>
-                    <h2>
-                        Informasi Akun
-                    </h2>
-                </div>
-
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">
-                            Kode
-                        </span>
-                        <div class="info-value" th:text="${accounts.accountCode}"></div>
-                    </div>
-
-                    <div class="info-item">
-                        <span class="info-label">
-                            Tipe Akun
-                        </span>
-                        <div class="info-value" th:text="${accounts.accountType}"></div>
-                    </div>
-
-
-
-                    <div class="info-item">
-                        <span class="info-label">
-                            Status
-                        </span>
-
-                        <div class="info-value normal">
-                            <b> <span th:if="${accounts.isActive}" class="status-aktif">Aktif</span></b>
-                            <b><span th:unless="${accounts.isActive}" class="status-tidak-aktif">Nonaktif</span></b>
+    <div layout:fragment="content" th:fragment="content">
+        <main class="main">
+            <div class="detail-container p-2">
+                <!-- <div class="detail-header">
+                    <div class="detail-heading">
+                        <div class="detail-title">
+                            <h1 th:text="${accounts.accountName}">
+                            </h1>
                         </div>
                     </div>
+                </div> -->
+
+
+                <div class="detail-card">
+                    <div class="table-responsive">
+                        <table class="table table-sm mb-0 align-middle">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 180px;">Kode</th>
+                                    <td style="width: 20px;">:</td>
+                                    <td th:text="${accounts.accountCode}">-</td>
+                                </tr>
+
+                                <tr>
+                                    <th>Bank Account</th>
+                                    <td>:</td>
+                                    <td th:text="${accounts.accountName}">-</td>
+                                </tr>
+
+                                <tr>
+                                    <th>COA</th>
+                                    <td>:</td>
+                                    <td>
+                                        <span th:text="${accounts.coa.childAccountCode}">-</span>
+                                        -
+                                        <span th:text="${accounts.coa.childAccountName}">-</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Parent</th>
+                                    <td>:</td>
+                                    <td>
+                                        <span th:text="${accounts.coa.parentAccountCode}">-</span>
+                                        -
+                                        <span th:text="${accounts.coa.parentAccountName}">-</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
-            </div>
+                <div class="detail-actions">
+                    <button type="button" class="btn btn-light" th:data-url="@{/bankaccount}"
+                        onclick="library.navigate(this.dataset.url)">
+                        <i class="bi bi-arrow-left"></i> Kembali
+                    </button>
 
-            <div class="detail-card">
-                <div class="card-heading">
-                    <div class="card-heading-icon">
-                        📄
-                    </div>
-                    <h2>
-                        Informasi Bank
-                    </h2>
-                </div>
-
-
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">
-                            Nama Bank
-                        </span>
-                        <div class="info-value" th:text="${accounts.bankName ?: '-'}"></div>
-                    </div>
-
-                    <div class="info-item">
-                        <span class="info-label">
-                            Rekening Bank
-                        </span>
-                        <div class="info-value" th:text="${accounts.accountNumber ?: '-'}"></div>
-                    </div>
-
-
-                    <div class="info-item">
-                        <span class="info-label">
-                            Pemilik
-                        </span>
-                        <div class="info-value" th:text="${accounts.accountHolder ?: '-'}"></div>
-                    </div>
-
+                    <a th:href=" @{/bankaccount/edit/{id}(id=${accounts.bankAccountId})}" class="btn btn-warning"><i
+                            class="bi bi-pencil-square"></i> Edit
+                    </a>
+                    <button type="button" class="btn btn-danger">
+                        <i class="bi bi-eye-slash"></i> Nonaktifkan
+                    </button>
                 </div>
             </div>
-
-            <div class="detail-actions">
-                <a th:href="@{/bankaccount}" class="btn btn-light"> <i class="bi bi-arrow-left"></i> Kembali ke
-                    Daftar
-                </a>
-                <a th:href="@{/bankaccount/edit/{id}(id=${accounts.bankAccountId})}" class="btn btn-warning"><i
-                        class="bi bi-pencil-square"></i> Edit
-                </a>
-                <button type="button" class="btn btn-danger">
-                    <i class="bi bi-eye-slash"></i> Nonaktifkan
-                </button>
-            </div>
-        </div>
-    </main>
-    <div th:replace="~{fragments/footer :: footer}">
+        </main>
     </div>
-    <script th:src="@{/js/utility/dashboard.js}"></script>
 </body>
 
 </html>
