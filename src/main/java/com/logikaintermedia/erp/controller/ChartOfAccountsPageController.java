@@ -56,4 +56,40 @@ public class ChartOfAccountsPageController {
         return "content/chartofaccounts/detail";
     }
 
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping("/coa/edit/{id}")
+    public String edit(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+            HttpServletResponse response) {
+        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
+        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
+        String title = "Edit Chart Of Accounts";
+        model.addAttribute("pageTitle", title);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("parent", parent);
+        if ("true".equals(hxRequest)) {
+            response.setHeader("X-Page-Title", title);
+            return "content/chartofaccounts/edit :: content";
+        }
+        return "content/chartofaccounts/edit";
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping("/coa/add/{id}")
+    public String add(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+            HttpServletResponse response) {
+        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
+        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
+        String title = "Tambah Chart Of Accounts";
+        model.addAttribute("pageTitle", title);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("parent", parent);
+        if ("true".equals(hxRequest)) {
+            response.setHeader("X-Page-Title", title);
+            return "content/chartofaccounts/add :: content";
+        }
+        return "content/chartofaccounts/add";
+    }
+
 }

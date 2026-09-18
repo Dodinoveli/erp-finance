@@ -12,10 +12,11 @@
                         <div class="row g-3 align-items-center">
                             <div class="col-12">
                                 <div class="d-flex gap-2 align-items-center flex-wrap">
-                                    <button type="button" class="btn btn-light" th:data-url="@{/coa}"
-                                        onclick="library.navigate(this.dataset.url)">
+                                    <a href="javascript:void(0)" class="btn btn-warning"
+                                        th:data-url="@{/coa/detail/{id}(id=${parent.accountId})}"
+                                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
                                         <i class="bi bi-arrow-left"></i> Kembali
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                             <div class="col">
@@ -36,10 +37,17 @@
                         </thead>
                         <tbody id="accountRows">
                             <tr th:each="account : ${accounts}">
-                                <td th:text="${account.accountCode}">
+                                <td>
+                                    <input type="hidden" name="accountId" th:value="${account.accountId}">
+
+                                    <input type="text" name="accountCode"
+                                        class="form-control form-control-sm  bg-secondary text-white"
+                                        th:value="${account.accountCode}" readonly>
+
                                 </td>
-                                <!-- <td th:text="${account.accountName}"></td> -->
-                                <td th:text="${account.accountName}">
+                                <td>
+                                    <input type="text" class="form-control form-control-sm"
+                                        th:value="${account.accountName}" name="accountName">
                                 </td>
                             </tr>
                         </tbody>
@@ -47,21 +55,9 @@
 
                 </div>
                 <div class="detail-actions">
-                    <!-- <button type="button" class="btn btn-light" th:data-url="@{/client}"
-                        onclick="library.navigate(this.dataset.url)">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </button> -->
-                    <a href="javascript:void(0)" class="btn btn-warning"
-                        th:data-url="@{/coa/edit/{id}(id=${parent.accountId})}"
-                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-
-                    <a href="javascript:void(0)" class="btn btn-primary"
-                        th:data-url="@{/coa/add/{id}(id=${parent.accountId})}"
-                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                        <i class="bi bi-plus"></i> Baru
-                    </a>
+                    <button type="button" class="btn btn-primary">
+                        <i class="bi bi-floppy"></i> Simpan
+                    </button>
                 </div>
             </div>
         </main>
