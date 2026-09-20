@@ -1,7 +1,6 @@
 package com.logikaintermedia.erp.modules.company;
 
 import java.util.UUID;
-
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
@@ -48,12 +47,12 @@ public class CompanyRepository {
         return jdbcTemplate.update(sql, toParams(model));
     }
 
-    public int insertCompanySequences(UUID companyId) {
-        String[] types = { "CLIENT", "SUPPLIER", "PROJECT", "INVOICE", "PAYMENT" };
+    public int insertCompanySequences(UUID id, UUID companyId) {
+        String[] types = { "CLIENT", "SUPPLIER", "PROJECT", "INVOICE", "PAYMENT", "COA" };
 
         String seqSql = """
                 INSERT INTO company_sequences (id, company_id, sequence_type, current_value)
-                VALUES (gen_random_uuid(), :companyId, :sequenceType, 0)
+                VALUES (:id, :companyId, :sequenceType, 0)
                 """;
 
         int total = 0;

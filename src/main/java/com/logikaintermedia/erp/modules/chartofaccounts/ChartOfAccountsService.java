@@ -59,16 +59,22 @@ public class ChartOfAccountsService {
         return repository.initializeCompanyCoa(companyId);
     }
 
+    // @Transactional
+    // public int[] save(List<ChartOfAccounts> accounts, UUID companyId) {
+
+    // }
+
     @Transactional
-    public int save(ChartOfAccounts account) {
-
-        return 0;
-    }
-
-    @Transactional
-    public int update(ChartOfAccounts account) {
-
-        return 0;
+    public int[] update(List<ChartOfAccounts> accounts, UUID companyId) {
+        accounts.forEach(account -> account.setCompanyId(companyId));
+        int[] result = repository.updateBatch(accounts);
+        // memastikan setiap row harus berhasil
+        for (int rows : result) {
+            if (rows <= 0) {
+                throw new IllegalArgumentException("Gagal update akun");
+            }
+        }
+        return result;
     }
 
 }

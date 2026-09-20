@@ -2,7 +2,6 @@ package com.logikaintermedia.erp.modules.chartofaccountstemplates;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
