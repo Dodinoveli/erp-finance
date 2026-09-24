@@ -99,6 +99,7 @@ public class BankAccountsRepository {
                     ba.deleted_at,
                     parent.account_code AS parent_account_code,
                     parent.account_name AS parent_account_name,
+                    child.account_id AS child_account_id,
                     child.account_code AS child_account_code,
                     child.account_name AS child_account_name
                 FROM bank_accounts ba
@@ -140,6 +141,7 @@ public class BankAccountsRepository {
                         ba.deleted_at,
                         parent.account_code AS parent_account_code,
                         parent.account_name AS parent_account_name,
+                        child.account_id AS child_account_id,
                         child.account_code AS child_account_code,
                         child.account_name AS child_account_name
                     FROM bank_accounts ba
@@ -158,12 +160,13 @@ public class BankAccountsRepository {
     }
 
     // mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
+    // untuk form simpan
     public List<ChartOfAccounts> findCashAndBankAccountsByCompanyId(UUID id) {
         String sql = """
                 SELECT
                     parent.account_id,
                     parent.account_code,
-                    parent.account_name,
+                    parent.account_name as account_name,
 
                     child.account_id AS child_account_id,
                     child.account_code AS child_account_code,
@@ -176,7 +179,7 @@ public class BankAccountsRepository {
 
                 WHERE parent.account_name IN ('KAS', 'BANK')
 
-                AND parent.company_id = :companyId
+                AND parent.company_id = :companyId order by parent.account_name asc, child.account_code asc
                                 """;
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("companyId", id);
@@ -186,24 +189,25 @@ public class BankAccountsRepository {
     }
 
     // mengambil COA bedasarkan parent_id saat combok di klik
-    public List<ChartOfAccounts> findCoaByparentId(UUID companyId, UUID parentId) {
-        String sql = """
-                SELECT
-                    c.*,
-                    p.account_code AS parent_code,
-                    p.account_name AS parent_name
-                FROM chart_of_accounts c
-                LEFT JOIN chart_of_accounts p
-                    ON p.account_id = c.parent_id
-                WHERE c.parent_id = :parentId
-                and c.company_id = :companyId
-                 """;
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("companyId", companyId);
-        params.addValue("parentId", parentId);
-        return namedParameterJdbcTemplate.query(sql,
-                params,
-                new BeanPropertyRowMapper<>(ChartOfAccounts.class));
-    }
+    // public List<ChartOfAccounts> findCoaByparentId(UUID companyId, UUID parentId)
+    // {
+    // String sql = """
+    // SELECT
+    // c.*,
+    // p.account_code AS parent_code,
+    // p.account_name AS parent_name
+    // FROM chart_of_accounts c
+    // LEFT JOIN chart_of_accounts p
+    // ON p.account_id = c.parent_id
+    // WHERE c.parent_id = :parentId
+    // and c.company_id = :companyId
+    // """;
+    // MapSqlParameterSource params = new MapSqlParameterSource();
+    // params.addValue("companyId", companyId);
+    // params.addValue("parentId", parentId);
+    // return namedParameterJdbcTemplate.query(sql,
+    // params,
+    // new BeanPropertyRowMapper<>(ChartOfAccounts.class));
+    // }
 
 }

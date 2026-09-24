@@ -68,8 +68,8 @@ public class CompanyService {
             throw new RuntimeException("Gagal menyimpan user");
         }
 
-        UUID id = Generators.timeBasedEpochGenerator().generate();
-        repository.insertCompanySequences(id, companyId);
+        // UUID id = Generators.timeBasedEpochGenerator().generate();
+        // repository.insertCompanySequences(id, companyId);
         return result;
     }
 

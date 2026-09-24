@@ -31,12 +31,14 @@ public class BankAccountsMapper implements RowMapper<BankAccounts> {
         account.setIsActive(rs.getBoolean("is_active"));
         account.setCompanyId((UUID) rs.getObject("company_id"));
         account.setAccountId((UUID) rs.getObject("account_id"));
+
         ChartOfAccounts coa = new ChartOfAccounts();
         coa.setParentAccountCode(rs.getString("parent_account_code"));
         coa.setParentAccountName(rs.getString("parent_account_name"));
         coa.setChildAccountCode(rs.getString("child_account_code"));
+        coa.setChildAccountId((UUID) rs.getObject("child_account_id"));
         coa.setChildAccountName(rs.getString("child_account_name"));
-      
+
         account.setCoa(coa);
         account.setUserId((UUID) rs.getObject("user_id"));
         account.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));

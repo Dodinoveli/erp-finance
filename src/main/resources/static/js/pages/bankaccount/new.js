@@ -1,5 +1,5 @@
 
-const bankAccountNew = {
+var bankAccountNew = {
 
     init: function () {
         this.bindEvents();
@@ -14,55 +14,91 @@ const bankAccountNew = {
         const accountNumber = document.getElementById("account_number");
         const accountHolder = document.getElementById("account_holder");
 
-        const form = document.getElementById("formBankAccount");
-        if (form) {
-            console.log("Form formBankAccount ditemukan, memasang event listener...");
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                console.log("Submit terdeteksi!");
-                self.createBankAccount(this);
-            });
-        } else {
-            console.warn("Elemen #formBankAccount tidak ditemukan di DOM saat init!");
-        }
+        const form = document.getElementById("formBankAccountNew");
+        if (form.dataset.bound === "true") return;
+        form.dataset.bound = "true";
+
+        console.log("Form formBankAccount ditemukan, memasang event listener...");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            console.log("Submit terdeteksi!");
+            self.createBankAccount(this);
+        });
+
 
         if (accountId) {
             accountId.addEventListener("change", function () {
                 let txt = this.options[this.selectedIndex].text;
                 let parentId = this.value;
-                console.log("Nilai txt ", txt)
-                if (parentId !== null && txt === "KAS") {
+                console.log("Nilai txt  : ", txt)
+                console.log("parentId :  ", parentId)
+                if (parentId !== null && this.options[this.selectedIndex].dataset.accountName === "KAS") {
+                    console.log("ini kas")
                     bankName.readOnly = true;
-                    bankName.style.background = "#d9d1d1";
+                    bankName.classList.add("input-readonly");
+
                     bankBranch.readOnly = true;
-                    bankBranch.style.background = "#d9d1d1";
+                    bankBranch.classList.add("input-readonly");
 
                     accountNumber.readOnly = true;
-                    accountNumber.style.background = "#d9d1d1";
+                    accountNumber.classList.add("input-readonly");
 
                     accountHolder.readOnly = true;
-                    accountHolder.style.background = "#d9d1d1";
+                    accountHolder.classList.add("input-readonly");
 
                     // kosongkan field
                     document.getElementById("bank_name").value = "";
                     document.getElementById("bank_branch").value = "";
                     document.getElementById("account_number").value = "";
                     document.getElementById("account_holder").value = "";
+                    document.querySelector('[name="accountType"]').value = this.options[this.selectedIndex].dataset.accountName;
                 } else {
+                    console.log("ini bank")
                     bankName.readOnly = false;
-                    bankName.style.background = "#ffff";
+                    bankName.classList.add("input-readonly");
 
                     bankBranch.readOnly = false;
-                    bankBranch.style.background = "#ffff";
+                    bankBranch.classList.add("input-readonly");
 
                     accountNumber.readOnly = false;
-                    accountNumber.style.background = "#ffff";
+                    accountNumber.classList.add("input-readonly");
 
                     accountHolder.readOnly = false;
-                    accountHolder.style.background = "#ffff";
+                    accountHolder.classList.add("input-readonly");
+                    document.querySelector('[name="accountType"]').value = this.options[this.selectedIndex].dataset.accountName;
                 }
+                // if (parentId !== null && txt === "KAS") {
+                //     bankName.readOnly = true;
+                //     bankName.style.background = "#d9d1d1";
+                //     bankBranch.readOnly = true;
+                //     bankBranch.style.background = "#d9d1d1";
 
-                self.showSubCoa(parentId);
+                //     accountNumber.readOnly = true;
+                //     accountNumber.style.background = "#d9d1d1";
+
+                //     accountHolder.readOnly = true;
+                //     accountHolder.style.background = "#d9d1d1";
+
+                //     // kosongkan field
+                //     document.getElementById("bank_name").value = "";
+                //     document.getElementById("bank_branch").value = "";
+                //     document.getElementById("account_number").value = "";
+                //     document.getElementById("account_holder").value = "";
+                // } else {
+                //     bankName.readOnly = false;
+                //     bankName.style.background = "#ffff";
+
+                //     bankBranch.readOnly = false;
+                //     bankBranch.style.background = "#ffff";
+
+                //     accountNumber.readOnly = false;
+                //     accountNumber.style.background = "#ffff";
+
+                //     accountHolder.readOnly = false;
+                //     accountHolder.style.background = "#ffff";
+                // }
+
+                // self.showSubCoa(parentId);
             });
         }
     },
@@ -86,6 +122,7 @@ const bankAccountNew = {
                 coaList.forEach(ac => {
                     const option = document.createElement('option');
                     option.value = ac.childAccountId;
+                    option.dataset.accountName = ac.accountName;
                     option.textContent = ac.childAccountCode + '-' + ac.childAccountName;
                     selectElement.appendChild(option);
                 });
@@ -95,33 +132,33 @@ const bankAccountNew = {
         }
     },
 
-    showSubCoa: async function (parentId) {
-        const url = "/api/v1/bankaccounts/find-coa-byparent-id/search";
-        try {
-            const params = new URLSearchParams({
-                parentId: parentId,
-            });
-            const response = await fetch(`${url}?${params}`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+    // showSubCoa: async function (parentId) {
+    //     const url = "/api/v1/bankaccounts/find-coa-byparent-id/search";
+    //     try {
+    //         const params = new URLSearchParams({
+    //             parentId: parentId,
+    //         });
+    //         const response = await fetch(`${url}?${params}`);
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status: ${response.status}`);
+    //         }
 
-            const result = await response.json();
-            if (result.status === "success") {
-                const selectElement = document.getElementById('account_id_detail');
-                selectElement.innerHTML = '<option value="">-- Pilih Sub Akun --</option>';
-                const coaList = result.data;
-                coaList.forEach(ac => {
-                    const option = document.createElement('option');
-                    option.value = ac.accountId;
-                    option.textContent = ac.accountName;
-                    selectElement.appendChild(option);
-                });
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    },
+    //         const result = await response.json();
+    //         if (result.status === "success") {
+    //             const selectElement = document.getElementById('account_id_detail');
+    //             selectElement.innerHTML = '<option value="">-- Pilih Sub Akun --</option>';
+    //             const coaList = result.data;
+    //             coaList.forEach(ac => {
+    //                 const option = document.createElement('option');
+    //                 option.value = ac.accountId;
+    //                 option.textContent = ac.accountName;
+    //                 selectElement.appendChild(option);
+    //             });
+    //         }
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // },
 
     createBankAccount: async function (formEl) {
         const formData = new FormData(formEl);

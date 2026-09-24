@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.logikaintermedia.erp.jwt.AuthUserPrincipal;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccountsBatchRequest;
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccountsRequest;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccountsService;
-
 import groovy.util.logging.Slf4j;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,24 +81,6 @@ public class ChartOfAccountsPageController {
         return "content/chartofaccounts/edit";
     }
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/coa/add/{id}")
-    public String add(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
-        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-        String title = "Tambah Chart Of Accounts";
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("parent", parent);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/chartofaccounts/add :: content";
-        }
-        return "content/chartofaccounts/add";
-    }
-
     // untuk update dengan form langsung tanpa api
     @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PostMapping("coa/update")
@@ -124,6 +105,48 @@ public class ChartOfAccountsPageController {
                 "HX-Trigger",
                 "coaUpdated");
         return "content/chartofaccounts/edit :: content";
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @GetMapping("/coa/add/{id}")
+    public String add(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+            HttpServletResponse response) {
+        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
+        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
+        String title = "Tambah Chart Of Accounts";
+        model.addAttribute("pageTitle", title);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("parent", parent);
+        if ("true".equals(hxRequest)) {
+            response.setHeader("X-Page-Title", title);
+            return "content/chartofaccounts/add :: content";
+        }
+        return "content/chartofaccounts/add";
+    }
+
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @PostMapping("coa/add")
+    public String saveBatch(@ModelAttribute ChartOfAccountsRequest request,
+            @AuthenticationPrincipal AuthUserPrincipal principal, RedirectAttributes redirectAttributes, Model model,
+            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+            HttpServletResponse response) {
+        service.save(request, principal.getCompanyId());
+        UUID parentId = request.getParentId();
+        List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
+        ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
+
+        String title = "Tambah Chart Of Accounts";
+        model.addAttribute("pageTitle", title);
+        model.addAttribute("accounts", accounts);
+        model.addAttribute("parent", parent);
+        response.setHeader("X-Page-Title", title);
+        log.info("Parentid " + parentId);
+        // Kirim event ke HTMX
+        response.setHeader(
+                "HX-Trigger",
+                "coaAdd");
+        return "content/chartofaccounts/add :: content";
     }
 
 }

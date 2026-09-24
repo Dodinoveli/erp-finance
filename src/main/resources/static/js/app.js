@@ -13,10 +13,10 @@ import { initSupplirEdit } from "./pages/supplier/edit.js";
 // 2. js bankaccount
 import { initBankAccountList } from "./pages/bankaccount/list.js";
 import { initBankAccountNew } from "./pages/bankaccount/new.js";
-// import { initBankAccountEdit } from "./pages/bankaccount/edit.js";
+import { initBankAccountEdit } from "./pages/bankaccount/edit.js";
 // import { initBankAccountDetail } from "./pages/bankaccount/detail.js";
 
-// 3. proyek 
+// 3. proyek  
 import { initProjectList } from "./pages/project/list.js";
 import { initProjectNew } from "./pages/project/new.js";
 import { initProjectEdit } from "./pages/project/edit.js";
@@ -73,10 +73,13 @@ function initPage() {
         initBankAccountList();
     }
 
-    if (document.querySelector("#formBankAccount")) {
+    if (document.querySelector("#formBankAccountNew")) {
         initBankAccountNew();
     }
 
+    if (document.querySelector("#formBankAccountEdit")) {
+        initBankAccountEdit();
+    }
     // project New
     if (document.querySelector("#projectTable")) {
         initProjectList();

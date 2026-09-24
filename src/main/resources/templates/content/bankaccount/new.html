@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/main}">
+<style>
+    .input-readonly {
+        background-color: #d9d1d1 !important;
+    }
+</style>
 
 <body>
     <div layout:fragment="content" th:fragment="content">
         <main class="main">
             <div class="detail-container p-2">
-                <form id="formBankAccount">
+                <form id="formBankAccountNew">
                     <div class="card p-1">
                         <div class="card-body">
                             <div class="row g-3">
@@ -37,6 +42,7 @@
                                         </select>
                                         <small class="text-danger" id="err-accountId"></small>
                                     </div>
+                                    <input type="hidden" name="accountType">
                                 </div>
 
                             </div>

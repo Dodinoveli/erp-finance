@@ -47,24 +47,6 @@ public class CompanyRepository {
         return jdbcTemplate.update(sql, toParams(model));
     }
 
-    public int insertCompanySequences(UUID id, UUID companyId) {
-        String[] types = { "CLIENT", "SUPPLIER", "PROJECT", "INVOICE", "PAYMENT", "COA" };
-
-        String seqSql = """
-                INSERT INTO company_sequences (id, company_id, sequence_type, current_value)
-                VALUES (:id, :companyId, :sequenceType, 0)
-                """;
-
-        int total = 0;
-        for (String type : types) {
-            MapSqlParameterSource params = new MapSqlParameterSource()
-                    .addValue("companyId", companyId)
-                    .addValue("sequenceType", type);
-            total += jdbcTemplate.update(seqSql, params);
-        }
-        return total;
-    }
-
     public String companyCodeById(UUID id) {
         String sql = """
                 select

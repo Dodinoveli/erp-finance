@@ -1,5 +1,7 @@
 package com.logikaintermedia.erp.modules.chartofaccounts;
 
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,11 +14,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
-
 import com.fasterxml.uuid.Generators;
 import com.logikaintermedia.erp.modules.chartofaccountstemplates.ChartOfAccountsTemplates;
 import com.logikaintermedia.erp.modules.chartofaccountstemplates.ChartOfAccountsTemplatesMaper;
-
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -65,6 +65,7 @@ public class ChartOfAccountRepository {
                     ON p.account_id = c.parent_id
                 WHERE c.parent_id = :parentId
                 and c.company_id= :companyId
+                order by c.account_code asc
                                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("parentId", parentId)
@@ -188,15 +189,25 @@ public class ChartOfAccountRepository {
 
     public int initializeCompanyCoa(UUID companyId) {
 
+        // cek apakah coa sudah di install ? sudah : belum
         if (isCoaInstalled(companyId)) {
             throw new IllegalArgumentException(
                     "Chart of Accounts sudah di-install");
         }
 
+        // ambil coa & copy ke company
         List<ChartOfAccountsTemplates> templates = findCoaTemplates();
         int insertedRows = insertCompanyCoa(companyId, templates);
         updateParentAccounts(companyId);
 
+        // Sequence umum: sekali per company
+        insertCompanySequences(companyId);
+
+        // Sequence coa: sekali per company
+        // List<ChartOfAccounts> accounts = findCoaLevel3AccountsByCompanyId(companyId);
+        // for (ChartOfAccounts chartOfAccounts : accounts) {
+        // insertCompanySequencesCoa(companyId, chartOfAccounts.getAccountId());
+        // }
         return insertedRows;
     }
 
@@ -285,8 +296,8 @@ public class ChartOfAccountRepository {
                     :isPostable,
                     :description,
                     :sortOrder,
-                    NOW(),
-                    NOW(),
+                    :createdAt,
+                    :updatedAt,
                     :companyId
                 )
                 """;
@@ -309,6 +320,8 @@ public class ChartOfAccountRepository {
                             .addValue("isPostable", template.getIsPostable())
                             .addValue("description", template.getDescription())
                             .addValue("sortOrder", template.getSortOrder())
+                            .addValue("createdAt", OffsetDateTime.now(ZoneOffset.UTC))
+                            .addValue("updatedAt", OffsetDateTime.now(ZoneOffset.UTC))
                             .addValue("companyId", companyId));
         }
 
@@ -321,15 +334,35 @@ public class ChartOfAccountRepository {
     private int updateParentAccounts(UUID companyId) {
 
         String sql = """
+                -- 1. Update akun COA perusahaan (sebagai CHILD)
                 UPDATE public.chart_of_accounts AS child
+
+                -- 2. Isi parent_id dengan account_id milik akun PARENT
                 SET parent_id = parent.account_id
+
+                -- 3. Ambil template untuk mengetahui siapa parent-nya
+                -- dan ambil COA perusahaan sebagai PARENT
                 FROM public.chart_of_accounts_templates AS t,
                      public.chart_of_accounts AS parent
-                WHERE child.template_account_id = t.template_account_id
-                  AND parent.template_account_id = t.parent_template_id
-                  AND parent.company_id = child.company_id
-                  AND child.company_id = :companyId
-                """;
+                WHERE
+
+                -- 4. Hubungkan akun perusahaan dengan template-nya
+                -- Contoh: KAS perusahaan → Template KAS
+                child.template_account_id = t.template_account_id
+                AND
+
+                -- 5. Template memberi tahu siapa parent-nya
+                -- Contoh: Template KAS → Template ASET LANCAR
+                parent.template_account_id = t.parent_template_id
+                AND
+
+                -- 6. Pastikan parent berasal dari perusahaan yang sama
+                parent.company_id = child.company_id
+                AND
+
+                -- 7. Hanya proses COA milik perusahaan yang sedang diproses
+                child.company_id = :companyId
+                                       """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("companyId", companyId);
@@ -337,9 +370,42 @@ public class ChartOfAccountRepository {
         return jdbcTemplate.update(sql, params);
     }
 
-    public int save(ChartOfAccounts account) {
+    // hanya ambil coa level 3
+    // public List<ChartOfAccounts> findCoaLevel3AccountsByCompanyId(UUID companyId)
+    // {
+    // String sql = """
+    // select
+    // * from chart_of_accounts
+    // where chart_of_accounts.account_level = '3'
+    // and company_id = :companyId
+    // order by account_code asc
+    // """;
+    // MapSqlParameterSource params = new
+    // MapSqlParameterSource().addValue("companyId", companyId);
+    // return jdbcTemplate.query(sql, params, new
+    // BeanPropertyRowMapper<>(ChartOfAccounts.class));
+    // }
 
-        return 0;
+    // insert ke tabel companySequences dengan hanya type
+    public int insertCompanySequences(UUID companyId) {
+        String[] types = { "CLIENT", "SUPPLIER", "PROJECT", "INVOICE", "PAYMENT" };
+
+        String seqSql = """
+                INSERT INTO company_sequences (id, company_id, sequence_type, current_value)
+                VALUES (:id, :companyId, :sequenceType, :currentValue)
+                """;
+
+        int total = 0;
+        for (String type : types) {
+            UUID id = Generators.timeBasedEpochGenerator().generate();
+            MapSqlParameterSource params = new MapSqlParameterSource()
+                    .addValue("id", id)
+                    .addValue("companyId", companyId)
+                    .addValue("sequenceType", type)
+                    .addValue("currentValue", 0L);
+            total += jdbcTemplate.update(seqSql, params);
+        }
+        return total;
     }
 
     // Chart Of Accounts
@@ -362,35 +428,87 @@ public class ChartOfAccountRepository {
     public int[] saveBatch(@NonNull List<ChartOfAccounts> account) {
         String sql = """
                 INSERT INTO public.chart_of_accounts(
-                    account_id,
-                    account_code,
-                    account_name,
-                    account_type,
-                    normal_balance,
-                    parent_id,
-                    account_level,
-                    is_header,
-                    is_postable,
-                    description,
-                    sort_order,
-                    created_at,
-                    updated_at,
-                    company_id,
-                    template_account_id
+                        account_id,
+                        account_code,
+                        account_name,
+                        account_type,
+                        normal_balance,
+                        parent_id,
+                        account_level,
+                        is_header,
+                        is_postable,
+                        description,
+                        sort_order,
+                        created_at,
+                        updated_at,
+                        company_id,
+                        template_account_id
                 )
                 VALUES (
-                :accountId,
-                :accountCode,
-                :accountName,
-                :accountType, :normalBalance,
-                :parentId,
-                :accountLevel,
-                :isHeader,
-                :isPostable,
-                :description, :sortOrder, :createdAt, :updatedAt, :companyId, :templateAccountId)
-                RETURNING account_code, sort_order;
+                    :accountId,
+                    :accountCode,
+                    :accountName,
+                    :accountType,
+                    :normalBalance,
+                    :parentId,
+                    :accountLevel,
+                    :isHeader,
+                    :isPostable,
+                    :description,
+                    :sortOrder,
+                    :createdAt,
+                    :updatedAt,
+                    :companyId,
+                    NULL
+                );
                                 """;
         return jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(account));
+    }
+
+    public UUID lockParent(UUID companyId, UUID parentId) {
+        String sql = """
+                SELECT account_id
+                    FROM chart_of_accounts
+                WHERE company_id = :companyId
+                    AND account_id = :parentId
+                FOR UPDATE;
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("parentId", parentId);
+        return jdbcTemplate.queryForObject(sql, params, UUID.class);
+    }
+
+    @SuppressWarnings("null")
+    public int lastCode(UUID companyId, UUID parentId) {
+        String sql = """
+                    SELECT account_code
+                       FROM chart_of_accounts
+                    WHERE company_id = :companyId
+                         AND parent_id = :parentId
+                    ORDER BY account_code DESC
+                    LIMIT 1;
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("parentId", parentId);
+        return jdbcTemplate.queryForObject(sql, params, Integer.class);
+    }
+
+    @SuppressWarnings("null")
+    public int lastSortOrder(UUID companyId, UUID parentId) {
+        String sql = """
+                    SELECT sort_order
+                       FROM chart_of_accounts
+                    WHERE company_id = :companyId
+                         AND parent_id = :parentId
+                    ORDER BY sort_order DESC
+                    LIMIT 1;
+                """;
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("parentId", parentId);
+        return jdbcTemplate.queryForObject(sql, params, Integer.class);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.logikaintermedia.erp.modules.chartofaccounts;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.Map;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.uuid.Generators;
 
 @Service
 public class ChartOfAccountsService {
@@ -56,13 +59,9 @@ public class ChartOfAccountsService {
 
     @Transactional
     public int initializeCompanyCoa(UUID companyId) {
-        return repository.initializeCompanyCoa(companyId);
+        int result = repository.initializeCompanyCoa(companyId);
+        return result;
     }
-
-    // @Transactional
-    // public int[] save(List<ChartOfAccounts> accounts, UUID companyId) {
-
-    // }
 
     @Transactional
     public int[] update(List<ChartOfAccounts> accounts, UUID companyId) {
@@ -73,6 +72,51 @@ public class ChartOfAccountsService {
             if (rows <= 0) {
                 throw new IllegalArgumentException("Gagal update akun");
             }
+        }
+        return result;
+    }
+
+    @Transactional
+    public int[] save(ChartOfAccountsRequest requests, UUID companyId) {
+        if (requests == null || requests.getAccountName().isEmpty()) {
+            throw new IllegalArgumentException("Akun tidak boleh kosong");
+        }
+        // Misalnya semua akun dalam request ini punya parent yang sama
+        UUID parentId = requests.getParentId();
+
+        // 1. Lock parent
+        repository.lockParent(companyId, parentId);
+
+        // 2. Ambil kode terakhir
+        int nextCode = repository.lastCode(companyId, parentId);
+        int nextSortOrder = repository.lastSortOrder(companyId, parentId);
+
+        // 3. Convert Request → ChartOfAccounts
+        List<ChartOfAccounts> accounts = new ArrayList<>();
+        for (String accountName : requests.getAccountName()) {
+            nextCode++;
+            nextSortOrder++;
+            ChartOfAccounts account = new ChartOfAccounts();
+            account.setAccountId(Generators.timeBasedEpochGenerator().generate());
+            account.setAccountCode(String.valueOf(nextCode));
+            account.setAccountName(accountName);
+            account.setAccountType(requests.getAccountType());
+            account.setNormalBalance(requests.getNormalBalance());
+            account.setParentId(parentId);
+            account.setAccountLevel((short) 4);
+            account.setCompanyId(companyId);
+            account.setIsHeader(false);
+            account.setIsPostable(true);
+            account.setDescription(null);
+            account.setSortOrder(nextSortOrder);
+            account.setCreatedAt(requests.getCreatedAt());
+            account.setUpdatedAt(requests.getUpdatedAt());
+            accounts.add(account);
+        }
+
+        int[] result = repository.saveBatch(accounts);
+        if (result.length == 0) {
+            throw new IllegalArgumentException("Gagal save akun");
         }
         return result;
     }

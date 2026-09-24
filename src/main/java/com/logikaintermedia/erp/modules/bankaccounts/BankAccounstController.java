@@ -49,15 +49,17 @@ public class BankAccounstController {
         return ResponseEntity.ok(ApiResponse.success("success", response));
     }
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/find-coa-byparent-id/search")
-    public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>> findCoaByparentId(
-            @RequestParam(required = false) UUID parentId,
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        UUID companyId = principal.getCompanyId();
-        List<ChartOfAccountsResponse> data = service.findCoaByparentId(companyId, parentId);
-        return ResponseEntity.ok(ApiResponse.success("success", data));
-    }
+    // @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    // @GetMapping("/find-coa-byparent-id/search")
+    // public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>>
+    // findCoaByparentId(
+    // @RequestParam(required = false) UUID parentId,
+    // @AuthenticationPrincipal AuthUserPrincipal principal) {
+    // UUID companyId = principal.getCompanyId();
+    // List<ChartOfAccountsResponse> data = service.findCoaByparentId(companyId,
+    // parentId);
+    // return ResponseEntity.ok(ApiResponse.success("success", data));
+    // }
 
     @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PostMapping

@@ -47,21 +47,21 @@ public class BankAccountPageController {
         return "content/bankaccount/new";
     }
 
-    // @PreAuthorize("hasRole('Owner')")
-    // @GetMapping("/bankaccount/edit/{id}")
-    // public String edit(@PathVariable UUID id, Model model,
-    // @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-    // HttpServletResponse response) {
-    // String title = "Edit Kas & Bank";
-    // BankAccounts accounts = service.findDetailById(id);
-    // model.addAttribute("pageTitle", title);
-    // model.addAttribute("accounts", accounts);
-    // if ("true".equals(hxRequest)) {
-    // response.setHeader("X-Page-Title", title);
-    // return "content/bankaccount/edit :: content";
-    // }
-    // return "content/bankaccount/edit";
-    // }
+    @PreAuthorize("hasRole('Owner')")
+    @GetMapping("/bankaccount/edit/{id}")
+    public String edit(@PathVariable UUID id, Model model, @AuthenticationPrincipal AuthUserPrincipal principal,
+            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+            HttpServletResponse response) {
+        String title = "Edit Kas & Bank";
+        BankAccounts accounts = service.findDetailById(id, principal.getCompanyId());
+        model.addAttribute("pageTitle", title);
+        model.addAttribute("accounts", accounts);
+        if ("true".equals(hxRequest)) {
+            response.setHeader("X-Page-Title", title);
+            return "content/bankaccount/edit :: content";
+        }
+        return "content/bankaccount/edit";
+    }
 
     @PreAuthorize("hasRole('Owner')")
     @GetMapping("/bankaccount/detail/{id}")

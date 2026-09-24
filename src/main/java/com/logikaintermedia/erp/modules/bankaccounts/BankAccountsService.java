@@ -122,24 +122,26 @@ public class BankAccountsService {
         return responseList;
     }
 
-    public List<ChartOfAccountsResponse> findCoaByparentId(UUID companyId, UUID parentId) {
+    // public List<ChartOfAccountsResponse> findCoaByparentId(UUID companyId, UUID
+    // parentId) {
 
-        List<ChartOfAccounts> coaList = repository.findCoaByparentId(companyId, parentId);
-        System.out.println("Keyword pencarian ========== " + parentId);
-        List<ChartOfAccountsResponse> responseList = new ArrayList<>();
-        if (parentId == null) {
-            if (coaList.isEmpty()) {
-                return Collections.emptyList();
-            }
-        } else {
+    // List<ChartOfAccounts> coaList = repository.findCoaByparentId(companyId,
+    // parentId);
+    // System.out.println("Keyword pencarian ========== " + parentId);
+    // List<ChartOfAccountsResponse> responseList = new ArrayList<>();
+    // if (parentId == null) {
+    // if (coaList.isEmpty()) {
+    // return Collections.emptyList();
+    // }
+    // } else {
 
-            for (ChartOfAccounts coa : coaList) {
-                ChartOfAccountsResponse response = new ChartOfAccountsResponse(coa);
-                responseList.add(response);
-            }
-        }
+    // for (ChartOfAccounts coa : coaList) {
+    // ChartOfAccountsResponse response = new ChartOfAccountsResponse(coa);
+    // responseList.add(response);
+    // }
+    // }
 
-        return responseList;
-    }
+    // return responseList;
+    // }
 
 }
