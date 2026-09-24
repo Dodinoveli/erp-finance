@@ -62,6 +62,10 @@ cd erp-finance
 mvn spring-boot:run
 
 # 5. Buka browser dan akses
-http://localhost:8080
+http://localhost:8080 
+```
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+---
+## License
+MIT License © 2026 Abdody
+
