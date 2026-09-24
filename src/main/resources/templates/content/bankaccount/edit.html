@@ -4,9 +4,9 @@
 
 <body>
     <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="detail-container">
-                <form id="formBankAccount" th:object="${accounts}">
+        <div class="detail-container p-2">
+            <main class="main">
+                <form id="formBankAccountEdit" th:object="${accounts}">
                     <div class="card p-1">
                         <div class="card-body">
                             <input type="hidden" id="bank_account_id" name="bankAccountId"
@@ -40,9 +40,17 @@
                                             th:field="*{accountId}" aria-label="Default select example">
                                             <option value="">-- Pilih Akun --</option>
                                             <option th:value="${accounts.coa.childAccountId}"
-                                                th:text="${accounts.coa.childAccountCode + ' - ' + accounts.coa.childAccountName}">
+                                                th:attr="data-parent-account-name=${accounts.coa.parentAccountName}"
+                                                th:text="${accounts.coa.childAccountCode + '-' + accounts.coa.childAccountName}">
+                                            </option>
+                                            <option th:each="coa : ${coaAccounts}"
+                                                th:attr="data-parent-account-name=${coa.parentAccountName}"
+                                                th:value="${coa.childAccountId}"
+                                                th:text="${coa.childAccountCode + '-' + coa.childAccountName}">
                                             </option>
                                         </select>
+                                        <input type="hidden" name="accountType"
+                                            th:value="${accounts.coa.parentAccountName}">
                                         <small class="text-danger" id="err-accountId"></small>
                                     </div>
                                     <!-- <input type="hidden" id="coa_id" name="coaId" th:field="*{coaId}" /> -->
@@ -105,8 +113,8 @@
                         <!-- https://kawallaba.my.id/bankaccount/detail/01a0c4f1-fafd-7404-93fd-c35dd24d65af -->
                     </div>
                 </form>
-            </div>
-        </main>
+            </main>
+        </div>
     </div>
 </body>
 

@@ -7,6 +7,7 @@ const bankAccontsEdit = {
 
     bindEvents: function () {
         const self = this;
+        // self.showCoa();
         const accountId = document.getElementById("account_id");
 
         const bankName = document.getElementById("bank_name");
@@ -15,128 +16,141 @@ const bankAccontsEdit = {
         const accountHolder = document.getElementById("account_holder");
 
         const form = document.getElementById("formBankAccountEdit");
-        if (form) {
-            console.log("Form formBankAccount ditemukan, memasang event listener...");
-            form.addEventListener("submit", function (e) {
-                e.preventDefault();
-                console.log("Submit terdeteksi!");
-                // self.updateBankAccount(this);
-            });
-        } else {
-            console.warn("Elemen #formBankAccount tidak ditemukan di DOM saat init!");
-        }
+        if (form.dataset.bound === "true") return;
+        form.dataset.bound = "true";
+
+        console.log("Form formBankAccount ditemukan, memasang event listener...");
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            console.log("Submit terdeteksi!");
+            self.updateBankAccount(this);
+        });
 
         if (accountId) {
             accountId.addEventListener("change", function () {
                 console.log("akun id ", accountId)
-                let txt = this.options[this.selectedIndex].text;
+                // let txt = this.options[this.selectedIndex].text;
+                const option = this.options[this.selectedIndex];
                 let parentId = this.value;
                 console.log("akun id ", parentId)
-                if (parentId !== null) {
-                    // alert(val) #d9d1d1
-                    console.log("akun id ", parentId)
+                if (parentId !== "" && option.dataset.parentAccountName === "KAS") {
+                    console.log("ini kas : ", option.dataset.parentAccountName)
                     bankName.readOnly = true;
-                    bankName.style.background = "#d9d1d1";
+                    bankName.classList.add("input-readonly");
 
                     bankBranch.readOnly = true;
-                    bankBranch.style.background = "#d9d1d1";
+                    bankBranch.classList.add("input-readonly");
 
                     accountNumber.readOnly = true;
-                    accountNumber.style.background = "#d9d1d1";
+                    accountNumber.classList.add("input-readonly");
 
                     accountHolder.readOnly = true;
-                    accountHolder.style.background = "#d9d1d1";
+                    accountHolder.classList.add("input-readonly");
 
                     // kosongkan field
                     document.getElementById("bank_name").value = "";
                     document.getElementById("bank_branch").value = "";
                     document.getElementById("account_number").value = "";
                     document.getElementById("account_holder").value = "";
+                    document.querySelector('[name="accountType"]').value = option.dataset.parentAccountName;
                 } else {
+                    console.log("ini Bank : ", option.dataset.parentAccountName)
                     bankName.readOnly = false;
-                    bankName.style.background = "#ffff";
+                    bankName.classList.add("input-readonly");
 
                     bankBranch.readOnly = false;
-                    bankBranch.style.background = "#ffff";
+                    bankBranch.classList.add("input-readonly");
 
                     accountNumber.readOnly = false;
-                    accountNumber.style.background = "#ffff";
+                    accountNumber.classList.add("input-readonly");
 
                     accountHolder.readOnly = false;
-                    accountHolder.style.background = "#ffff";
+                    accountHolder.classList.add("input-readonly");
+                    document.querySelector('[name="accountType"]').value = option.dataset.parentAccountName;
                 }
 
-                self.showCoa(parentId);
             });
         }
     },
 
-    showCoa: async function (keyword) {
-        const url = "/api/v1/bankaccounts/find-cash-and-bank-accounts-by-company-id";
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const result = await response.json();
-            if (result.status === "success") {
-                const selectElement = document.getElementById('account_id');
-                selectElement.innerHTML = '<option value="">-- Pilih Tipe Akun --</option>';
-                const coaList = result.data;
-                coaList.forEach(ac => {
-                    const option = document.createElement('option');
-                    option.value = ac.childAccountId;
-                    option.textContent = ac.childAccountCode + '-' + ac.childAccountName;
-                    selectElement.appendChild(option);
-                });
-            }
-        } catch (error) { }
-    },
-
-    // updateBankAccount: async function (formEl) {
-    //     const formData = new FormData(formEl);
-    //     const id = formData.get("bankAccountId");
-    //     const payload = Object.fromEntries(formData.entries());
-    //     if (id == null) alert("id tidak valid")
-    //     this.showErrors({}, formEl);
-
+    // showCoa: async function () {
+    //     const url = "/api/v1/bankaccounts/find-cash-and-bank-accounts-by-company-id";
     //     try {
-
-    //         const result = await fetch(`/api/v1/bankaccounts/${id}`, payload, "Mengubah Data...");
-    //         if (result && result.success !== false) {
-    //             await Toast.fire({
-    //                 icon: 'success',
-    //                 title: 'Berhasil!',
-    //                 text: result.message,
-    //                 timer: 3000,
-    //                 showConfirmButton: false
-    //             });
-    //             setTimeout(() => {
-    //                 window.location.href = `/bankaccount/detail/${id}`;
-    //             }, 500);
-    //             return result;
-    //         } else {
-    //             throw new Error(result?.message || 'Gagal Menyimpan data');
+    //         const response = await fetch(url);
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! status: ${response.status}`);
     //         }
-    //     } catch (err) {
-    //         console.log("Full Error Object = ", err);
-    //         const errors = err?.errors || err?.data?.errors;
-    //         if (errors) {
-    //             this.showErrors(errors, formEl);
-    //             Toast.fire({
-    //                 icon: 'error',
-    //                 title: 'Gagal Menyimpan Data, Periksa inputan'
-    //             });
-    //         } else {
-    //             Swal.fire({
-    //                 icon: "error",
-    //                 title: "Oops...",
-    //                 text: err.message,
+    //         const result = await response.json();
+    //         if (result.status === "success") {
+    //             const selectElement = document.getElementById('account_id');
+    //             selectElement.innerHTML = '<option value="">-- Pilih Tipe Akun --</option>';
+    //             const coaList = result.data;
+    //             coaList.forEach(ac => {
+    //                 const option = document.createElement('option');
+    //                 option.value = ac.childAccountId;
+    //                 option.dataset.accountName = ac.accountName;
+    //                 option.textContent = ac.childAccountCode + '-' + ac.childAccountName;
+    //                 selectElement.appendChild(option);
     //             });
     //         }
-    //         throw errors;
-    //     }
+    //     } catch (error) { }
     // },
+
+    updateBankAccount: async function (formEl) {
+        const formData = new FormData(formEl);
+        const id = formData.get("bankAccountId");
+        const payload = Object.fromEntries(formData.entries());
+        if (id == null) alert("id tidak valid")
+        this.showErrors({}, formEl);
+        Toast.loading("Menyimpan data...");
+        try {
+
+            const response = await fetch(`/api/v1/bankaccounts/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify(payload),
+            }
+            );
+            var result = await response.json();
+            if (!response.ok) {
+                throw {
+                    status: response.status,
+                    message: result?.message,
+                    errors: result?.errors,
+                    data: result,
+                };
+            }
+            await Toast.success(result.message, "Berhasil!", 2000);
+            setTimeout(() => {
+                var url = `/bankaccount/detail/${id}`;
+
+                htmx
+                    .ajax("GET", url, {
+                        target: "#page-content",
+                        swap: "innerHTML",
+                        indicator: "#loading"
+                    })
+                    .then(() => {
+                        window.history.pushState({}, "", url);
+                    });
+            }, 2500);
+
+
+        } catch (err) {
+            console.log("Full Error Object = ", err);
+            const errors = err?.errors || err?.data?.errors;
+            if (errors) {
+                this.showErrors(errors, formEl);
+                Toast.error(err.message, "Gagal", 3000)
+            } else {
+                Toast.error(err.message, "Opps Error", 3000)
+            }
+            throw err;
+        }
+    },
 
     showErrors: function (errors, formEl) {
         if (!formEl) return; // 🔥 guard biar gak error lagi

@@ -1,5 +1,6 @@
 package com.logikaintermedia.erp.modules.bankaccounts;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,10 +40,14 @@ public class BankAccountsService {
             response.setAccountCode(bac.getAccountCode());
             response.setAccountName(bac.getAccountName());
             response.setOpeningBalance(bac.getOpeningBalance());
-            // private String parentAccountCode;
-            // private String parentAccountName;
-            // private String childAccountCode;
-            // private String childAccountName;
+            response.setBankName(bac.getBankName());
+            response.setBankBranch(bac.getBankBranch());
+            response.setAccountNumber(bac.getAccountNumber());
+            response.setAccountHolder(bac.getAccountHolder());
+            // ba.bank_name,
+            // ba.bank_branch,
+            // ba.account_number,
+            // ba.account_holder,
             accounts.setAccountId(bac.getAccountId());
             accounts.setAccountName(bac.getAccountName());
             accounts.setParentAccountCode(bac.getParentAccountCode());
@@ -83,23 +88,16 @@ public class BankAccountsService {
     public BankAccounts updateBankAccounts(BankAccountsRequest request, UUID bankAccountId, UUID companyId,
             UUID userId) {
         BankAccounts accounts = new BankAccounts();
-
         accounts.setAccountCode(request.getAccountCode());
         accounts.setAccountName(request.getAccountName());
-        // accounts.setAccountType(request.getAccountType());
         accounts.setBankName(request.getBankName());
         accounts.setBankBranch(request.getBankBranch());
         accounts.setAccountNumber(request.getAccountNumber());
         accounts.setAccountHolder(request.getAccountHolder());
-        // accounts.setCurrency(request.getCurrency());
-        // accounts.setOpeningBalance(request.getOpeningBalance());
-        // accounts.setIsDefault(request.getIsDefault());
-        accounts.setIsActive(request.getIsActive());
-
+        accounts.setOpeningBalance(BigDecimal.ZERO);
+        accounts.setIsActive(true);
         accounts.setAccountId(request.getAccountId());
-        // accounts.setCreatedAt(request.getCreatedAt());
         accounts.setUpdatedAt(request.getUpdatedAt());
-        // accounts.setDeletedAt(null);
         accounts.setBankAccountId(bankAccountId);
         accounts.setCompanyId(companyId);
         accounts.setUserId(userId);
@@ -120,6 +118,11 @@ public class BankAccountsService {
             responseList.add(response);
         }
         return responseList;
+    }
+
+    public List<ChartOfAccounts> findCoaForBankAccount(UUID companyId,
+            UUID currentAccountId) {
+        return repository.findCoaForBankAccount(companyId, currentAccountId);
     }
 
     // public List<ChartOfAccountsResponse> findCoaByparentId(UUID companyId, UUID

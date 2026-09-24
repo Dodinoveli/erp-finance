@@ -104,6 +104,7 @@ var bankAccountNew = {
     },
 
     showCoa: async function () {
+        //  const url = "/api/v1/bankaccounts/find-cash-and-bank-accounts-by-company-id";
         const url = "/api/v1/bankaccounts/find-cash-and-bank-accounts-by-company-id";
         try {
             // const params = new URLSearchParams({

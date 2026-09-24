@@ -9,6 +9,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class BankAccountsRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -58,22 +61,22 @@ public class BankAccountsRepository {
 
     public int update(BankAccounts accounts) {
         String sql = """
-                UPDATE bank_accounts SET
+                UPDATE public.bank_accounts
+                SET
                     account_code = :accountCode,
                     account_name = :accountName,
-                    account_type = :accountType,
                     bank_name = :bankName,
                     bank_branch = :bankBranch,
                     account_number = :accountNumber,
                     account_holder = :accountHolder,
-                    account_id = :accountId,
+                    opening_balance = :openingBalance,
                     is_active = :isActive,
-                    updated_at = :updatedAt,
-                    account_id_detail = :accountIdDetail
+                    account_id = :accountId,
+                    updated_at = :updatedAt
                 where bank_account_id = :bankAccountId
                 and company_id = :companyId
                 and user_id = :userId
-                        """;
+                                       """;
         return namedParameterJdbcTemplate.update(sql, toParams(accounts));
     }
 
@@ -186,6 +189,61 @@ public class BankAccountsRepository {
         return namedParameterJdbcTemplate.query(sql,
                 params,
                 new BeanPropertyRowMapper<>(ChartOfAccounts.class));
+    }
+
+    public List<ChartOfAccounts> findCoaForBankAccount(
+            UUID companyId,
+            UUID currentAccountId) {
+
+        String sql = """
+                             SELECT
+                                parent.account_id,
+                                parent.account_code,
+                                parent.account_name as parent_account_name,
+
+                                child.account_id AS child_account_id,
+                                child.account_code AS child_account_code,
+                                child.account_name AS child_account_name,
+                	child.parent_id AS child_parent_id
+
+                            FROM chart_of_accounts parent
+
+                            INNER JOIN chart_of_accounts child
+                                ON child.parent_id = parent.account_id
+
+                            WHERE parent.account_name IN ('KAS', 'BANK')
+
+                            AND parent.company_id = :companyId
+                and   child.account_id <> :currentAccountId
+                order by parent.account_name asc, child.account_code asc
+                                            """;
+
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("companyId", companyId);
+        params.addValue("currentAccountId", currentAccountId);
+
+        log.warn("companyId        : {}", companyId);
+        log.warn("currentAccountId : {}", currentAccountId);
+        List<ChartOfAccounts> result = namedParameterJdbcTemplate.query(
+                sql,
+                params,
+                (rs, rowNum) -> {
+                    ChartOfAccounts coa = new ChartOfAccounts();
+
+                    coa.setChildAccountId(rs.getObject("child_account_id", UUID.class));
+                    coa.setChildAccountCode(rs.getString("child_account_code"));
+                    coa.setChildAccountName(rs.getString("child_account_name"));
+                    coa.setParentAccountName(rs.getString("parent_account_name"));
+                    log.debug(
+                            "COA ID: {} | CODE: {} | NAME: {}",
+                            coa.getChildAccountId(),
+                            coa.getChildAccountCode(),
+                            coa.getChildAccountName());
+                    return coa;
+                });
+        log.warn("JUMLAH COA: {}", result.size());
+
+        return result;
     }
 
     // mengambil COA bedasarkan parent_id saat combok di klik

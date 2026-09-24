@@ -1,5 +1,6 @@
 package com.logikaintermedia.erp.controller;
 
+import java.util.List;
 import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import com.logikaintermedia.erp.modules.bankaccounts.BankAccounts;
 import com.logikaintermedia.erp.modules.bankaccounts.BankAccountsService;
+import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 import jakarta.servlet.http.HttpServletResponse;
 
+@lombok.extern.slf4j.Slf4j
 @Controller
 public class BankAccountPageController {
     private final BankAccountsService service;
@@ -54,8 +57,13 @@ public class BankAccountPageController {
             HttpServletResponse response) {
         String title = "Edit Kas & Bank";
         BankAccounts accounts = service.findDetailById(id, principal.getCompanyId());
+        List<ChartOfAccounts> data = service.findCoaForBankAccount(principal.getCompanyId(),
+                accounts.getCoa().getChildAccountId());
+        log.warn("akun id : {}", accounts.getCoa().getChildAccountId());
         model.addAttribute("pageTitle", title);
         model.addAttribute("accounts", accounts);
+        // coaAccounts
+        model.addAttribute("coaAccounts", data);
         if ("true".equals(hxRequest)) {
             response.setHeader("X-Page-Title", title);
             return "content/bankaccount/edit :: content";

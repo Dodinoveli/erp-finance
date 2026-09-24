@@ -13,13 +13,11 @@ public class CoaMappingMapper implements RowMapper<CoaMapping> {
     @Nullable
     public CoaMapping mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
         CoaMapping mapping = new CoaMapping();
-        mapping.setMappingId((UUID) rs.getObject("mapping_id"));
-        mapping.setTransactionType(rs.getString("transaction_type"));
-        mapping.setPaymentType(rs.getString("paymentType"));
-        mapping.setDebitCoaId((UUID) rs.getObject("debit_coa_id"));
-        mapping.setCreditCoaId((UUID) rs.getObject("credit_coa_id"));
+        mapping.setMappingId(rs.getObject("mapping_id", UUID.class));
+        mapping.setTransactionType(TransactionType.valueOf(rs.getString("transaction_type")));
+        mapping.setPaymentType(PaymentType.valueOf(rs.getString("payment_type")));
         mapping.setDescription(rs.getString("description"));
-        mapping.setCompanyId((UUID) rs.getObject("company_id"));
+        mapping.setCompanyId(rs.getObject("company_id", UUID.class));
         return mapping;
     }
 

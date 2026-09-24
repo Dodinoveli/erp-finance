@@ -19,7 +19,7 @@ export function initBankAccountList() {
                 targets: 3, width: '120px'
             }, // parent
             { targets: 4, width: '120px' },  // Aksi
-            { targets: 5, width: '60px' }  // Aksi
+            { targets: 5, width: '120px' },  // Aksi
 
         ],
         layout: {
@@ -72,17 +72,36 @@ export function initBankAccountList() {
         columns: [
             { data: "accountCode" },
             { data: "accountName" },
+            {
+                data: null,
+                render: (data, type, row) => `
+                <div class="d-flex flex-column gap-1">
+                    <div><span class="text-muted">Bank:</span> <strong>${row.bankName || '-'}</strong></div>
+                    <div><span class="text-muted">Cabang:</span> ${row.bankBranch || '-'}</div>
+                    <div><span class="text-muted">Rekening:</span> ${row.accountNumber || '-'}</div>
+                    <div><span class="text-muted">A.N:</span> ${row.accountHolder || '-'}</div>
+                </div>
+                `
+            },
             { data: "openingBalance" },
             {
                 data: null,
-                render: (data, type, row) =>
-                    `${row.coa.childAccountCode} - ${row.coa.childAccountName}`
+                render: (data, type, row) => `
+                <div>
+                    <div class="small text-muted">
+                        Parent: ${row.coa?.parentAccountCode || '-'} · ${row.coa?.parentAccountName || '-'}
+                    </div>
+                    <div class="fw-semibold">
+                        ${row.coa?.childAccountCode || '-'} · ${row.coa?.childAccountName || '-'}
+                    </div>
+                </div>
+            `
             },
-            {
-                data: null,
-                render: (data, type, row) =>
-                    `${row.coa.parentAccountCode} - ${row.coa.parentAccountName}`
-            },
+            // {
+            //     data: null,
+            //     render: (data, type, row) =>
+            //         `${row.coa.parentAccountCode} - ${row.coa.parentAccountName}`
+            // },
             // {
             //     data: "isActive",
             //     render: function (data) {

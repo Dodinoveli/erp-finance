@@ -6,10 +6,8 @@ import lombok.Data;
 @Data
 public class CoaMapping {
     private UUID mappingId;
-    private String transactionType;
-    private String paymentType;
-    private UUID debitCoaId;
-    private UUID creditCoaId;
+    private TransactionType transactionType;
+    private PaymentType paymentType;
     private String description;
     private UUID companyId;
 
