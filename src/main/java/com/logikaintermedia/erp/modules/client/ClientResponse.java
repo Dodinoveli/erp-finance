@@ -1,8 +1,9 @@
 package com.logikaintermedia.erp.modules.client;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
+
+import com.logikaintermedia.erp.encryption.EncryptionUtil;
 
 import lombok.Data;
 
@@ -43,4 +44,16 @@ public class ClientResponse {
     private String clientBankName;
     private String clientAccountNumber;
     private String clientAccountName;
+
+    public static ClientResponse from(Client entity) {
+        ClientResponse response = new ClientResponse();
+        response.setClientId(entity.getClientId());
+        response.setClientName(entity.getClientName());
+        response.setClientCode(entity.getClientCode());
+        response.setClientContactPerson(entity.getClientContactPerson());
+        response.setClientEmail(EncryptionUtil.decryptSafely(entity.getClientEmail()));
+        response.setClientContactPhone(EncryptionUtil.decryptSafely(entity.getClientContactPhone()));
+        response.setClientIsActive(entity.getClientIsActive());
+        return response;
+    }
 }

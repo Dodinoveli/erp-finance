@@ -1,14 +1,23 @@
 package com.logikaintermedia.erp.modules.coamapping;
 
 import java.util.UUID;
+
+import com.fasterxml.uuid.Generators;
+import com.logikaintermedia.erp.validation.OnCreate;
+import com.logikaintermedia.erp.validation.OnUpdate;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class CoaMappingRequest {
-    private UUID mappingId;
-    private TransactionType transactionType;
-    private PaymentType paymentType;
+
+    @NotBlank(message = "Jenis Transaksi wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+    private String transactionType;
+
+    @NotBlank(message = "Jenis Pembayaran wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+    private String paymentType;
+
+    @NotBlank(message = "Keterangan wajib diisi", groups = { OnCreate.class, OnUpdate.class })
     private String description;
-    private UUID companyId;
 
 }

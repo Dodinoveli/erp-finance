@@ -50,6 +50,7 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
+    mode: HTML
 
   # 6. SERVLET & MULTIPART SETTINGS (File Upload)
   servlet:

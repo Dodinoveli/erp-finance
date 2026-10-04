@@ -1,7 +1,6 @@
 package com.logikaintermedia.erp.modules.client;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -129,6 +128,7 @@ public class ClientRepository {
         return jdbc.update(sql, toParams(model));
     }
 
+    // tidak di pakai
     public List<Client> findById(UUID companyId, String keyword, LocalDateTime lastCreatedAt, UUID lastId,
             int limit) {
 
@@ -161,8 +161,8 @@ public class ClientRepository {
                             OR (client_created_at = :lastCreatedAt AND client_id < :lastId)
                         )
                     """;
-             params.addValue("lastCreatedAt", lastCreatedAt);
-             params.addValue("lastId", lastId);
+            params.addValue("lastCreatedAt", lastCreatedAt);
+            params.addValue("lastId", lastId);
         }
         sql += " ORDER BY client_created_at DESC, client_id DESC LIMIT :limit ";
 
@@ -191,6 +191,7 @@ public class ClientRepository {
         }
     }
 
+    // untuk menampilkan data ke datatables
     public List<Client> findClientByCompanyId(UUID companyId,
             int start,
             int length,

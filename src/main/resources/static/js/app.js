@@ -23,6 +23,10 @@ import { initProjectEdit } from "./pages/project/edit.js";
 
 import { initChartOfAccounts } from "./pages/chartofaccounts/list.js"
 import { initChartOfAccountsTemplates } from "./pages/chartofaccountstemplates/list.js"
+
+// 5. coamapping
+import { initCoamapping } from "./pages/coamapping/new.js"
+import { initCoaMappingList } from "./pages/coamapping/list-coa-mapping.js"
 // ==============================
 // GLOBAL HTMX LOADING
 // ==============================
@@ -100,6 +104,14 @@ function initPage() {
     // accountTemplates
     if (document.querySelector("#coa-table-templates")) {
         initChartOfAccountsTemplates();
+    }
+
+    if (document.querySelector("#formCoaMappingNew")) {
+        initCoamapping();
+    }
+
+     if (document.querySelector("#coamappingTable")) {
+        initCoaMappingList();
     }
 
 }

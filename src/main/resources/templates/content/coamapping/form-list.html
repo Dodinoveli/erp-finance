@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layouts/main}">
+<style>
+  /* Menyembunyikan kotak pencarian DataTables tapi tombol tambah tetap aman */
+  .dt-search {
+    display: none !important;
+  }
+</style>
+
+<body>
+  <div layout:fragment="content" th:fragment="content">
+    <main class="main">
+      <div class="container-fluid py-1">
+        <div class="card border-0 shadow-sm">
+          <!-- Nav Tabs -->
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="coamappingtab" data-bs-toggle="tab"
+                data-bs-target="#coamappingtab-pane" type="button" role="tab" aria-controls="coamappingtab-pane"
+                aria-selected="true">
+                Coa Mapping
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="tabel-tab" data-bs-toggle="tab" data-bs-target="#tabel-tab-pane"
+                type="button" role="tab" aria-controls="tabel-tab-pane" aria-selected="false">
+                Coa Mapping Line
+              </button>
+            </li>
+          </ul>
+
+          <!-- Tab Content -->
+          <div class="tab-content" id="myTabContent">
+            <!-- Tab 1: Form -->
+            <div class="tab-pane fade show active" id="coamappingtab-pane" role="tabpanel"
+              aria-labelledby="coamappingtab" tabindex="0">
+              <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                  <table id="coamappingTable" class="table table-hover table-striped mb-0">
+                    <thead>
+                      <tr>
+                        <th>Jenis Transaksi</th>
+                        <th>Total</th>
+                        <th>Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- Modal coamapping -->
+              <div class="modal fade" id="modalCoaMapping" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <form id="formCoaMappingNew" method="post">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5 lbl-normal" id="exampleModalLabel">Buat CoaMapping</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="row g-3">
+                          <input type="hidden" name="mappingId" id="mapping_id">
+                          <div class="col-md-6">
+                            <label class="lbl-normal">Jenis Transaksi</label>
+                            <div class="form-field">
+                              <select id="transaction_type" name="transactionType"
+                                class="form-select select-underline p-1" aria-label="Default select example">
+                                <option value="">-- Pilih Jenis Transaksi -- </option>
+                                <option value="PROJECT_DP">Project Dp</option>
+                                <option value="PROJECT_PROGRESS">Project Progress </option>
+                                <option value="PROJECT_PAYMENT">Project Payment</option>
+                                <option value="PURCHASE_MATERIAL">Purchase Material</option>
+                                <option value="EXPENSE">Expense</option>
+                                <option value="RETENTION">Retention</option>
+                              </select>
+                              <small class="text-danger" id="err-transactionType"></small>
+                            </div>
+                            <input type="hidden" name="accountType" />
+                          </div>
+
+                          <div class="col-md-6">
+                            <label class="lbl-normal">Jenis Pembayaran</label>
+                            <div class="form-field">
+                              <select id="payment_type" name="paymentType" class="form-select select-underline p-1"
+                                aria-label="Default select example">
+                                <option value="">-- Pilih Jenis Pembayaran -- </option>
+                                <option value="CASH">Cash</option>
+                                <option value="BANK">Bank</option>
+                                <option value="CREDIT">Credit</option>
+                              </select>
+                              <small class="text-danger" id="err-paymentType"></small>
+                            </div>
+                            <input type="hidden" name="accountType" />
+                          </div>
+                        </div>
+                        <div class="row g-3">
+                          <div class="col-md-12">
+                            <div class="mb-3">
+                              <label style="padding-top: 5px" class="lbl-normal">Keterangan
+                              </label>
+                              <div class="form-field">
+                                <textarea id="description" name="description" class="form-control input-underline"
+                                  rows="1" placeholder="Contoh : Pembelian material dibayar tunai"></textarea>
+                                <small class="text-danger" id="err-description"></small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="modal-footer">
+                        <div class="detail-actions">
+                          <button type="submit" class="btn btn-simpan">
+                            <i class="bi bi-floppy"></i> Simpan
+                          </button>
+                          <button type="button" class="btn btn-batal" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle"></i> Batal
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- Modal coamapping -->
+              <!-- Modal Detail -->
+              <div class="modal fade" id="detailModal" tabindex="-1">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                  <div class="modal-content">
+
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        Detail COA Mapping
+                      </h5>
+
+                      <button type="button" class="btn-close" data-bs-dismiss="modal">
+                      </button>
+                    </div>
+
+                    <div class="modal-body" id="detailModalContent">
+
+                      <div class="text-center py-4">
+                        Memuat detail...
+                      </div>
+
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Tab 2: Tabel -->
+            <div class="tab-pane fade" id="tabel-tab-pane" role="tabpanel" aria-labelledby="tabel-tab" tabindex="0">
+              <!-- isi tabel di sini -->
+              <h1>Hay sya tabel</h1>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

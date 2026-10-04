@@ -10,7 +10,6 @@ import com.logikaintermedia.erp.validation.OnCreate;
 import com.logikaintermedia.erp.validation.OnUpdate;
 import java.util.Objects;
 import java.util.UUID;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,7 +73,7 @@ public class ClientController {
         return ResponseEntity.ok(response);
     }
 
-     @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
     @PostMapping
     public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody ClientRequest entity,
             @AuthenticationPrincipal AuthUserPrincipal user) {
@@ -92,10 +91,9 @@ public class ClientController {
         // ClientResponse result = new ClientResponse();
         // BeanUtils.copyProperties(data, result);
         return ResponseEntity
-        .ok(ApiResponse.success(
-            "Data Client berhasil diperbaharui...",
-            data
-        ));
+                .ok(ApiResponse.success(
+                        "Data Client berhasil diperbaharui...",
+                        data));
     }
 
 }
