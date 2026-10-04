@@ -7,15 +7,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
-import com.logikaintermedia.erp.modules.project.Proyek;
-import com.logikaintermedia.erp.modules.project.ProyekService;
+import com.logikaintermedia.erp.modules.project.Project;
+import com.logikaintermedia.erp.modules.project.ProjectService;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class ProjectPageController {
-    private final ProyekService service;
+    private final ProjectService service;
 
-    public ProjectPageController(ProyekService service) {
+    public ProjectPageController(ProjectService service) {
         this.service = service;
     }
 
@@ -51,7 +51,7 @@ public class ProjectPageController {
     public String edit(@PathVariable UUID id, Model model,
             @RequestHeader(value = "HX-Request", required = false) String hxRequest,
             HttpServletResponse response) {
-        Proyek project = service.detailById(id);
+        Project project = service.detailById(id);
         String title = "Edit Proyek";
 
         model.addAttribute("pageTitle", title);
@@ -69,7 +69,7 @@ public class ProjectPageController {
     public String detail(@PathVariable UUID id, Model model,
             @RequestHeader(value = "HX-Request", required = false) String hxRequest,
             HttpServletResponse response) {
-        Proyek project = service.detailById(id);
+        Project project = service.detailById(id);
         String title = "Detail Proyek";
         model.addAttribute("pageTitle", title);
         model.addAttribute("project", project);

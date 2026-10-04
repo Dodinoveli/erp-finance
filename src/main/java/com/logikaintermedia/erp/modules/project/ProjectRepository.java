@@ -17,14 +17,14 @@ import org.springframework.stereotype.Repository;
 import com.logikaintermedia.erp.modules.client.Client;
 
 @Repository
-public class ProyekRepository {
+public class ProjectRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public ProyekRepository(NamedParameterJdbcTemplate jdbcTemplate) {
+    public ProjectRepository(NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public @NonNull MapSqlParameterSource toParams(Proyek mdl) {
+    public @NonNull MapSqlParameterSource toParams(Project mdl) {
         return new MapSqlParameterSource()
                 .addValue("projectId", mdl.getProjectId())
                 .addValue("projectCode", mdl.getProjectCode())
@@ -50,7 +50,7 @@ public class ProyekRepository {
     /**
      * menyimpan data proyek bedasarkan id perusahaan
      */
-    public int save(Proyek proyek) {
+    public int save(Project proyek) {
         String sql = """
                 INSERT INTO projects (
                 	project_id, project_code, project_po, name, description, client_id,
@@ -85,7 +85,7 @@ public class ProyekRepository {
     /**
      * menyimpan dan menubah data proyek bedasarkan id perusahaan
      */
-    public int update(Proyek proyek) {
+    public int update(Project proyek) {
         String sql = """
                     UPDATE public.projects
                          SET
@@ -153,7 +153,7 @@ public class ProyekRepository {
      * @param companyId
      * @return
      */
-    public List<Proyek> findProyekByCompanyId(UUID companyId,
+    public List<Project> findProyekByCompanyId(UUID companyId,
             int start,
             int length,
             String keyword) {
@@ -198,8 +198,8 @@ public class ProyekRepository {
                 LIMIT :length OFFSET :start
                 """;
         try {
-            List<Proyek> result = jdbcTemplate.query(sql, params,
-                    new BeanPropertyRowMapper<>(Proyek.class));
+            List<Project> result = jdbcTemplate.query(sql, params,
+                    new BeanPropertyRowMapper<>(Project.class));
             return result;
         } catch (Exception e) {
             e.printStackTrace();
@@ -261,7 +261,7 @@ public class ProyekRepository {
     /**
      * mengambil data proyek bedasarkan projectId
      */
-    public Proyek detailById(UUID id) {
+    public Project detailById(UUID id) {
         String sql = """
                 select
                     *
@@ -272,7 +272,7 @@ public class ProyekRepository {
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("projectId", id);
         try {
-            return jdbcTemplate.queryForObject(sql, params, new ProyekMapper());
+            return jdbcTemplate.queryForObject(sql, params, new ProjectMapper());
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

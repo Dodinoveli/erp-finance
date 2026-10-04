@@ -1,8 +1,6 @@
 package com.logikaintermedia.erp.modules.project;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,16 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/project")
-public class ProyekController {
-    private final ProyekService service;
+public class ProjectController {
+    private final ProjectService service;
 
-    public ProyekController(ProyekService service) {
+    public ProjectController(ProjectService service) {
         this.service = service;
     }
 
     @PreAuthorize("hasRole('Owner')")
     @GetMapping
-    public ResponseEntity<DataTableResponse<ProyekResponse>> getClients(
+    public ResponseEntity<DataTableResponse<ProjectResponse>> getClients(
             @AuthenticationPrincipal AuthUserPrincipal user,
             @RequestParam(defaultValue = "0") int draw,
             @RequestParam(defaultValue = "0") int start,
@@ -44,7 +42,7 @@ public class ProyekController {
             @RequestParam(required = false) String keyword) {
         // System.out.println("KEYWORD = [" + keyword + "]");
         log.warn("KEYWORD = [" + keyword + "]");
-        DataTableResponse<ProyekResponse> response = service.getProyek(user.getCompanyId(), draw, start, length,
+        DataTableResponse<ProjectResponse> response = service.getProyek(user.getCompanyId(), draw, start, length,
                 keyword);
         return ResponseEntity.ok(response);
     }
@@ -59,18 +57,18 @@ public class ProyekController {
 
     @PreAuthorize("hasRole('Owner')")
     @PostMapping
-    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody ProyekRequest request,
+    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody ProjectRequest request,
             @AuthenticationPrincipal AuthUserPrincipal principal) {
-        Proyek response = service.saveProyek(request, principal.getCompanyId(), principal.getUserId());
+        Project response = service.saveProyek(request, principal.getCompanyId(), principal.getUserId());
         return ResponseEntity.ok(ApiResponse.success("Data Proyek berhasil disimpan", response));
     }
 
     @PreAuthorize("hasRole('Owner')")
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody ProyekRequest entity,
+    public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody ProjectRequest entity,
             @PathVariable UUID id,
             @AuthenticationPrincipal AuthUserPrincipal principal) {
-        Proyek response = service.updateProyek(entity, id, principal.getCompanyId(), principal.getUserId());
+        Project response = service.updateProyek(entity, id, principal.getCompanyId(), principal.getUserId());
         return ResponseEntity.ok(ApiResponse.success("Data Proyek berhasil di perbaharui...", response));
     }
 }

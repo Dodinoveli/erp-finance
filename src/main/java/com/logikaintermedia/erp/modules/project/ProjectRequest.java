@@ -14,7 +14,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ProyekRequest {
+public class ProjectRequest {
 
         private UUID projectId;
 

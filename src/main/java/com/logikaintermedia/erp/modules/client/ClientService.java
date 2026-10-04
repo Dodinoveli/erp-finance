@@ -1,17 +1,13 @@
 package com.logikaintermedia.erp.modules.client;
 
 import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.logikaintermedia.erp.utility.CursorResponse;
 import com.logikaintermedia.erp.utility.DataCountResponse;
 import com.logikaintermedia.erp.utility.DataTableResponse;
 import lombok.extern.slf4j.Slf4j;
-import com.logikaintermedia.erp.encryption.EncryptionUtil;
 
 @Slf4j
 @Service

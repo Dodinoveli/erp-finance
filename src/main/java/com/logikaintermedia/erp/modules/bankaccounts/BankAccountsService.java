@@ -1,13 +1,10 @@
 package com.logikaintermedia.erp.modules.bankaccounts;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.fasterxml.uuid.Generators;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccountsResponse;
 
@@ -59,24 +56,7 @@ public class BankAccountsService {
 
     @Transactional
     public BankAccounts saveBankAccounts(BankAccountsRequest request, UUID companyId, UUID userId) {
-        BankAccounts accounts = new BankAccounts();
-        accounts.setBankAccountId(Generators.timeBasedEpochRandomGenerator().generate());
-        accounts.setAccountCode(request.getAccountCode());
-        accounts.setAccountName(request.getAccountName());
-        accounts.setBankName(request.getBankName());
-        accounts.setBankBranch(request.getBankBranch());
-        accounts.setAccountNumber(request.getAccountNumber());
-        accounts.setAccountHolder(request.getAccountHolder());
-        accounts.setCurrency(request.getCurrency());
-        accounts.setOpeningBalance(request.getOpeningBalance());
-        accounts.setIsDefault(request.getIsDefault());
-        accounts.setIsActive(request.getIsActive());
-        accounts.setCompanyId(companyId);
-        accounts.setAccountId(request.getAccountId());
-        accounts.setCreatedAt(request.getCreatedAt());
-        accounts.setUpdatedAt(null);
-        accounts.setUserId(userId);
-        accounts.setDeletedAt(null);
+        BankAccounts accounts = BankAccounts.from(request, userId, companyId, userId);
         int data = repository.save(accounts);
         if (data <= 0) {
             throw new IllegalArgumentException("Gagal menyimpan data Bank Accounts , silakan coba kembali");
@@ -87,20 +67,7 @@ public class BankAccountsService {
     @Transactional
     public BankAccounts updateBankAccounts(BankAccountsRequest request, UUID bankAccountId, UUID companyId,
             UUID userId) {
-        BankAccounts accounts = new BankAccounts();
-        accounts.setAccountCode(request.getAccountCode());
-        accounts.setAccountName(request.getAccountName());
-        accounts.setBankName(request.getBankName());
-        accounts.setBankBranch(request.getBankBranch());
-        accounts.setAccountNumber(request.getAccountNumber());
-        accounts.setAccountHolder(request.getAccountHolder());
-        accounts.setOpeningBalance(BigDecimal.ZERO);
-        accounts.setIsActive(true);
-        accounts.setAccountId(request.getAccountId());
-        accounts.setUpdatedAt(request.getUpdatedAt());
-        accounts.setBankAccountId(bankAccountId);
-        accounts.setCompanyId(companyId);
-        accounts.setUserId(userId);
+        BankAccounts accounts = BankAccounts.updateFrom(request, bankAccountId, companyId, userId);
         int data = repository.update(accounts);
         if (data <= 0) {
             throw new IllegalArgumentException("Gagal mengubah data Bank Accounts, silakan coba kembali");
@@ -124,27 +91,5 @@ public class BankAccountsService {
             UUID currentAccountId) {
         return repository.findCoaForBankAccount(companyId, currentAccountId);
     }
-
-    // public List<ChartOfAccountsResponse> findCoaByparentId(UUID companyId, UUID
-    // parentId) {
-
-    // List<ChartOfAccounts> coaList = repository.findCoaByparentId(companyId,
-    // parentId);
-    // System.out.println("Keyword pencarian ========== " + parentId);
-    // List<ChartOfAccountsResponse> responseList = new ArrayList<>();
-    // if (parentId == null) {
-    // if (coaList.isEmpty()) {
-    // return Collections.emptyList();
-    // }
-    // } else {
-
-    // for (ChartOfAccounts coa : coaList) {
-    // ChartOfAccountsResponse response = new ChartOfAccountsResponse(coa);
-    // responseList.add(response);
-    // }
-    // }
-
-    // return responseList;
-    // }
 
 }

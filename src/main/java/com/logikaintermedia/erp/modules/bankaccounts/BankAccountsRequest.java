@@ -1,11 +1,9 @@
 package com.logikaintermedia.erp.modules.bankaccounts;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.logikaintermedia.erp.validation.OnCreate;
 import com.logikaintermedia.erp.validation.OnUpdate;
 import jakarta.validation.constraints.AssertTrue;

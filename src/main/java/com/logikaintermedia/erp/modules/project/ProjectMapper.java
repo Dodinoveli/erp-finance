@@ -8,11 +8,11 @@ import java.util.UUID;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.lang.NonNull;
 
-public class ProyekMapper implements RowMapper<Proyek> {
+public class ProjectMapper implements RowMapper<Project> {
 
     @Override
-    public Proyek mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
-        Proyek mdl = new Proyek();
+    public Project mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
+        Project mdl = new Project();
         mdl.setProjectId(rs.getObject("project_id", UUID.class));
         mdl.setProjectCode(rs.getString("project_code"));
         mdl.setProjectPo(rs.getString("project_po"));

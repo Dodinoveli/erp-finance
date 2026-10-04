@@ -8,7 +8,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import com.logikaintermedia.erp.modules.chartofaccounts.ChartOfAccounts;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

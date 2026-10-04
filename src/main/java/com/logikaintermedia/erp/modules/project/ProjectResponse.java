@@ -7,7 +7,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class ProyekResponse {
+public class ProjectResponse {
     private UUID projectId;
     private String projectCode;
     private String projectPo;
@@ -32,4 +32,23 @@ public class ProyekResponse {
 
     // client
     private String clientName;
+
+    public static ProjectResponse from(Project entity) {
+        ProjectResponse dto = new ProjectResponse();
+        dto.setProjectId(entity.getProjectId());
+        dto.setProjectCode(entity.getProjectCode());
+        dto.setProjectPo(entity.getProjectPo());
+        dto.setPoDate(entity.getPoDate());
+        dto.setName(entity.getName());
+        dto.setProjectType(entity.getProjectType());
+        dto.setContractValue(entity.getContractValue());
+        dto.setClientName(entity.getClientName());
+        dto.setTaxType(entity.getTaxType());
+        dto.setTotalTax(entity.getTotalTax());
+        dto.setDpp(entity.getDpp());
+        dto.setVatRate(entity.getVatRate());
+        dto.setTotalAmount(entity.getTotalAmount());
+        dto.setCreatedAt(entity.getCreatedAt());
+        return dto;
+    }
 }
