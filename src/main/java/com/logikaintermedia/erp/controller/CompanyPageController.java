@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class CompanyPageController {
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/perusahaan")
-    public String perusahaan() {
-        return "perusahaan/perusahaan";
-    }
+	@PreAuthorize("hasRole('Owner')")
+	@GetMapping("/perusahaan")
+	public String perusahaan() {
+		return "perusahaan/perusahaan";
+	}
 }

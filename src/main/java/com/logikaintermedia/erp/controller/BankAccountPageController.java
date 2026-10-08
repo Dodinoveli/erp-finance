@@ -18,72 +18,70 @@ import jakarta.servlet.http.HttpServletResponse;
 @lombok.extern.slf4j.Slf4j
 @Controller
 public class BankAccountPageController {
-    private final BankAccountsService service;
+	private final BankAccountsService service;
 
-    public BankAccountPageController(BankAccountsService service) {
-        this.service = service;
-    }
+	public BankAccountPageController(BankAccountsService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/bankaccount")
-    public String bankaccount(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        String title = "Daftar Kas & Bank";
-        model.addAttribute("pageTitle", title);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/bankaccount/list :: content";
-        }
-        return "content/bankaccount/list";
-    }
+	@PreAuthorize("hasRole('Owner')")
+	@GetMapping("/bankaccount")
+	public String bankaccount(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+			HttpServletResponse response) {
+		String title = "Daftar Kas & Bank";
+		model.addAttribute("pageTitle", title);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/bankaccount/list :: content";
+		}
+		return "content/bankaccount/list";
+	}
 
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/bankaccount/new")
-    public String bankaccountNew(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        String title = "Kas & Bank Baru";
-        model.addAttribute("pageTitle", title);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/bankaccount/new :: content";
-        }
-        return "content/bankaccount/new";
-    }
+	@PreAuthorize("hasRole('Owner')")
+	@GetMapping("/bankaccount/new")
+	public String bankaccountNew(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+			HttpServletResponse response) {
+		String title = "Kas & Bank Baru";
+		model.addAttribute("pageTitle", title);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/bankaccount/new :: content";
+		}
+		return "content/bankaccount/new";
+	}
 
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/bankaccount/edit/{id}")
-    public String edit(@PathVariable UUID id, Model model, @AuthenticationPrincipal AuthUserPrincipal principal,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        String title = "Edit Kas & Bank";
-        BankAccounts accounts = service.findDetailById(id, principal.getCompanyId());
-        List<ChartOfAccounts> data = service.findCoaForBankAccount(principal.getCompanyId(),
-                accounts.getCoa().getChildAccountId());
-        log.warn("akun id : {}", accounts.getCoa().getChildAccountId());
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        // coaAccounts
-        model.addAttribute("coaAccounts", data);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/bankaccount/edit :: content";
-        }
-        return "content/bankaccount/edit";
-    }
+	@PreAuthorize("hasRole('Owner')")
+	@GetMapping("/bankaccount/edit/{id}")
+	public String edit(@PathVariable UUID id, Model model, @AuthenticationPrincipal AuthUserPrincipal principal,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		String title = "Edit Kas & Bank";
+		BankAccounts accounts = service.findDetailById(id, principal.getCompanyId());
+		List<ChartOfAccounts> data = service.findCoaForBankAccount(principal.getCompanyId(),
+				accounts.getCoa().getChildAccountId());
+		log.warn("akun id : {}", accounts.getCoa().getChildAccountId());
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("accounts", accounts);
+		// coaAccounts
+		model.addAttribute("coaAccounts", data);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/bankaccount/edit :: content";
+		}
+		return "content/bankaccount/edit";
+	}
 
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/bankaccount/detail/{id}")
-    public String detail(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        BankAccounts accounts = service.findDetailById(id, principal.getCompanyId());
-        String title = "Detail Kas & Bank";
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("pageTitle", title);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/bankaccount/detail :: content";
-        }
-        return "content/bankaccount/detail";
-    }
+	@PreAuthorize("hasRole('Owner')")
+	@GetMapping("/bankaccount/detail/{id}")
+	public String detail(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		BankAccounts accounts = service.findDetailById(id, principal.getCompanyId());
+		String title = "Detail Kas & Bank";
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("pageTitle", title);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/bankaccount/detail :: content";
+		}
+		return "content/bankaccount/detail";
+	}
 }

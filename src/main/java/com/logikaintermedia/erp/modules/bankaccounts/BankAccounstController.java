@@ -26,62 +26,58 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/bankaccounts")
 public class BankAccounstController {
 
-    private final BankAccountsService service;
+	private final BankAccountsService service;
 
-    public BankAccounstController(BankAccountsService service) {
-        this.service = service;
-    }
+	public BankAccounstController(BankAccountsService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping
-    public ResponseEntity<?> findBankAccountsByCompanyId(
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        UUID companyId = principal.getCompanyId();
-        List<BankAccountsResponse> response = service.findBankAccountsByCompanyId(companyId);
-        return ResponseEntity.ok(ApiResponse.success("success", response));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping
+	public ResponseEntity<?> findBankAccountsByCompanyId(@AuthenticationPrincipal AuthUserPrincipal principal) {
+		UUID companyId = principal.getCompanyId();
+		List<BankAccountsResponse> response = service.findBankAccountsByCompanyId(companyId);
+		return ResponseEntity.ok(ApiResponse.success("success", response));
+	}
 
-    // mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/find-cash-and-bank-accounts-by-company-id")
-    public ResponseEntity<?> findCashAndBankAccountsByCompanyId(
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        UUID companyId = principal.getCompanyId();
-        List<ChartOfAccountsResponse> response = service.findCashAndBankAccountsByCompanyId(companyId);
-        return ResponseEntity.ok(ApiResponse.success("success", response));
-    }
+	// mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/find-cash-and-bank-accounts-by-company-id")
+	public ResponseEntity<?> findCashAndBankAccountsByCompanyId(@AuthenticationPrincipal AuthUserPrincipal principal) {
+		UUID companyId = principal.getCompanyId();
+		List<ChartOfAccountsResponse> response = service.findCashAndBankAccountsByCompanyId(companyId);
+		return ResponseEntity.ok(ApiResponse.success("success", response));
+	}
 
-    // @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    // @GetMapping("/find-coa-byparent-id/search")
-    // public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>>
-    // findCoaByparentId(
-    // @RequestParam(required = false) UUID parentId,
-    // @AuthenticationPrincipal AuthUserPrincipal principal) {
-    // UUID companyId = principal.getCompanyId();
-    // List<ChartOfAccountsResponse> data = service.findCoaByparentId(companyId,
-    // parentId);
-    // return ResponseEntity.ok(ApiResponse.success("success", data));
-    // }
+	// @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	// @GetMapping("/find-coa-byparent-id/search")
+	// public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>>
+	// findCoaByparentId(
+	// @RequestParam(required = false) UUID parentId,
+	// @AuthenticationPrincipal AuthUserPrincipal principal) {
+	// UUID companyId = principal.getCompanyId();
+	// List<ChartOfAccountsResponse> data = service.findCoaByparentId(companyId,
+	// parentId);
+	// return ResponseEntity.ok(ApiResponse.success("success", data));
+	// }
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PostMapping
-    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody BankAccountsRequest entity,
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        BankAccounts response = service.saveBankAccounts(entity, principal.getCompanyId(), principal.getUserId());
-        return ResponseEntity.ok(ApiResponse.success("data rekening berhasil disimpan", response));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PostMapping
+	public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody BankAccountsRequest entity,
+			@AuthenticationPrincipal AuthUserPrincipal principal) {
+		BankAccounts response = service.saveBankAccounts(entity, principal.getCompanyId(), principal.getUserId());
+		return ResponseEntity.ok(ApiResponse.success("data rekening berhasil disimpan", response));
+	}
 
-    @SuppressWarnings("null")
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody BankAccountsRequest entity,
-            @PathVariable UUID id,
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        BankAccounts data = service.updateBankAccounts(entity, id, principal.getCompanyId(),
-                principal.getUserId());
-        // BankAccountsResponse response = new BankAccountsResponse();
-        // BeanUtils.copyProperties(data, response);
-        return ResponseEntity.ok(ApiResponse.success("data rekening berhasil diperbaharui", data));
-    }
+	@SuppressWarnings("null")
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PutMapping("/{id}")
+	public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody BankAccountsRequest entity,
+			@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal) {
+		BankAccounts data = service.updateBankAccounts(entity, id, principal.getCompanyId(), principal.getUserId());
+		// BankAccountsResponse response = new BankAccountsResponse();
+		// BeanUtils.copyProperties(data, response);
+		return ResponseEntity.ok(ApiResponse.success("data rekening berhasil diperbaharui", data));
+	}
 
 }

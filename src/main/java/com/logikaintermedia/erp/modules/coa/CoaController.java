@@ -15,17 +15,17 @@ import com.logikaintermedia.erp.utility.ApiResponse;
 @RestController
 @RequestMapping("api/v1/coa")
 public class CoaController {
-    private final CoaService coaService;
+	private final CoaService coaService;
 
-    public CoaController(CoaService coaService) {
-        this.coaService = coaService;
-    }
+	public CoaController(CoaService coaService) {
+		this.coaService = coaService;
+	}
 
-    @PreAuthorize("hasRole('Owner')")
-    @GetMapping("/tree")
-    public ResponseEntity<ApiResponse<List<CoaResponse>>> getTree(@AuthenticationPrincipal AuthUserPrincipal user) {
-        UUID companyId = user.getCompanyId();
-        List<CoaResponse> response = coaService.getCoaTree(companyId);
-        return ResponseEntity.ok(ApiResponse.success("success", response));
-    }
+	@PreAuthorize("hasRole('Owner')")
+	@GetMapping("/tree")
+	public ResponseEntity<ApiResponse<List<CoaResponse>>> getTree(@AuthenticationPrincipal AuthUserPrincipal user) {
+		UUID companyId = user.getCompanyId();
+		List<CoaResponse> response = coaService.getCoaTree(companyId);
+		return ResponseEntity.ok(ApiResponse.success("success", response));
+	}
 }

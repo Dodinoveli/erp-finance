@@ -1,111 +1,115 @@
 <!doctype html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-  <div layout:fragment="content" th:fragment="content">
-    <main class="main">
-      <div class="container-fluid py-2">
-        <!-- TABLE CARD -->
-        <div class="row g-3 mb-2">
-          <!-- TOTAL -->
-          <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body py-2 px-3 d-flex align-items-center">
-                <div class="bg-primary bg-opacity-10 text-primary rounded p-2">
-                  <i class="bi bi-people"></i>
-                </div>
-                <div class="ms-2">
-                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Total Supplier
-                  </div>
-                  <div class="fw-semibold fs-5 text-primary" id="total-supplier">
-                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--  class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;" -->
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="container-fluid py-2">
+				<!-- TABLE CARD -->
+				<div class="row g-3 mb-2">
+					<!-- TOTAL -->
+					<div class="col-12 col-sm-6 col-xl-3">
+						<div class="card border-0 shadow-sm">
+							<div class="card-body py-2 px-3 d-flex align-items-center">
+								<div class="bg-primary bg-opacity-10 text-primary rounded p-2">
+									<i class="bi bi-people"></i>
+								</div>
+								<div class="ms-2">
+									<div class="text-muted small fw-semibold text-uppercase"
+										style="letter-spacing: 0.3px;">Total Supplier</div>
+									<div class="fw-semibold fs-5 text-primary" id="total-supplier">
+										<nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--  class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;" -->
 
-          <!-- AKTIF -->
-          <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body py-2 px-3 d-flex align-items-center">
-                <div class="bg-success bg-opacity-10 text-success rounded p-2">
-                  <i class="bi bi-person-check"></i>
-                </div>
-                <div class="ms-2">
-                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Supplier Aktif
-                  </div>
-                  <div class="fw-semibold fs-5 text-success" id="supplier-aktif">
-                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+					<!-- AKTIF -->
+					<div class="col-12 col-sm-6 col-xl-3">
+						<div class="card border-0 shadow-sm">
+							<div class="card-body py-2 px-3 d-flex align-items-center">
+								<div class="bg-success bg-opacity-10 text-success rounded p-2">
+									<i class="bi bi-person-check"></i>
+								</div>
+								<div class="ms-2">
+									<div class="text-muted small fw-semibold text-uppercase"
+										style="letter-spacing: 0.3px;">Supplier Aktif</div>
+									<div class="fw-semibold fs-5 text-success" id="supplier-aktif">
+										<nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-          <!-- NONAKTIF -->
-          <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body py-2 px-3 d-flex align-items-center">
-                <div class="bg-danger bg-opacity-10 text-danger rounded p-2">
-                  <i class="bi bi-person-x"></i>
-                </div>
-                <div class="ms-2">
-                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Nonaktif</div>
-                  <div class="fw-semibold fs-5 text-danger" id="supplier-nonaktif">
-                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+					<!-- NONAKTIF -->
+					<div class="col-12 col-sm-6 col-xl-3">
+						<div class="card border-0 shadow-sm">
+							<div class="card-body py-2 px-3 d-flex align-items-center">
+								<div class="bg-danger bg-opacity-10 text-danger rounded p-2">
+									<i class="bi bi-person-x"></i>
+								</div>
+								<div class="ms-2">
+									<div class="text-muted small fw-semibold text-uppercase"
+										style="letter-spacing: 0.3px;">Nonaktif</div>
+									<div class="fw-semibold fs-5 text-danger"
+										id="supplier-nonaktif">
+										<nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-          <!-- BARU -->
-          <div class="col-12 col-sm-6 col-xl-3">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body py-2 px-3 d-flex align-items-center">
-                <div class="bg-warning bg-opacity-10 text-warning rounded p-2">
-                  <i class="bi bi-person-plus"></i>
-                </div>
-                <div class="ms-2">
-                  <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.3px;">Supplier Baru
-                  </div>
-                  <div class="fw-semibold fs-5 text-warning" id="supplier-baru">
-                    <nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+					<!-- BARU -->
+					<div class="col-12 col-sm-6 col-xl-3">
+						<div class="card border-0 shadow-sm">
+							<div class="card-body py-2 px-3 d-flex align-items-center">
+								<div class="bg-warning bg-opacity-10 text-warning rounded p-2">
+									<i class="bi bi-person-plus"></i>
+								</div>
+								<div class="ms-2">
+									<div class="text-muted small fw-semibold text-uppercase"
+										style="letter-spacing: 0.3px;">Supplier Baru</div>
+									<div class="fw-semibold fs-5 text-warning" id="supplier-baru">
+										<nb-skeleton variant="text" width="100%" height="24px"></nb-skeleton>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-        <div class="card border-0 shadow-sm">
-          <!-- TABLE -->
-          <div class="table-responsive">
-            <!-- <table id="supplierTable" class="table table-hover align-middle mb-0 tabledt"> -->
-            <table id="supplierTable" class="table table-hover table-striped mb-0">
-              <thead>
-                <tr>
-                  <th>Kode</th>
-                  <th>Nama</th>
-                  <th>Kontak</th>
-                  <th>Email</th>
-                  <th>Tipe</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="supplier-table-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </main>
+				<div class="card border-0 shadow-sm">
+					<!-- TABLE -->
+					<div class="table-responsive">
+						<!-- <table id="supplierTable" class="table table-hover align-middle mb-0 tabledt"> -->
+						<table id="supplierTable"
+							class="table table-hover table-striped mb-0">
+							<thead>
+								<tr>
+									<th>Kode</th>
+									<th>Nama</th>
+									<th>Kontak</th>
+									<th>Email</th>
+									<th>Tipe</th>
+									<th>Status</th>
+									<th>Aksi</th>
+								</tr>
+							</thead>
+							<tbody id="supplier-table-body"></tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</main>
 
 
-  </div>
+	</div>
 </body>
 
 </html>

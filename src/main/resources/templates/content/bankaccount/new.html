@@ -1,103 +1,105 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 <style>
-    .input-readonly {
-        background-color: #d9d1d1 !important;
-    }
+.input-readonly {
+	background-color: #d9d1d1 !important;
+}
 </style>
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="detail-container p-2">
-                <form id="formBankAccountNew">
-                    <div class="card p-1">
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Kode</label>
-                                    <div class="form-field">
-                                        <input type="text" class="form-control input-underline" id="account_code"
-                                            name="accountCode" placeholder="Contoh: BCA01 atau KAS01 "> <small
-                                            class="text-danger" id="err-accountCode"> </small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Nama AKun</label>
-                                    <div class="form-field">
-                                        <input type="text" id="account_name" name="accountName"
-                                            class="form-control input-underline"
-                                            placeholder="Contoh: Bank BCA Operasional atau Kas Kantor">
-                                        <small class="text-danger" id="err-accountName"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-12">
-                                    <label class="lbl-normal">Tipe Akun</label>
-                                    <div class="form-field">
-                                        <select id="account_id" name="accountId" class="form-select select-underline"
-                                            aria-label="Default select example">
-                                        </select>
-                                        <small class="text-danger" id="err-accountId"></small>
-                                    </div>
-                                    <input type="hidden" name="accountType">
-                                </div>
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="detail-container p-2">
+				<form id="formBankAccountNew">
+					<div class="card p-1">
+						<div class="card-body">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="lbl-normal">Kode</label>
+									<div class="form-field">
+										<input type="text" class="form-control input-underline"
+											id="account_code" name="accountCode"
+											placeholder="Contoh: BCA01 atau KAS01 "> <small
+											class="text-danger" id="err-accountCode"> </small>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="lbl-normal">Nama AKun</label>
+									<div class="form-field">
+										<input type="text" id="account_name" name="accountName"
+											class="form-control input-underline"
+											placeholder="Contoh: Bank BCA Operasional atau Kas Kantor">
+										<small class="text-danger" id="err-accountName"></small>
+									</div>
+								</div>
+							</div>
+							<div class="row g-3">
+								<div class="col-md-12">
+									<label class="lbl-normal">Tipe Akun</label>
+									<div class="form-field">
+										<select id="account_id" name="accountId"
+											class="form-select select-underline"
+											aria-label="Default select example">
+										</select> <small class="text-danger" id="err-accountId"></small>
+									</div>
+									<input type="hidden" name="accountType">
+								</div>
 
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Nama Bank</label>
-                                    <div class="form-field">
-                                        <input type="text" id="bank_name" name="bankName"
-                                            class="form-control input-underline" placeholder="Contoh: Bank Bca">
-                                        <small class="text-danger" id="err-bankName"></small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Cabang</label>
-                                    <div class="form-field">
-                                        <input type="text" id="bank_branch" name="bankBranch"
-                                            class="form-control input-underline" placeholder="Contoh: Bandar Lampung">
-                                        <small class="text-danger" id="err-bankBranch"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">No Rekening</label>
-                                    <div class="form-field">
-                                        <input type="text" id="account_number" name="accountNumber"
-                                            class="form-control input-underline">
-                                        <small class="text-danger" id="err-accountNumber"></small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Pemilik</label>
-                                    <div class="form-field">
-                                        <input type="text" id="account_holder" name="accountHolder"
-                                            class="form-control input-underline">
-                                        <small class="text-danger" id="err-accountHolder"></small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+							</div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="lbl-normal">Nama Bank</label>
+									<div class="form-field">
+										<input type="text" id="bank_name" name="bankName"
+											class="form-control input-underline"
+											placeholder="Contoh: Bank Bca"> <small
+											class="text-danger" id="err-bankName"></small>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="lbl-normal">Cabang</label>
+									<div class="form-field">
+										<input type="text" id="bank_branch" name="bankBranch"
+											class="form-control input-underline"
+											placeholder="Contoh: Bandar Lampung"> <small
+											class="text-danger" id="err-bankBranch"></small>
+									</div>
+								</div>
+							</div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="lbl-normal">No Rekening</label>
+									<div class="form-field">
+										<input type="text" id="account_number" name="accountNumber"
+											class="form-control input-underline"> <small
+											class="text-danger" id="err-accountNumber"></small>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="lbl-normal">Pemilik</label>
+									<div class="form-field">
+										<input type="text" id="account_holder" name="accountHolder"
+											class="form-control input-underline"> <small
+											class="text-danger" id="err-accountHolder"></small>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="detail-actions">
-                        <button type="submit" class="btn btn-simpan">
-                            Simpan
-                        </button>
+					<div class="detail-actions">
+						<button type="submit" class="btn btn-simpan">Simpan</button>
 
-                        <button type="button" class="btn btn-batal" th:data-url="@{/bankaccount}"
-                            onclick="library.navigate(this.dataset.url)">Batal
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </main>
-    </div>
+						<button type="button" class="btn btn-batal"
+							th:data-url="@{/bankaccount}"
+							onclick="library.navigate(this.dataset.url)">Batal</button>
+					</div>
+				</form>
+			</div>
+		</main>
+	</div>
 </body>
 
 </html>

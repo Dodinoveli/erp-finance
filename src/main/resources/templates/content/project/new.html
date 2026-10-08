@@ -1,159 +1,164 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="container-fluid mt-2">
-                <form id="formProjectNew">
-                    <div class="card p-1">
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">PO NUMBER/ SPK</label>
-                                        <div class="form-field">
-                                            <input type="text" class="form-control input-underline" id="project_po"
-                                                name="projectPo"
-                                                placeholder="Contoh: PO/2026/08/0142, sesuaikan dengan no po anda">
-                                            <small class="text-danger" id="err-projectPo"> </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Tanggal PO NUMBER/ SPK</label>
-                                        <div class="form-field">
-                                            <input type="date" id="po_date" name="poDate"
-                                                class="form-control input-underline">
-                                            <small class="text-danger" id="err-poDate"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="container-fluid mt-2">
+				<form id="formProjectNew">
+					<div class="card p-1">
+						<div class="card-body">
+							<div class="row g-3">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">PO NUMBER/ SPK</label>
+										<div class="form-field">
+											<input type="text" class="form-control input-underline"
+												id="project_po" name="projectPo"
+												placeholder="Contoh: PO/2026/08/0142, sesuaikan dengan no po anda">
+											<small class="text-danger" id="err-projectPo"> </small>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Tanggal PO NUMBER/ SPK</label>
+										<div class="form-field">
+											<input type="date" id="po_date" name="poDate"
+												class="form-control input-underline"> <small
+												class="text-danger" id="err-poDate"></small>
+										</div>
+									</div>
+								</div>
+							</div>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Nama</label>
-                                        <div class="form-field">
-                                            <input type="text" id="name" name="name"
-                                                class="form-control input-underline">
-                                            <small class="text-danger" id="err-name"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Klien</label>
-                                        <div class="form-field">
-                                            <select id="client_id" name="clientId" class="form-control input-underline">
-                                            </select>
-                                            <small class=" text-danger" id="err-clientId"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Nama</label>
+										<div class="form-field">
+											<input type="text" id="name" name="name"
+												class="form-control input-underline"> <small
+												class="text-danger" id="err-name"></small>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Klien</label>
+										<div class="form-field">
+											<select id="client_id" name="clientId"
+												class="form-control input-underline p-1">
+											</select> <small class=" text-danger" id="err-clientId"></small>
+										</div>
+									</div>
+								</div>
+							</div>
 
-                            <div class="row g-3">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Deskripsi</label>
-                                        <div class="form-field">
-                                            <textarea name="description" id="description"
-                                                class="form-control input-underline" rows=" 1"
-                                                placeholder="Contoh: Pekerjaan Pembuatan gudang"></textarea>
-                                            <small class="text-danger" id="err-description"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+							<div class="row g-3">
+								<div class="col-md-12">
+									<div class="mb-3">
+										<label class="lbl-normal">Deskripsi</label>
+										<div class="form-field">
+											<textarea name="description" id="description"
+												class="form-control input-underline" rows="3"
+												placeholder="Contoh: Pekerjaan Pembuatan gudang"></textarea>
+											<small class="text-danger" id="err-description"></small>
+										</div>
+									</div>
+								</div>
+							</div>
 
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Jenis Proyek <span
-                                                class="text-danger">*</span></label>
-                                        <div class="form-field">
-                                            <select id="project_type" name="projectType"
-                                                class="form-select select-underline">
-                                                <option value="">-- Pilih Jenis Proyek --</option>
-                                                <option value="Konstruksi">Konstruksi & Bangunan</option>
-                                                <option value="Sipil">Sipil & Infrastruktur</option>
-                                                <option value="Elektrikal">Mekanikal & Elektrikal (MEP)</option>
-                                                <option value="Pengadaan">Pengadaan Barang (Procurement)</option>
-                                                <option value="Konsultansi">Konsultansi & Perencanaan</option>
-                                                <option value="Renovasi">Renovasi & Perawatan (Maintenance)</option>
-                                                <option value="IT">Teknologi Informasi (IT)</option>
-                                                <option value="Multi-Disiplin">Multi-Disiplin / EPC (Campuran)
-                                                </option>
-                                                <option value="General">General / Lain-lain</option>
-                                            </select>
-                                            <small class="text-danger" id="err-projectType"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Lokasi</label>
-                                        <div class="form-field">
-                                            <input type="text" id="location" name="location"
-                                                class="form-control input-underline" placeholder=" Lampung" />
-                                            <small class="text-danger" id="err-location"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Nilai Kontrak</label>
-                                        <div class="form-field">
-                                            <input type="text" id="contract_value" name="contractValue"
-                                                class="form-control input-underline" placeholder=" 100.000.000" />
-                                            <small class="text-danger" id="err-contractValue"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Termasuk PPN 12% ? <span
-                                                class="text-danger">*</span></label>
-                                        <div class="form-field">
-                                            <select id="tax_type" name="taxType" class="form-select select-underline">
-                                                <option value="">-- Pilih Skema PPN --</option>
-                                                <option value=" EXCLUSIVE">Nilai Kontrak BELUM termasuk PPN (Exclusive)
-                                                </option>
-                                                <option value="INCLUSIVE">Nilai Kontrak SUDAH termasuk PPN (Inclusive)
-                                                </option>
-                                                <option value="NON_PPN">Nilai Kontrak NON PPN </option>
-                                            </select>
-                                            <small class="text-danger" id="err-taxType"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Jenis Proyek <span
+											class="text-danger">*</span></label>
+										<div class="form-field">
+											<select id="project_type" name="projectType"
+												class="form-select select-underline p-1">
+												<option value="KONSTRUKSI">Konstruksi & Bangunan</option>
+												<option value="SIPIL">Sipil & Infrastruktur</option>
+												<option value="ELEKTRIKAL">Mekanikal & Elektrikal
+													(MEP)</option>
+												<option value="PENGADAAN">Pengadaan Barang
+													(Procurement)</option>
+												<option value="KONSULTANSI">Konsultansi &
+													Perencanaan</option>
+												<option value="RENOVASI">Renovasi & Perawatan
+													(Maintenance)</option>
+												<option value="IT">Teknologi Informasi (IT)</option>
+												<option value="MULTI_DISIPLIN">Multi-Disiplin / EPC
+													(Campuran)</option>
+												<option value="GENERAL">General / Lain-lain</option>
+											</select> <small class="text-danger" id="err-projectType"></small>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Lokasi</label>
+										<div class="form-field">
+											<input type="text" id="location" name="location"
+												class="form-control input-underline" placeholder=" Lampung" />
+											<small class="text-danger" id="err-location"></small>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Nilai Kontrak</label>
+										<div class="form-field">
+											<input type="text" id="contract_value" name="contractValue"
+												class="form-control input-underline"
+												placeholder=" 100.000.000" /> <small class="text-danger"
+												id="err-contractValue"></small>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="mb-3">
+										<label class="lbl-normal">Termasuk PPN 12% ? <span
+											class="text-danger">*</span></label>
+										<div class="form-field">
+											<select id="tax_type" name="taxType"
+												class="form-select select-underline p-1">
+												<option value="">-- Pilih Skema PPN --</option>
+												<option value="EXCLUSIVE">Nilai Kontrak BELUM
+													termasuk PPN (Exclusive)</option>
+												<option value="INCLUSIVE">Nilai Kontrak SUDAH
+													termasuk PPN (Inclusive)</option>
+												<option value="NON_PPN">Nilai Kontrak NON PPN</option>
+											</select> <small class="text-danger" id="err-taxType"></small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class=" detail-actions">
-                        <button type="submit" class="btn btn-simpan">
-                            <i class="bi bi-floppy"></i> Simpan
-                        </button>
+					<div class=" detail-actions">
+						<button type="submit" class="btn btn-simpan">
+							<i class="bi bi-floppy"></i> Simpan
+						</button>
 
-                        <button type="button" class="btn btn-batal" th:data-url="@{/project}"
-                            onclick="library.navigate(this.dataset.url)">
-                            <i class="bi bi-x-circle"></i> Batal
-                        </button>
+						<button type="button" class="btn btn-batal"
+							th:data-url="@{/project}"
+							onclick="library.navigate(this.dataset.url)">
+							<i class="bi bi-x-circle"></i> Batal
+						</button>
 
-                    </div>
-                </form>
-            </div>
-        </main>
+					</div>
+				</form>
+			</div>
+		</main>
 
-    </div>
+	</div>
 </body>
 
 </html>

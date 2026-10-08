@@ -12,17 +12,17 @@ import com.logikaintermedia.erp.utility.ApiResponse;
 @RequestMapping("/api/v1/accounttemplates")
 public class ChartOfAccountsTemplatesController {
 
-    private final ChartOfAccountsTemplatesService service;
+	private final ChartOfAccountsTemplatesService service;
 
-    public ChartOfAccountsTemplatesController(ChartOfAccountsTemplatesService service) {
-        this.service = service;
-    }
+	public ChartOfAccountsTemplatesController(ChartOfAccountsTemplatesService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/tree")
-    public ResponseEntity<ApiResponse<List<ChartOfAccountsTemplatesResponse>>> getFindAll() {
-        List<ChartOfAccountsTemplatesResponse> response = service.getFindAll();
-        return ResponseEntity.ok(ApiResponse.success("success", response));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/tree")
+	public ResponseEntity<ApiResponse<List<ChartOfAccountsTemplatesResponse>>> getFindAll() {
+		List<ChartOfAccountsTemplatesResponse> response = service.getFindAll();
+		return ResponseEntity.ok(ApiResponse.success("success", response));
+	}
 
 }

@@ -12,27 +12,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChartOfAccountsTemplates {
-    private UUID templateAccountId;
+	private UUID templateAccountId;
 
-    private String accountCode;
-    private String accountName;
+	private String accountCode;
+	private String accountName;
 
-    private String accountType;
-    private String normalBalance;
+	private String accountType;
+	private String normalBalance;
 
-    private UUID parentTemplateId;
+	private UUID parentTemplateId;
 
-    private Short accountLevel;
-    private Boolean isHeader;
-    private Boolean isPostable;
+	private Short accountLevel;
+	private Boolean isHeader;
+	private Boolean isPostable;
 
-    private String description;
-    private Integer sortOrder;
+	private String description;
+	private Integer sortOrder;
 
-    private OffsetDateTime createdAt;
-    private OffsetDateTime updatedAt;
+	private OffsetDateTime createdAt;
+	private OffsetDateTime updatedAt;
 
-    private UUID accountId;
-    private UUID companyId;
+	private UUID accountId;
+	private UUID companyId;
 
 }

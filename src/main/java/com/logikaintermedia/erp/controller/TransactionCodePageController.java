@@ -15,39 +15,38 @@ import jakarta.servlet.http.HttpServletResponse;
 @Controller
 public class TransactionCodePageController {
 
-    private final TransactionCodeService service;
+	private final TransactionCodeService service;
 
-    public TransactionCodePageController(TransactionCodeService service) {
-        this.service = service;
-    }
+	public TransactionCodePageController(TransactionCodeService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/transactioncode")
-    public String project(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        String title = " Kode Dokuemen";
-        model.addAttribute("pageTitle", title);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/transactioncode/list :: content";
-        }
-        return "content/transactioncode/list";
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/transactioncode")
+	public String project(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+			HttpServletResponse response) {
+		String title = " Kode Dokuemen";
+		model.addAttribute("pageTitle", title);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/transactioncode/list :: content";
+		}
+		return "content/transactioncode/list";
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/transactioncode/edit/{id}")
-    public String edit(@PathVariable UUID id, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        String title = "Edit Kode Dokuemen";
-        Optional<Map<String, Object>> result = service.companyCodeById(id);
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("trx", result.get());
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/transactioncode/edit/{id}")
+	public String edit(@PathVariable UUID id, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		String title = "Edit Kode Dokuemen";
+		Optional<Map<String, Object>> result = service.companyCodeById(id);
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("trx", result.get());
 
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/transactioncode/edit :: content";
-        }
-        return "content/transactioncode/edit";
-    }
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/transactioncode/edit :: content";
+		}
+		return "content/transactioncode/edit";
+	}
 }

@@ -26,55 +26,48 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/v1/suppliers")
 public class SupplierController {
-    private final SupplierService service;
+	private final SupplierService service;
 
-    public SupplierController(SupplierService service) {
-        this.service = service;
-    }
+	public SupplierController(SupplierService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping
-    public ResponseEntity<DataTableResponse<SupplierResponse>> getById(
-            @AuthenticationPrincipal AuthUserPrincipal user,
-            @RequestParam(defaultValue = "0") int draw,
-            @RequestParam(defaultValue = "0") int start,
-            @RequestParam(defaultValue = "10") int length,
-            @RequestParam(required = false) String keyword) {
-        UUID companyId = user.getCompanyId();
-        System.out.println("companyId = " + companyId);
-        DataTableResponse<SupplierResponse> response = service.getSupplierById(companyId, draw, start, length, keyword);
-        return ResponseEntity.ok(response);
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping
+	public ResponseEntity<DataTableResponse<SupplierResponse>> getById(@AuthenticationPrincipal AuthUserPrincipal user,
+			@RequestParam(defaultValue = "0") int draw, @RequestParam(defaultValue = "0") int start,
+			@RequestParam(defaultValue = "10") int length, @RequestParam(required = false) String keyword) {
+		UUID companyId = user.getCompanyId();
+		System.out.println("companyId = " + companyId);
+		DataTableResponse<SupplierResponse> response = service.getSupplierById(companyId, draw, start, length, keyword);
+		return ResponseEntity.ok(response);
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/total-new")
-    public ResponseEntity<DataCountResponse<Supplier>> getTotal(
-            @AuthenticationPrincipal AuthUserPrincipal user) {
-        DataCountResponse<Supplier> response = service.getTotal(user.getCompanyId());
-        return ResponseEntity.ok(response);
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/total-new")
+	public ResponseEntity<DataCountResponse<Supplier>> getTotal(@AuthenticationPrincipal AuthUserPrincipal user) {
+		DataCountResponse<Supplier> response = service.getTotal(user.getCompanyId());
+		return ResponseEntity.ok(response);
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PostMapping
-    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody SupplierRequest entity,
-            @AuthenticationPrincipal AuthUserPrincipal user) {
-        Supplier result = service.createSupplier(entity, user.getCompanyId(), user.getUserId());
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Data Supplier berhasil disimpan", result));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PostMapping
+	public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody SupplierRequest entity,
+			@AuthenticationPrincipal AuthUserPrincipal user) {
+		Supplier result = service.createSupplier(entity, user.getCompanyId(), user.getUserId());
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ApiResponse.created("Data Supplier berhasil disimpan", result));
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody SupplierRequest entity,
-            @PathVariable UUID id,
-            @AuthenticationPrincipal AuthUserPrincipal user) {
-        Supplier result = Objects.requireNonNull(service.updateSupplier(entity, id, user.getCompanyId()));
-        SupplierResponse data = new SupplierResponse();
-        BeanUtils.copyProperties(result, data);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Data Supplier berhasil diubah", data));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PutMapping("/{id}")
+	public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody SupplierRequest entity,
+			@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal user) {
+		Supplier result = Objects.requireNonNull(service.updateSupplier(entity, id, user.getCompanyId()));
+		SupplierResponse data = new SupplierResponse();
+		BeanUtils.copyProperties(result, data);
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ApiResponse.created("Data Supplier berhasil diubah", data));
+	}
 
 }

@@ -6,17 +6,17 @@ import lombok.Data;
 
 @Data
 public class User {
-    private UUID userId;
-    private String userName;
-    private String password;
-    private String fullName;
-    private String email;
-    private String phone;
-    private String roles;
-    private Boolean isActive;
-    private UUID companyId;
-    private OffsetDateTime createdAt;
-    private OffsetDateTime updatedAt;
+	private UUID userId;
+	private String userName;
+	private String password;
+	private String fullName;
+	private String email;
+	private String phone;
+	private String roles;
+	private Boolean isActive;
+	private UUID companyId;
+	private OffsetDateTime createdAt;
+	private OffsetDateTime updatedAt;
 
-    private String deviceId;
+	private String deviceId;
 }

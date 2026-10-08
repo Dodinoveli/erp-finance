@@ -1,171 +1,166 @@
-<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-pemetaan-bagan-akun-Content">
-    <style>
-        /* Container untuk merapikan isi konten di bawah tab */
-        .tab-content-container {
-            border: 0px solid #dee2e6;
-            border-top: none;
-            background: #f5f5f5;
-        }
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org"
+	id="panel-pemetaan-bagan-akun-Content">
+	<style>
+/* Container untuk merapikan isi konten di bawah tab */
+.tab-content-container {
+	border: 0px solid #dee2e6;
+	border-top: none;
+	background: #f5f5f5;
+}
 
-        /* #formPemetaanBaganAkun,
+/* #formPemetaanBaganAkun,
         #view-input-pemetaan {
             height: 100%;
             overflow: hidden;
         } */
+.container-fluid {
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
 
-        .container-fluid {
-            padding-left: 10px !important;
-            padding-right: 10px !important;
-        }
+/* Garis tipis pemisah */
+.border-top {
+	border-top: 1px solid #eee !important;
+}
 
-        /* Garis tipis pemisah */
-        .border-top {
-            border-top: 1px solid #eee !important;
-        }
+/* untuk tombol export dll */
+/* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+.dropdown-toggle::after {
+	vertical-align: middle;
+}
 
-        /* untuk tombol export dll */
-        /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
-        .dropdown-toggle::after {
-            vertical-align: middle;
-        }
+/* Efek hover pada item dropdown */
+.dropdown-item:hover {
+	background-color: #f8f9fa;
+	color: #2b7de9;
+}
 
-        /* Efek hover pada item dropdown */
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            color: #2b7de9;
-        }
+/* Memberikan warna ikon agar lebih informatif */
+.dropdown-item i {
+	width: 20px;
+	text-align: center;
+}
 
-        /* Memberikan warna ikon agar lebih informatif */
-        .dropdown-item i {
-            width: 20px;
-            text-align: center;
-        }
+.card-body-easyui {
+	padding: 15px !important;
+	border-radius: 0 0 4px 4px;
+}
+</style>
+	<ul class="nav nav-tabs custom-terminal-tabs" id="clientTab"
+		style="position: sticky; top: 0">
+		<li class="nav-item">
+			<button class="nav-link text-light" id="btn-tab-list-client"
+				onclick="clientModel.switchTabClient('view-list-client')">
+				<i class="fas fa-list me-1"></i>
+			</button>
+		</li>
 
-        .card-body-easyui {
-            padding: 15px !important;
-            border-radius: 0 0 4px 4px;
-        }
-    </style>
-    <ul class="nav nav-tabs custom-terminal-tabs" id="clientTab" style="position: sticky; top: 0">
-        <li class="nav-item">
-            <button class="nav-link text-light" id="btn-tab-list-client"
-                onclick="clientModel.switchTabClient('view-list-client')">
-                <i class="fas fa-list me-1"></i>
-            </button>
-        </li>
+		<li class="nav-item">
+			<button class="nav-link active" id="btn-tab-input-client"
+				onclick="clientModel.switchTabClient('view-input-pemetaan')">
+				<i class="fas fa-edit me-1" id="txtinput"></i> <span
+					id="text-label-client">Data Baru</span>
+			</button>
+		</li>
 
-        <li class="nav-item">
-            <button class="nav-link active" id="btn-tab-input-client"
-                onclick="clientModel.switchTabClient('view-input-pemetaan')">
-                <i class="fas fa-edit me-1" id="txtinput"></i>
-                <span id="text-label-client">Data Baru</span>
-            </button>
-        </li>
+		<li class="nav-item" id="li-tab-detail-client" style="display: none">
+			<button class="nav-link text-light" id="btn-tab-detail-client">
+				<i class="fas fa-id-card me-1"></i> Detail: <span
+					id="tab-label-client"></span> <span class="ms-2 badge bg-danger"
+					onclick="clientModel.closeEdit(event)" style="cursor: pointer">×</span>
+			</button>
+		</li>
+	</ul>
 
-        <li class="nav-item" id="li-tab-detail-client" style="display: none">
-            <button class="nav-link text-light" id="btn-tab-detail-client">
-                <i class="fas fa-id-card me-1"></i> Detail:
-                <span id="tab-label-client"></span>
-                <span class="ms-2 badge bg-danger" onclick="clientModel.closeEdit(event)"
-                    style="cursor: pointer">×</span>
-            </button>
-        </li>
-    </ul>
+	<div class="tab-content-container p-0">
+		<form id="formPemetaanBaganAkun">
+			<div id="view-input-pemetaan" style="display: block">
+				<div class="container-fluid py-2">
+					<div class="row g-3">
+						<div class="col-md-12">
+							<div class="card border-0 shadow-sm"
+								style="width: 100%; border-radius: 0px">
+								<div class="card-body card-body-easyui p-3">
+									<div class="row">
+										<input type="hidden" id="mapping_id" name="mappingId" />
+										<div class="col-md-12 pe-md-4">
+											<div class="accurate-form-group">
+												<label> Tipe Transaksi </label>
+												<div class="form-field">
+													<select id="transaction_type" name="transactionType"
+														class="form-control form-control-sm">
+														<option value="" disabled selected>-- Pilih Tipe
+															Transaksi --</option>
+														<option value="PENAGIHAN_TERM_PROYEK">Penagihan
+															Progress / Termin Proyek (Invoice ke Owner)</option>
+														<option value="PEMBELIAN_MATERIAL_LANGSUNG">Pembelian
+															Material Langsung (Semen, Besi, dll ke Proyek jadi beban)</option>
+														<option value="PEMBELIAN_MATERIAL_STOK">Pembelian
+															Material Stok (Masuk Gudang dulu jadi ASET)</option>
+														<option value="OPNAME_SUBKONTRAKTOR">Opname
+															Pekerjaan Subkontraktor / Mandor</option>
+													</select> <small class="text-danger" id="err-transactionType"></small>
+												</div>
+											</div>
 
-    <div class="tab-content-container p-0">
-        <form id="formPemetaanBaganAkun">
-            <div id="view-input-pemetaan" style="display: block">
-                <div class="container-fluid py-2">
-                    <div class="row g-3">
-                        <div class="col-md-12">
-                            <div class="card border-0 shadow-sm" style="width: 100%; border-radius: 0px">
-                                <div class="card-body card-body-easyui p-3">
-                                    <div class="row">
-                                        <input type="hidden" id="mapping_id" name="mappingId" />
-                                        <div class="col-md-12 pe-md-4">
-                                            <div class="accurate-form-group">
-                                                <label> Tipe Transaksi </label>
-                                                <div class="form-field">
-                                                    <select id="transaction_type" name="transactionType"
-                                                        class="form-control form-control-sm">
-                                                        <option value="" disabled selected>
-                                                            -- Pilih Tipe Transaksi --
-                                                        </option>
-                                                        <option value="PENAGIHAN_TERM_PROYEK">Penagihan Progress /
-                                                            Termin Proyek (Invoice ke Owner)</option>
-                                                        <option value="PEMBELIAN_MATERIAL_LANGSUNG">Pembelian Material
-                                                            Langsung (Semen, Besi, dll ke Proyek jadi beban)</option>
-                                                        <option value="PEMBELIAN_MATERIAL_STOK">Pembelian Material Stok
-                                                            (Masuk Gudang dulu jadi ASET)</option>
-                                                        <option value="OPNAME_SUBKONTRAKTOR">Opname Pekerjaan
-                                                            Subkontraktor / Mandor</option>
-                                                    </select>
-                                                    <small class="text-danger" id="err-transactionType"></small>
-                                                </div>
-                                            </div>
+											<div class="accurate-form-group">
+												<label> Metode Pembayaran</label>
+												<div class="form-field">
+													<select id="payment_type" name="paymentType"
+														class="form-control form-control-sm">
+														<option value="" disabled selected>-- Pilih
+															Metode Pembayaran --</option>
+														<option value="TUNAI">TUNAI (Kas Kecil Lapangan /
+															Cash)</option>
+														<option value="TRANSFER">TRANSFER (Bank Utama)</option>
+														<option value="TEMPO">TEMPO (Hutang / Piutang
+															Usaha)</option>
+													</select> <small class="text-danger" id="err-paymentType"></small>
+												</div>
+											</div>
 
-                                            <div class="accurate-form-group">
-                                                <label> Metode Pembayaran</label>
-                                                <div class="form-field">
-                                                    <select id="payment_type" name="paymentType"
-                                                        class="form-control form-control-sm">
-                                                        <option value="" disabled selected>
-                                                            -- Pilih Metode Pembayaran --
-                                                        </option>
-                                                        <option value="TUNAI">TUNAI (Kas Kecil Lapangan / Cash)</option>
-                                                        <option value="TRANSFER">TRANSFER (Bank Utama)</option>
-                                                        <option value="TEMPO">TEMPO (Hutang / Piutang Usaha)</option>
-                                                    </select>
-                                                    <small class="text-danger" id="err-paymentType"></small>
-                                                </div>
-                                            </div>
+											<div class="accurate-form-group">
+												<label> Bagan Akun Debit </label>
+												<div class="form-field">
+													<select id="debit_coa_id" name="debitCoaId"
+														class="form-control form-control-sm">
+														<option value="" disabled selected>-- Pilih Bagan
+															Akun Debit --</option>
+														<!-- Data dari database chart_of_accounts akan di-looping di sini -->
+														<!-- Contoh format: <option value="UUID-AKUN">1.1.01.01 - Kas Besar</option> -->
+													</select> <small class="text-danger" id="err-debitCoaId"></small>
+												</div>
+											</div>
 
-                                            <div class="accurate-form-group">
-                                                <label> Bagan Akun Debit </label>
-                                                <div class="form-field">
-                                                    <select id="debit_coa_id" name="debitCoaId"
-                                                        class="form-control form-control-sm">
-                                                        <option value="" disabled selected>
-                                                            -- Pilih Bagan Akun Debit --
-                                                        </option>
-                                                        <!-- Data dari database chart_of_accounts akan di-looping di sini -->
-                                                        <!-- Contoh format: <option value="UUID-AKUN">1.1.01.01 - Kas Besar</option> -->
-                                                    </select>
-                                                    <small class="text-danger" id="err-debitCoaId"></small>
-                                                </div>
-                                            </div>
-
-                                            <div class="accurate-form-group">
-                                                <label> Bagan Akun Kredit </label>
-                                                <div class="form-field">
-                                                    <select id="credit_coa_id" name="creditCoaId"
-                                                        class="form-control form-control-sm">
-                                                        <option value="" disabled selected>
-                                                            -- Pilih Bagan Akun Kredit --
-                                                        </option>
-                                                        <!-- Data dari database chart_of_accounts akan di-looping di sini -->
-                                                        <!-- Contoh format: <option value="UUID-AKUN">4.1.01.01 - Pendapatan Proyek</option> -->
-                                                    </select>
-                                                    <small class="text-danger" id="err-creditCoaId"></small>
-                                                </div>
-                                            </div>
+											<div class="accurate-form-group">
+												<label> Bagan Akun Kredit </label>
+												<div class="form-field">
+													<select id="credit_coa_id" name="creditCoaId"
+														class="form-control form-control-sm">
+														<option value="" disabled selected>-- Pilih Bagan
+															Akun Kredit --</option>
+														<!-- Data dari database chart_of_accounts akan di-looping di sini -->
+														<!-- Contoh format: <option value="UUID-AKUN">4.1.01.01 - Pendapatan Proyek</option> -->
+													</select> <small class="text-danger" id="err-creditCoaId"></small>
+												</div>
+											</div>
 
 
-                                            <div class="accurate-form-group">
-                                                <label style="padding-top: 5px">Deskripsi</label>
-                                                <div class="form-field">
-                                                    <textarea id="description" name="description"
-                                                        class="form-control form-control-sm" rows="3"
-                                                        placeholder="Otomatisasi jurnal saat kontraktor menerbitkan invoice progress proyek ke owner secara tempo."></textarea>
-                                                    <small class="text-danger" id="err-description"></small>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+											<div class="accurate-form-group">
+												<label style="padding-top: 5px">Deskripsi</label>
+												<div class="form-field">
+													<textarea id="description" name="description"
+														class="form-control form-control-sm" rows="3"
+														placeholder="Otomatisasi jurnal saat kontraktor menerbitkan invoice progress proyek ke owner secara tempo."></textarea>
+													<small class="text-danger" id="err-description"></small>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
-                            <!-- <div class="p-2">
+							<!-- <div class="p-2">
                 <button type="submit" form="formPemetaanBaganAkun" class="btn btn-primary" style="
                     --bs-btn-padding-y: 0.35rem;
                     --bs-btn-padding-x: 0.5rem;
@@ -182,36 +177,36 @@
                   <i class="bi bi-x-circle"></i> Batal
                 </button>
               </div> -->
-                            <div class="card mt-1 shadow-sm border-0">
-                                <div class="card-body text-center">
-                                    <div class="d-flex justify-content-center gap-3">
-                                        <button type="submit" class="btn btn-primary px-4">
-                                            <i class="bi bi-floppy"></i> Simpan
-                                        </button>
-                                        <button type="reset" class="btn btn-danger px-4">
-                                            <i class="bi bi-x-circle"></i> Batal
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+							<div class="card mt-1 shadow-sm border-0">
+								<div class="card-body text-center">
+									<div class="d-flex justify-content-center gap-3">
+										<button type="submit" class="btn btn-primary px-4">
+											<i class="bi bi-floppy"></i> Simpan
+										</button>
+										<button type="reset" class="btn btn-danger px-4">
+											<i class="bi bi-x-circle"></i> Batal
+										</button>
+									</div>
+								</div>
+							</div>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 
-        <div id="view-list-client" style="display: none; padding: 5px">
-            <div class="toolbar-easyui">
-                <div class="btn-separator"></div>
-                <button id="btn-tambah-client" class="btn-tambah fw-bold">
-                    <i class="fas fa-plus"></i> Tambah
-                </button>
-                <button id="btn-refresh-client" class="btn-segarkan">
-                    <i class="fas fa-sync-alt"></i> Refresh
-                </button>
+		<div id="view-list-client" style="display: none; padding: 5px">
+			<div class="toolbar-easyui">
+				<div class="btn-separator"></div>
+				<button id="btn-tambah-client" class="btn-tambah fw-bold">
+					<i class="fas fa-plus"></i> Tambah
+				</button>
+				<button id="btn-refresh-client" class="btn-segarkan">
+					<i class="fas fa-sync-alt"></i> Refresh
+				</button>
 
-                <!-- <div class="dropdown d-inline-block" style="position: relative">
+				<!-- <div class="dropdown d-inline-block" style="position: relative">
                     <button class="btn-excel dropdown-toggle" type="button"
                         onclick="clientModel.toggleExcelMenu(event)">
                         <i class="fas fa-file-excel me-1"></i> Export
@@ -258,51 +253,52 @@
                     </ul>
                 </div> -->
 
-                <!-- <button class="btn-print"><i class="fas fa-print"></i> Print</button> -->
+				<!-- <button class="btn-print"><i class="fas fa-print"></i> Print</button> -->
 
-                <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
-                    <div class="search-container-terminal me-2">
-                        <input type="text" id="search-client-input" placeholder="Search..."
-                            class="input-hugo-terminal" />
-                    </div>
-                    <button id="btn-search-client" class="btn-cari">
-                        <i class="fas fa-search"></i> Submit
-                    </button>
-                </div>
-            </div>
+				<div
+					style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+					<div class="search-container-terminal me-2">
+						<input type="text" id="search-client-input"
+							placeholder="Search..." class="input-hugo-terminal" />
+					</div>
+					<button id="btn-search-client" class="btn-cari">
+						<i class="fas fa-search"></i> Submit
+					</button>
+				</div>
+			</div>
 
-            <div class="table-wrapper table-wrapper-client" id="client-wrapper">
-                <table id="client-table">
-                    <thead>
-                        <tr>
-                            <th class="kolom-sticky-1 resizer">Kode</th>
-                            <th class="kolom-sticky-2 resizer">Perusahaan</th>
-                            <th class="kolom-sticky-3 resizer">Tipe Klien</th>
-                            <th class="resizer" style="width: 150px">Npwp</th>
-                            <th class="resizer" style="width: 150px">Nik</th>
-                            <th class="resizer" style="width: 150px">Nitku</th>
-                            <th class="resizer" style="width: 100px">Pkp</th>
-                            <th class="resizer" style="width: 200px">Alamat</th>
-                            <th class="resizer" style="width: 160px">Kota</th>
-                            <th class="resizer" style="width: 160px">Propinsi</th>
-                            <th class="resizer" style="width: 100px">Kode Pos</th>
-                            <th class="resizer" style="width: 150px">Negara</th>
-                            <th class="resizer" style="width: 150px">Email</th>
-                            <th class="resizer" style="width: 150px">Nama Kontak</th>
-                            <th class="resizer" style="width: 130px">Telepon</th>
-                            <th class="resizer" style="width: 100px">Status</th>
-                            <th class="resizer" style="width: 100px">Bank</th>
-                            <th class="resizer" style="width: 120px">Rekening</th>
-                            <th class="resizer" style="width: 150px">Pemilik Rekening</th>
-                        </tr>
-                    </thead>
-                    <tbody id="client-table-body"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+			<div class="table-wrapper table-wrapper-client" id="client-wrapper">
+				<table id="client-table">
+					<thead>
+						<tr>
+							<th class="kolom-sticky-1 resizer">Kode</th>
+							<th class="kolom-sticky-2 resizer">Perusahaan</th>
+							<th class="kolom-sticky-3 resizer">Tipe Klien</th>
+							<th class="resizer" style="width: 150px">Npwp</th>
+							<th class="resizer" style="width: 150px">Nik</th>
+							<th class="resizer" style="width: 150px">Nitku</th>
+							<th class="resizer" style="width: 100px">Pkp</th>
+							<th class="resizer" style="width: 200px">Alamat</th>
+							<th class="resizer" style="width: 160px">Kota</th>
+							<th class="resizer" style="width: 160px">Propinsi</th>
+							<th class="resizer" style="width: 100px">Kode Pos</th>
+							<th class="resizer" style="width: 150px">Negara</th>
+							<th class="resizer" style="width: 150px">Email</th>
+							<th class="resizer" style="width: 150px">Nama Kontak</th>
+							<th class="resizer" style="width: 130px">Telepon</th>
+							<th class="resizer" style="width: 100px">Status</th>
+							<th class="resizer" style="width: 100px">Bank</th>
+							<th class="resizer" style="width: 120px">Rekening</th>
+							<th class="resizer" style="width: 150px">Pemilik Rekening</th>
+						</tr>
+					</thead>
+					<tbody id="client-table-body"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-    <script type="module" th:inline="javascript">
+	<script type="module" th:inline="javascript">
         const clientModel = {
             cursorCreatedAt: null,
             cursorId: null,

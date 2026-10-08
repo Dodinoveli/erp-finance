@@ -1,86 +1,86 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="container-fluid py-1">
-                <!-- TABLE CARD -->
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body border-bottom">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-12">
-                                <div class="d-flex gap-2 align-items-center flex-wrap">
-                                    <a href="javascript:void(0)" class="btn btn-primary"
-                                        th:data-url="@{/coa/detail/{id}(id=${parent.accountId})}"
-                                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                                        <i class="bi bi-arrow-left"></i> Kembali
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <span class="fw-semibold">Parent :</span>
-                                <span th:text="${parent.accountCode}">Kas</span> -
-                                <span th:text="${parent.accountName}">Kas</span>
-                            </div>
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="container-fluid py-1">
+				<!-- TABLE CARD -->
+				<div class="card border-0 shadow-sm">
+					<div class="card-body border-bottom">
+						<div class="row g-3 align-items-center">
+							<div class="col-12">
+								<div class="d-flex gap-2 align-items-center flex-wrap">
+									<a href="javascript:void(0)" class="btn btn-primary"
+										th:data-url="@{/coa/detail/{id}(id=${parent.accountId})}"
+										onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+										<i class="bi bi-arrow-left"></i> Kembali
+									</a>
+								</div>
+							</div>
+							<div class="col">
+								<span class="fw-semibold">Parent :</span> <span
+									th:text="${parent.accountCode}">Kas</span> - <span
+									th:text="${parent.accountName}">Kas</span>
+							</div>
 
-                        </div>
-                    </div>
+						</div>
+					</div>
 
-                    <!-- existing -->
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 150px;">Kode Akun</th>
-                                <th scope="col">Nama Akun</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="account : ${accounts}">
-                                <td>
-                                    <input type="hidden" name="accountId" th:value="${account.accountId}">
+					<!-- existing -->
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col" style="width: 150px;">Kode Akun</th>
+								<th scope="col">Nama Akun</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="account : ${accounts}">
+								<td><input type="hidden" name="accountId"
+									th:value="${account.accountId}"> <input type="text"
+									name="accountCode"
+									class="form-control form-control-sm bg-success text-white"
+									th:value="${account.accountCode}" readonly></td>
+								<!-- <td th:text="${account.accountName}"></td> -->
+								<td><input type="text" class="form-control form-control-sm"
+									th:value="${account.accountName}" name="accountName"></td>
+							</tr>
+						</tbody>
+					</table>
 
-                                    <input type="text" name="accountCode"
-                                        class="form-control form-control-sm bg-success text-white"
-                                        th:value="${account.accountCode}" readonly>
+				</div>
 
-                                </td>
-                                <!-- <td th:text="${account.accountName}"></td> -->
-                                <td>
-                                    <input type="text" class="form-control form-control-sm"
-                                        th:value="${account.accountName}" name="accountName">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+				<form id="accountForm" th:action="@{/coa/add}" method="post"
+					th:hx-post="@{/coa/add}" hx-target="#page-content"
+					hx-swap="innerHTML">
 
-                </div>
+					<input type="hidden" th:name="parentId"
+						th:value="${parent.accountId}"> <input type="hidden"
+						th:name="accountType" th:value="${parent.accountType}"> <input
+						type="hidden" th:name="normalBalance"
+						th:value="${parent.normalBalance}">
 
-                <form id="accountForm" th:action="@{/coa/add}" method="post" th:hx-post="@{/coa/add}"
-                    hx-target="#page-content" hx-swap="innerHTML">
+					<table class="table">
+						<tbody id="newAccountRows"></tbody>
+					</table>
 
-                    <input type="hidden" th:name="parentId" th:value="${parent.accountId}">
-                    <input type="hidden" th:name="accountType" th:value="${parent.accountType}">
-                    <input type="hidden" th:name="normalBalance" th:value="${parent.normalBalance}">
+					<button type="button"
+						class="btn btn-outline-primary btn-sm w-100 mb-2" id="addRow">
+						<i class="bi bi-plus"></i> Tambah
+					</button>
 
-                    <table class="table">
-                        <tbody id="newAccountRows"></tbody>
-                    </table>
+					<button type="submit" class="btn btn-success btn-sm w-100">
+						<i class="bi bi-check"></i> Simpan
+					</button>
 
-                    <button type="button" class="btn btn-outline-primary btn-sm w-100 mb-2" id="addRow">
-                        <i class="bi bi-plus"></i> Tambah
-                    </button>
+				</form>
 
-                    <button type="submit" class="btn btn-success btn-sm w-100">
-                        <i class="bi bi-check"></i> Simpan
-                    </button>
-
-                </form>
-
-            </div>
-        </main>
-        <script>
+			</div>
+		</main>
+		<script>
             document.getElementById('addRow').addEventListener('click', function () {
                 document.getElementById('newAccountRows').insertAdjacentHTML('beforeend', `
                     <tr>
@@ -163,7 +163,7 @@
 
             });
         </script>
-    </div>
+	</div>
 
 </body>
 

@@ -3,43 +3,43 @@
 // ======================================================
 
 const Toast = Swal.mixin({
-  toast: true,
-  position: "top-end",
-  showConfirmButton: false,
-  timer: 3000,
-  timerProgressBar: true,
+	toast: true,
+	position: "top-end",
+	showConfirmButton: false,
+	timer: 3000,
+	timerProgressBar: true,
 
-  didOpen: (toast) => {
-    toast.addEventListener("mouseenter", Swal.stopTimer);
-    toast.addEventListener("mouseleave", Swal.resumeTimer);
-  },
+	didOpen: (toast) => {
+		toast.addEventListener("mouseenter", Swal.stopTimer);
+		toast.addEventListener("mouseleave", Swal.resumeTimer);
+	},
 });
 
 let toastLoadingInstance = null;
 
 function showToastLoading(text = "Memproses...") {
-  if (toastLoadingInstance) {
-    Swal.close();
-    toastLoadingInstance = null;
-  }
+	if (toastLoadingInstance) {
+		Swal.close();
+		toastLoadingInstance = null;
+	}
 
-  Toast.fire({
-    title: text,
-    showConfirmButton: false,
-    timer: null,
-    didOpen: () => {
-      Swal.showLoading();
-    },
-  });
+	Toast.fire({
+		title: text,
+		showConfirmButton: false,
+		timer: null,
+		didOpen: () => {
+			Swal.showLoading();
+		},
+	});
 
-  toastLoadingInstance = true;
+	toastLoadingInstance = true;
 }
 
 function hideToastLoading() {
-  if (toastLoadingInstance) {
-    Swal.close();
-    toastLoadingInstance = null;
-  }
+	if (toastLoadingInstance) {
+		Swal.close();
+		toastLoadingInstance = null;
+	}
 }
 
 // ======================================================
@@ -49,19 +49,19 @@ function hideToastLoading() {
 let loadingCounter = 0;
 
 function startLoading(text = "Memproses...") {
-  loadingCounter++;
+	loadingCounter++;
 
-  if (loadingCounter === 1) {
-    showToastLoading(text || "Memproses...");
-  }
+	if (loadingCounter === 1) {
+		showToastLoading(text || "Memproses...");
+	}
 }
 
 function stopLoading() {
-  loadingCounter = Math.max(0, loadingCounter - 1);
+	loadingCounter = Math.max(0, loadingCounter - 1);
 
-  if (loadingCounter === 0) {
-    hideToastLoading();
-  }
+	if (loadingCounter === 0) {
+		hideToastLoading();
+	}
 }
 
 // ======================================================
@@ -69,8 +69,8 @@ function stopLoading() {
 // ======================================================
 
 const API_BASE_URL =
-  `${window.location.protocol}//${window.location.hostname}` +
-  `${window.location.port ? ":" + window.location.port : ""}`;
+	`${window.location.protocol}//${window.location.hostname}` +
+	`${window.location.port ? ":" + window.location.port : ""}`;
 
 // ======================================================
 // 🔐 REFRESH STATE
@@ -83,56 +83,56 @@ let refreshPromise = null;
 // ======================================================
 
 async function handleResponse(response) {
-  // 403 = unauthorized / forbidden
-  if (response.status === 403) {
-    window.location.href = "/login";
-    throw new Error("Session expired");
-  }
+	// 403 = unauthorized / forbidden
+	if (response.status === 403) {
+		window.location.href = "/login";
+		throw new Error("Session expired");
+	}
 
-  const contentType = response.headers.get("content-type") || "";
+	const contentType = response.headers.get("content-type") || "";
 
-  let data = null;
+	let data = null;
 
-  try {
-    if (contentType.includes("application/json")) {
-      data = await response.json();
-    } else {
-      const text = await response.text();
+	try {
+		if (contentType.includes("application/json")) {
+			data = await response.json();
+		} else {
+			const text = await response.text();
 
-      data = text ? { message: text } : null;
-    }
-  } catch {
-    data = null;
-  }
+			data = text ? { message: text } : null;
+		}
+	} catch {
+		data = null;
+	}
 
-  // ==================================================
-  // ❌ HTTP ERROR
-  // ==================================================
+	// ==================================================
+	// ❌ HTTP ERROR
+	// ==================================================
 
-  if (!response.ok) {
-    const message =
-      data?.message ||
-      data?.error ||
-      response.statusText ||
-      "Terjadi kesalahan pada server";
+	if (!response.ok) {
+		const message =
+			data?.message ||
+			data?.error ||
+			response.statusText ||
+			"Terjadi kesalahan pada server";
 
-    const error = new Error(message);
+		const error = new Error(message);
 
-    error.data = data;
-    error.status = response.status;
+		error.data = data;
+		error.status = response.status;
 
-    throw error;
-  }
+		throw error;
+	}
 
-  // ==================================================
-  // 📭 NO CONTENT
-  // ==================================================
+	// ==================================================
+	// 📭 NO CONTENT
+	// ==================================================
 
-  if (response.status === 204) {
-    return null;
-  }
+	if (response.status === 204) {
+		return null;
+	}
 
-  return data;
+	return data;
 }
 
 // ======================================================
@@ -140,28 +140,28 @@ async function handleResponse(response) {
 // ======================================================
 
 async function doRefresh() {
-  if (!refreshPromise) {
-    refreshPromise = fetch(API_BASE_URL + "/api/auth/refresh", {
-      method: "POST",
-      credentials: "include",
-    })
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error("Refresh gagal");
-        }
+	if (!refreshPromise) {
+		refreshPromise = fetch(API_BASE_URL + "/api/auth/refresh", {
+			method: "POST",
+			credentials: "include",
+		})
+			.then(async (response) => {
+				if (!response.ok) {
+					throw new Error("Refresh gagal");
+				}
 
-        try {
-          return await response.json();
-        } catch {
-          return {};
-        }
-      })
-      .finally(() => {
-        refreshPromise = null;
-      });
-  }
+				try {
+					return await response.json();
+				} catch {
+					return {};
+				}
+			})
+			.finally(() => {
+				refreshPromise = null;
+			});
+	}
 
-  return refreshPromise;
+	return refreshPromise;
 }
 
 // ======================================================
@@ -169,106 +169,106 @@ async function doRefresh() {
 // ======================================================
 
 async function apiFetch(url, options = {}) {
-  const controller = new AbortController();
+	const controller = new AbortController();
 
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
+	const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-  // ==================================================
-  // HEADERS
-  // ==================================================
+	// ==================================================
+	// HEADERS
+	// ==================================================
 
-  const headers = {
-    ...(options.headers || {}),
-  };
+	const headers = {
+		...(options.headers || {}),
+	};
 
-  // JSON hanya jika ada body dan bukan FormData
-  if (options.body && !(options.body instanceof FormData)) {
-    headers["Content-Type"] = headers["Content-Type"] || "application/json";
-  }
+	// JSON hanya jika ada body dan bukan FormData
+	if (options.body && !(options.body instanceof FormData)) {
+		headers["Content-Type"] = headers["Content-Type"] || "application/json";
+	}
 
-  // ==================================================
-  // LOADING
-  // ==================================================
+	// ==================================================
+	// LOADING
+	// ==================================================
 
-  const useLoading = options.loadingText !== false;
+	const useLoading = options.loadingText !== false;
 
-  if (useLoading) {
-    startLoading(options.loadingText || "Memproses...");
-  }
+	if (useLoading) {
+		startLoading(options.loadingText || "Memproses...");
+	}
 
-  try {
-    const requestOptions = {
-      ...options,
-      headers,
-      credentials: "include",
-      signal: controller.signal,
-    };
+	try {
+		const requestOptions = {
+			...options,
+			headers,
+			credentials: "include",
+			signal: controller.signal,
+		};
 
-    delete requestOptions.loadingText;
+		delete requestOptions.loadingText;
 
-    // ==================================================
-    // 🔍 DEBUG
-    // ==================================================
+		// ==================================================
+		// 🔍 DEBUG
+		// ==================================================
 
-    console.log(`${requestOptions.method || "GET"} ${API_BASE_URL}${url}`);
+		console.log(`${requestOptions.method || "GET"} ${API_BASE_URL}${url}`);
 
-    // ==================================================
-    // 🚀 REQUEST
-    // ==================================================
+		// ==================================================
+		// 🚀 REQUEST
+		// ==================================================
 
-    let response = await fetch(API_BASE_URL + url, requestOptions);
+		let response = await fetch(API_BASE_URL + url, requestOptions);
 
-    // ==================================================
-    // 🔥 401 → REFRESH → RETRY
-    // ==================================================
+		// ==================================================
+		// 🔥 401 → REFRESH → RETRY
+		// ==================================================
 
-    if (response.status === 401 && !url.includes("/api/auth/refresh")) {
-      console.warn("401 detected → trying refresh...");
+		if (response.status === 401 && !url.includes("/api/auth/refresh")) {
+			console.warn("401 detected → trying refresh...");
 
-      try {
-        await doRefresh();
+			try {
+				await doRefresh();
 
-        // retry request
-        response = await fetch(API_BASE_URL + url, requestOptions);
-      } catch (error) {
-        console.error("Refresh gagal → redirect login");
+				// retry request
+				response = await fetch(API_BASE_URL + url, requestOptions);
+			} catch (error) {
+				console.error("Refresh gagal → redirect login");
 
-        Toast.fire({
-          icon: "error",
-          title: "Session expired",
-          text: "Please login again",
-        });
+				Toast.fire({
+					icon: "error",
+					title: "Session expired",
+					text: "Please login again",
+				});
 
-        setTimeout(() => {
-          window.location.href = "/login";
-        }, 1500);
+				setTimeout(() => {
+					window.location.href = "/login";
+				}, 1500);
 
-        throw error;
-      }
-    }
+				throw error;
+			}
+		}
 
-    // ==================================================
-    // 📦 RESPONSE
-    // ==================================================
+		// ==================================================
+		// 📦 RESPONSE
+		// ==================================================
 
-    return await handleResponse(response);
-  } catch (error) {
-    if (error.name === "AbortError") {
-      throw new Error("Request timeout (30s)");
-    }
+		return await handleResponse(response);
+	} catch (error) {
+		if (error.name === "AbortError") {
+			throw new Error("Request timeout (30s)");
+		}
 
-    if (error instanceof Error) {
-      throw error;
-    }
+		if (error instanceof Error) {
+			throw error;
+		}
 
-    throw new Error("Network error");
-  } finally {
-    clearTimeout(timeoutId);
+		throw new Error("Network error");
+	} finally {
+		clearTimeout(timeoutId);
 
-    if (useLoading) {
-      stopLoading();
-    }
-  }
+		if (useLoading) {
+			stopLoading();
+		}
+	}
 }
 
 // ======================================================
@@ -276,15 +276,15 @@ async function apiFetch(url, options = {}) {
 // ======================================================
 
 function buildQueryString(params = {}) {
-  const query = new URLSearchParams();
+	const query = new URLSearchParams();
 
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== null && value !== undefined) {
-      query.append(key, String(value));
-    }
-  });
+	Object.entries(params).forEach(([key, value]) => {
+		if (value !== null && value !== undefined) {
+			query.append(key, String(value));
+		}
+	});
 
-  return query.toString();
+	return query.toString();
 }
 
 // ======================================================
@@ -292,67 +292,67 @@ function buildQueryString(params = {}) {
 // ======================================================
 
 window.api = {
-  // ==================================================
-  // GET
-  // ==================================================
+	// ==================================================
+	// GET
+	// ==================================================
 
-  get: function (url, params = {}) {
-    const queryString = buildQueryString(params);
+	get: function(url, params = {}) {
+		const queryString = buildQueryString(params);
 
-    if (queryString) {
-      url += (url.includes("?") ? "&" : "?") + queryString;
-    }
+		if (queryString) {
+			url += (url.includes("?") ? "&" : "?") + queryString;
+		}
 
-    console.log("========== API GET ==========");
+		console.log("========== API GET ==========");
 
-    console.log("URL:", API_BASE_URL + url);
+		console.log("URL:", API_BASE_URL + url);
 
-    console.log("PARAMS:", params);
+		console.log("PARAMS:", params);
 
-    console.log("=============================");
+		console.log("=============================");
 
-    return apiFetch(url, {
-      method: "GET",
-      loadingText: false,
-    });
-  },
+		return apiFetch(url, {
+			method: "GET",
+			loadingText: false,
+		});
+	},
 
-  // ==================================================
-  // POST
-  // ==================================================
+	// ==================================================
+	// POST
+	// ==================================================
 
-  post: function (url, data, text) {
-    return apiFetch(url, {
-      method: "POST",
+	post: function(url, data, text) {
+		return apiFetch(url, {
+			method: "POST",
 
-      body: data instanceof FormData ? data : JSON.stringify(data),
+			body: data instanceof FormData ? data : JSON.stringify(data),
 
-      loadingText: text,
-    });
-  },
+			loadingText: text,
+		});
+	},
 
-  // ==================================================
-  // PUT
-  // ==================================================
+	// ==================================================
+	// PUT
+	// ==================================================
 
-  put: function (url, data, text) {
-    return apiFetch(url, {
-      method: "PUT",
+	put: function(url, data, text) {
+		return apiFetch(url, {
+			method: "PUT",
 
-      body: data instanceof FormData ? data : JSON.stringify(data),
+			body: data instanceof FormData ? data : JSON.stringify(data),
 
-      loadingText: text,
-    });
-  },
+			loadingText: text,
+		});
+	},
 
-  // ==================================================
-  // DELETE
-  // ==================================================
+	// ==================================================
+	// DELETE
+	// ==================================================
 
-  delete: function (url, text) {
-    return apiFetch(url, {
-      method: "DELETE",
-      loadingText: text,
-    });
-  },
+	delete: function(url, text) {
+		return apiFetch(url, {
+			method: "DELETE",
+			loadingText: text,
+		});
+	},
 };

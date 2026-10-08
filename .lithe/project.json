@@ -1,0 +1,4 @@
+{
+  "version": 1,
+  "defaultRunConfiguration": "spring-boot.maven:kawal-laba"
+}

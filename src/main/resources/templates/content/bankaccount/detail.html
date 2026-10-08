@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="detail-container p-2">
-                <!-- <div class="detail-header">
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="detail-container p-2">
+				<!-- <div class="detail-header">
                     <div class="detail-heading">
                         <div class="detail-title">
                             <h1 th:text="${accounts.accountName}">
@@ -16,67 +17,62 @@
                 </div> -->
 
 
-                <div class="detail-card">
-                    <div class="table-responsive">
-                        <table class="table table-sm mb-0 align-middle">
-                            <tbody>
-                                <tr>
-                                    <th style="width: 180px;">Kode</th>
-                                    <td style="width: 20px;">:</td>
-                                    <td th:text="${accounts.accountCode}">-</td>
-                                </tr>
+				<div class="detail-card">
+					<div class="table-responsive">
+						<table class="table table-sm mb-0 align-middle">
+							<tbody>
+								<tr>
+									<th style="width: 180px;">Kode</th>
+									<td style="width: 20px;">:</td>
+									<td th:text="${accounts.accountCode}">-</td>
+								</tr>
 
-                                <tr>
-                                    <th>Bank Account</th>
-                                    <td>:</td>
-                                    <td th:text="${accounts.accountName}">-</td>
-                                </tr>
+								<tr>
+									<th>Bank Account</th>
+									<td>:</td>
+									<td th:text="${accounts.accountName}">-</td>
+								</tr>
 
-                                <tr>
-                                    <th>COA</th>
-                                    <td>:</td>
-                                    <td>
-                                        <span th:text="${accounts.coa.childAccountCode}">-</span>
-                                        -
-                                        <span th:text="${accounts.coa.childAccountName}">-</span>
-                                    </td>
-                                </tr>
+								<tr>
+									<th>COA</th>
+									<td>:</td>
+									<td><span th:text="${accounts.coa.childAccountCode}">-</span>
+										- <span th:text="${accounts.coa.childAccountName}">-</span></td>
+								</tr>
 
-                                <tr>
-                                    <th>Parent</th>
-                                    <td>:</td>
-                                    <td>
-                                        <span th:text="${accounts.coa.parentAccountCode}">-</span>
-                                        -
-                                        <span th:text="${accounts.coa.parentAccountName}">-</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+								<tr>
+									<th>Parent</th>
+									<td>:</td>
+									<td><span th:text="${accounts.coa.parentAccountCode}">-</span>
+										- <span th:text="${accounts.coa.parentAccountName}">-</span></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 
-                <div class="detail-actions">
-                    <button type="button" class="btn btn-light" th:data-url="@{/bankaccount}"
-                        onclick="library.navigate(this.dataset.url)">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </button>
+				<div class="detail-actions">
+					<button type="button" class="btn btn-light"
+						th:data-url="@{/bankaccount}"
+						onclick="library.navigate(this.dataset.url)">
+						<i class="bi bi-arrow-left"></i> Kembali
+					</button>
 
-                    <!-- <a th:href=" @{/bankaccount/edit/{id}(id=${accounts.bankAccountId})}" class="btn btn-warning"><i
+					<!-- <a th:href=" @{/bankaccount/edit/{id}(id=${accounts.bankAccountId})}" class="btn btn-warning"><i
                             class="bi bi-pencil-square"></i> Edit
                     </a> -->
-                    <a href="javascript:void(0)" class="btn btn-warning"
-                        th:data-url="@{/bankaccount/edit/{id}(id=${accounts.bankAccountId})}"
-                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-                    <button type="button" class="btn btn-danger">
-                        <i class="bi bi-eye-slash"></i> Nonaktifkan
-                    </button>
-                </div>
-            </div>
-        </main>
-    </div>
+					<a href="javascript:void(0)" class="btn btn-warning"
+						th:data-url="@{/bankaccount/edit/{id}(id=${accounts.bankAccountId})}"
+						onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+						<i class="bi bi-pencil-square"></i> Edit
+					</a>
+					<button type="button" class="btn btn-danger">
+						<i class="bi bi-eye-slash"></i> Nonaktifkan
+					</button>
+				</div>
+			</div>
+		</main>
+	</div>
 </body>
 
 </html>

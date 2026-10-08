@@ -8,9 +8,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class AuthUserPrincipal {
-    private UUID userId;
-    private String username;
-    private UUID companyId;
-    private List<String> roles;
-    private String deviceId;
+	private UUID userId;
+	private String username;
+	private UUID companyId;
+	private List<String> roles;
+	private String deviceId;
 }

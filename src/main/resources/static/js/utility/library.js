@@ -1,145 +1,144 @@
-// js/utility/library.js
 export const library = {
 
-    showLoading: function () {
-        const loading = document.getElementById("loading");
-        if (!loading) return;
-        loading.style.opacity = "1";
-        loading.style.visibility = "visible";
-        loading.style.pointerEvents = "auto";
-    },
+	showLoading: function() {
+		const loading = document.getElementById("loading");
+		if (!loading) return;
+		loading.style.opacity = "1";
+		loading.style.visibility = "visible";
+		loading.style.pointerEvents = "auto";
+	},
 
-    hideLoading: function () {
-        const loading = document.getElementById("loading");
-        if (!loading) return;
-        loading.style.opacity = "0";
-        loading.style.visibility = "hidden";
-        loading.style.pointerEvents = "none";
-    },
+	hideLoading: function() {
+		const loading = document.getElementById("loading");
+		if (!loading) return;
+		loading.style.opacity = "0";
+		loading.style.visibility = "hidden";
+		loading.style.pointerEvents = "none";
+	},
 
-    navigate: function (url) {
-        console.log("[NAVIGATE]", url);
+	navigate: function(url) {
+		console.log("[NAVIGATE]", url);
 
-        this.showLoading();
-        return htmx.ajax("GET", url, {
-            target: "#page-content",
-            swap: "innerHTML"
-        })
-            .then(() => {
-                window.history.pushState({}, "", url);
-            })
-            .catch((error) => {
-                console.error("Gagal navigasi:", error);
-                throw error;
-            })
-            .finally(() => {
-                this.hideLoading();
-            });
-    },
-    open: function (url) {
-        console.log("[OPEN]", url);
+		this.showLoading();
+		return htmx.ajax("GET", url, {
+			target: "#page-content",
+			swap: "innerHTML"
+		})
+			.then(() => {
+				window.history.pushState({}, "", url);
+			})
+			.catch((error) => {
+				console.error("Gagal navigasi:", error);
+				throw error;
+			})
+			.finally(() => {
+				this.hideLoading();
+			});
+	},
+	open: function(url) {
+		console.log("[OPEN]", url);
 
-        this.showLoading();
+		this.showLoading();
 
-        window.location.href = url;
-    },
+		window.location.href = url;
+	},
 
 
-    formatRupiah: function (value) {
+	formatRupiah: function(value) {
 
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR",
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2
-        }).format(value);
-    },
+		return new Intl.NumberFormat("id-ID", {
+			style: "currency",
+			currency: "IDR",
+			minimumFractionDigits: 0,
+			maximumFractionDigits: 2
+		}).format(value);
+	},
 
-    formatDateIndonesia: function (dateString) {
+	formatDateIndonesia: function(dateString) {
 
-        if (!dateString) return "-";
+		if (!dateString) return "-";
 
-        const date = new Date(dateString);
+		const date = new Date(dateString);
 
-        return date.toLocaleDateString("id-ID", {
-            day: "2-digit",
-            month: "2-digit",
-            year: "numeric"
-        });
-    },
+		return date.toLocaleDateString("id-ID", {
+			day: "2-digit",
+			month: "2-digit",
+			year: "numeric"
+		});
+	},
 
-    setTableHeight: function (id_wrapper, id_table) {
+	setTableHeight: function(id_wrapper, id_table) {
 
-        const wrapper = document.getElementById(id_wrapper);
-        const table = document.getElementById(id_table);
+		const wrapper = document.getElementById(id_wrapper);
+		const table = document.getElementById(id_table);
 
-        if (!wrapper || !table) {
-            console.warn("⚠️ Wrapper atau table tidak ditemukan");
-            return;
-        }
+		if (!wrapper || !table) {
+			console.warn("⚠️ Wrapper atau table tidak ditemukan");
+			return;
+		}
 
-        const tbody = table.querySelector("tbody");
+		const tbody = table.querySelector("tbody");
 
-        if (!tbody) {
-            console.warn("⚠️ Tbody tidak ditemukan");
-            return;
-        }
+		if (!tbody) {
+			console.warn("⚠️ Tbody tidak ditemukan");
+			return;
+		}
 
-        const rows = tbody.querySelectorAll("tr");
-        const totalRows = rows.length;
+		const rows = tbody.querySelectorAll("tr");
+		const totalRows = rows.length;
 
-        // Tidak ada data
-        if (totalRows === 0) {
+		// Tidak ada data
+		if (totalRows === 0) {
 
-            wrapper.style.height = "auto";
-            wrapper.style.maxHeight = "none";
-            wrapper.style.overflowY = "hidden";
-            wrapper.style.overflowX = "auto";
+			wrapper.style.height = "auto";
+			wrapper.style.maxHeight = "none";
+			wrapper.style.overflowY = "hidden";
+			wrapper.style.overflowX = "auto";
 
-            return;
-        }
+			return;
+		}
 
-        // Tinggi 1 row
-        const rowHeight = rows[0].getBoundingClientRect().height;
+		// Tinggi 1 row
+		const rowHeight = rows[0].getBoundingClientRect().height;
 
-        // Tinggi header
-        const thead = table.querySelector("thead");
+		// Tinggi header
+		const thead = table.querySelector("thead");
 
-        const headerHeight = thead
-            ? thead.getBoundingClientRect().height
-            : 0;
+		const headerHeight = thead
+			? thead.getBoundingClientRect().height
+			: 0;
 
-        // Maksimal data yang ditampilkan
-        const maxRows = 12;
+		// Maksimal data yang ditampilkan
+		const maxRows = 12;
 
-        // Tinggi body maksimal 12 row
-        const bodyHeight = rowHeight * maxRows;
+		// Tinggi body maksimal 12 row
+		const bodyHeight = rowHeight * maxRows;
 
-        // Tinggi wrapper
-        const wrapperHeight = headerHeight + bodyHeight;
+		// Tinggi wrapper
+		const wrapperHeight = headerHeight + bodyHeight;
 
-        wrapper.style.height = wrapperHeight + "px";
-        wrapper.style.maxHeight = wrapperHeight + "px";
+		wrapper.style.height = wrapperHeight + "px";
+		wrapper.style.maxHeight = wrapperHeight + "px";
 
-        // Scroll
-        wrapper.style.overflowY = "auto";
-        wrapper.style.overflowX = "auto";
+		// Scroll
+		wrapper.style.overflowY = "auto";
+		wrapper.style.overflowX = "auto";
 
-        // Sticky header
-        if (thead) {
+		// Sticky header
+		if (thead) {
 
-            thead.style.position = "sticky";
-            thead.style.top = "0";
-            thead.style.zIndex = "10";
-            thead.style.backgroundColor = "#f8f9fa";
-        }
+			thead.style.position = "sticky";
+			thead.style.top = "0";
+			thead.style.zIndex = "10";
+			thead.style.backgroundColor = "#f8f9fa";
+		}
 
-        console.log(`📊 Total rows: ${totalRows}`);
-        console.log(`📊 Max rows: ${maxRows}`);
-        console.log(`📐 Row height: ${rowHeight}px`);
-        console.log(`📐 Wrapper height: ${wrapperHeight}px`);
-        console.log(`📜 Scroll: ${totalRows > maxRows ? "ON" : "OFF"}`);
-    }
+		console.log(`📊 Total rows: ${totalRows}`);
+		console.log(`📊 Max rows: ${maxRows}`);
+		console.log(`📐 Row height: ${rowHeight}px`);
+		console.log(`📐 Wrapper height: ${wrapperHeight}px`);
+		console.log(`📜 Scroll: ${totalRows > maxRows ? "ON" : "OFF"}`);
+	}
 };
 
 // Akses global

@@ -25,128 +25,119 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class ChartOfAccountsPageController {
 
-    private final ChartOfAccountsService service;
+	private final ChartOfAccountsService service;
 
-    public ChartOfAccountsPageController(ChartOfAccountsService service) {
-        this.service = service;
-    }
+	public ChartOfAccountsPageController(ChartOfAccountsService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('admin')")
-    @GetMapping("/coa")
-    public String coa(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        String title = "Chart of Accounts";
-        model.addAttribute("pageTitle", title);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/chartofaccounts/list :: content";
-        }
-        return "content/chartofaccounts/list";
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('admin')")
+	@GetMapping("/coa")
+	public String coa(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
+			HttpServletResponse response) {
+		String title = "Chart of Accounts";
+		model.addAttribute("pageTitle", title);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/chartofaccounts/list :: content";
+		}
+		return "content/chartofaccounts/list";
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/coa/detail/{id}")
-    public String detail(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
-        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-        String title = "Detail Chart Of Accounts";
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("parent", parent);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/chartofaccounts/detail :: content";
-        }
-        return "content/chartofaccounts/detail";
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/coa/detail/{id}")
+	public String detail(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
+		ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
+		String title = "Detail Chart Of Accounts";
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("parent", parent);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/chartofaccounts/detail :: content";
+		}
+		return "content/chartofaccounts/detail";
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/coa/edit/{id}")
-    public String edit(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/coa/edit/{id}")
+	public String edit(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
 
-        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
-        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-        String title = "Edit Chart Of Accounts";
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("parent", parent);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/chartofaccounts/edit :: content";
-        }
-        return "content/chartofaccounts/edit";
-    }
+		List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
+		ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
+		String title = "Edit Chart Of Accounts";
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("parent", parent);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/chartofaccounts/edit :: content";
+		}
+		return "content/chartofaccounts/edit";
+	}
 
-    // untuk update dengan form langsung tanpa api
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PostMapping("coa/update")
-    public String updateBatch(@ModelAttribute ChartOfAccountsBatchRequest request,
-            @AuthenticationPrincipal AuthUserPrincipal principal, RedirectAttributes redirectAttributes, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        service.update(request.getAccounts(), principal.getCompanyId());
+	// untuk update dengan form langsung tanpa api
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PostMapping("coa/update")
+	public String updateBatch(@ModelAttribute ChartOfAccountsBatchRequest request,
+			@AuthenticationPrincipal AuthUserPrincipal principal, RedirectAttributes redirectAttributes, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		service.update(request.getAccounts(), principal.getCompanyId());
 
-        UUID parentId = request.getParentId();
-        List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
-        ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
+		UUID parentId = request.getParentId();
+		List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
+		ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
 
-        String title = "Edit Chart Of Accounts";
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("parent", parent);
-        response.setHeader("X-Page-Title", title);
-        log.info("Parentid " + parentId);
-        // Kirim event ke HTMX
-        response.setHeader(
-                "HX-Trigger",
-                "coaUpdated");
-        return "content/chartofaccounts/edit :: content";
-    }
+		String title = "Edit Chart Of Accounts";
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("parent", parent);
+		response.setHeader("X-Page-Title", title);
+		log.info("Parentid " + parentId);
+		// Kirim event ke HTMX
+		response.setHeader("HX-Trigger", "coaUpdated");
+		return "content/chartofaccounts/edit :: content";
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/coa/add/{id}")
-    public String add(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
-        ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-        String title = "Tambah Chart Of Accounts";
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("parent", parent);
-        if ("true".equals(hxRequest)) {
-            response.setHeader("X-Page-Title", title);
-            return "content/chartofaccounts/add :: content";
-        }
-        return "content/chartofaccounts/add";
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/coa/add/{id}")
+	public String add(@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
+		ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
+		String title = "Tambah Chart Of Accounts";
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("parent", parent);
+		if ("true".equals(hxRequest)) {
+			response.setHeader("X-Page-Title", title);
+			return "content/chartofaccounts/add :: content";
+		}
+		return "content/chartofaccounts/add";
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PostMapping("coa/add")
-    public String saveBatch(@ModelAttribute ChartOfAccountsRequest request,
-            @AuthenticationPrincipal AuthUserPrincipal principal, RedirectAttributes redirectAttributes, Model model,
-            @RequestHeader(value = "HX-Request", required = false) String hxRequest,
-            HttpServletResponse response) {
-        service.save(request, principal.getCompanyId());
-        UUID parentId = request.getParentId();
-        List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
-        ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PostMapping("coa/add")
+	public String saveBatch(@ModelAttribute ChartOfAccountsRequest request,
+			@AuthenticationPrincipal AuthUserPrincipal principal, RedirectAttributes redirectAttributes, Model model,
+			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
+		service.save(request, principal.getCompanyId());
+		UUID parentId = request.getParentId();
+		List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
+		ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
 
-        String title = "Tambah Chart Of Accounts";
-        model.addAttribute("pageTitle", title);
-        model.addAttribute("accounts", accounts);
-        model.addAttribute("parent", parent);
-        response.setHeader("X-Page-Title", title);
-        log.info("Parentid " + parentId);
-        // Kirim event ke HTMX
-        response.setHeader(
-                "HX-Trigger",
-                "coaAdd");
-        return "content/chartofaccounts/add :: content";
-    }
+		String title = "Tambah Chart Of Accounts";
+		model.addAttribute("pageTitle", title);
+		model.addAttribute("accounts", accounts);
+		model.addAttribute("parent", parent);
+		response.setHeader("X-Page-Title", title);
+		log.info("Parentid " + parentId);
+		// Kirim event ke HTMX
+		response.setHeader("HX-Trigger", "coaAdd");
+		return "content/chartofaccounts/add :: content";
+	}
 
 }

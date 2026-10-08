@@ -15,86 +15,86 @@ import lombok.Data;
 
 @Data
 public class SupplierRequest {
-        private UUID supplierId;
-        private String supplierCode;
+	private UUID supplierId;
+	private String supplierCode;
 
-        @NotBlank(message = "Nama wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierName;
+	@NotBlank(message = "Nama wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierName;
 
-        @NotBlank(message = "Tipe wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierType;
+	@NotBlank(message = "Tipe wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierType;
 
-        @Pattern(regexp = "^\\d{15,16}$", message = "NPWP harus berupa 15 atau 16 digit angka ", groups = {
-                        OnCreate.class, OnUpdate.class })
-        private String supplierNpwp;
+	@Pattern(regexp = "^\\d{15,16}$", message = "NPWP harus berupa 15 atau 16 digit angka ", groups = { OnCreate.class,
+			OnUpdate.class })
+	private String supplierNpwp;
 
-        @NotBlank(message = "Alamat wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierAddress;
+	@NotBlank(message = "Alamat wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierAddress;
 
-        @NotBlank(message = "Kota wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierCity;
+	@NotBlank(message = "Kota wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierCity;
 
-        @NotBlank(message = "Propinsi wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierProvince;
+	@NotBlank(message = "Propinsi wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierProvince;
 
-        @NotBlank(message = "Kode Pos wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierPostalCode;
+	@NotBlank(message = "Kode Pos wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierPostalCode;
 
-        @NotBlank(message = "Negara wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierCountry;
+	@NotBlank(message = "Negara wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierCountry;
 
-        @Email(message = "Format email tidak valid", groups = { OnCreate.class, OnUpdate.class })
-        @Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Email tidak boleh dimulai dengan simbol", groups = {
-                        OnCreate.class, OnUpdate.class })
-        private String supplierEmail;
+	@Email(message = "Format email tidak valid", groups = { OnCreate.class, OnUpdate.class })
+	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Email tidak boleh dimulai dengan simbol", groups = {
+			OnCreate.class, OnUpdate.class })
+	private String supplierEmail;
 
-        @NotBlank(message = "Nama Kontak wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private String supplierContactPerson;
+	@NotBlank(message = "Nama Kontak wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String supplierContactPerson;
 
-        @NotBlank(message = "Telp wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        @Pattern(regexp = "^\\d{10,15}", message = "No Telp harus angka 10-15 digit", groups = { OnCreate.class,
-                        OnUpdate.class })
-        private String supplierContactPhone;
+	@NotBlank(message = "Telp wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	@Pattern(regexp = "^\\d{10,15}", message = "No Telp harus angka 10-15 digit", groups = { OnCreate.class,
+			OnUpdate.class })
+	private String supplierContactPhone;
 
-        private String supplierPaymentTermDays;
-        private BigDecimal creditLimit = BigDecimal.ZERO;
-        private String supplierBankName;
+	private String supplierPaymentTermDays;
+	private BigDecimal creditLimit = BigDecimal.ZERO;
+	private String supplierBankName;
 
-        @Pattern(regexp = "^\\d{10,20}$", message = "Nomor rekening harus berupa angka dengan panjang 10-20 digit", groups = {
-                        OnCreate.class, OnUpdate.class })
-        private String supplierBankAccountNumber;
+	@Pattern(regexp = "^\\d{10,20}$", message = "Nomor rekening harus berupa angka dengan panjang 10-20 digit", groups = {
+			OnCreate.class, OnUpdate.class })
+	private String supplierBankAccountNumber;
 
-        private String supplierBankAccountName;
+	private String supplierBankAccountName;
 
-        @NotNull(message = "Pkp wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-        private Boolean supplierPkp;
+	@NotNull(message = "Pkp wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private Boolean supplierPkp;
 
-        private Boolean supplierIsActive;
-        private UUID companyId;
+	private Boolean supplierIsActive;
+	private UUID companyId;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-        private OffsetDateTime supplierCreatedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+	private OffsetDateTime supplierCreatedAt;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-        private OffsetDateTime supplierUpdatedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+	private OffsetDateTime supplierUpdatedAt;
 
-        UUID userId;
+	UUID userId;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
-        private OffsetDateTime supplierDeletedAt;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS")
+	private OffsetDateTime supplierDeletedAt;
 
-        public void setSupplierNpwp(String supplierNpwp) {
-                this.supplierNpwp = (supplierNpwp == null || supplierNpwp.isBlank()) ? null : supplierNpwp;
-        }
+	public void setSupplierNpwp(String supplierNpwp) {
+		this.supplierNpwp = (supplierNpwp == null || supplierNpwp.isBlank()) ? null : supplierNpwp;
+	}
 
-        public void setSupplierBankAccountNumber(String supplierBankAccountNumber) {
-                this.supplierBankAccountNumber = (supplierBankAccountNumber == null
-                                || supplierBankAccountNumber.isBlank()) ? null
-                                                : supplierBankAccountNumber;
-        }
+	public void setSupplierBankAccountNumber(String supplierBankAccountNumber) {
+		this.supplierBankAccountNumber = (supplierBankAccountNumber == null || supplierBankAccountNumber.isBlank())
+				? null
+				: supplierBankAccountNumber;
+	}
 
-        public void setSupplierEmail(String supplierEmail) {
-                this.supplierEmail = (supplierEmail == null || supplierEmail.isBlank()) ? null : supplierEmail;
-        }
+	public void setSupplierEmail(String supplierEmail) {
+		this.supplierEmail = (supplierEmail == null || supplierEmail.isBlank()) ? null : supplierEmail;
+	}
 
 }

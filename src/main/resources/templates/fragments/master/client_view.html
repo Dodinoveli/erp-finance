@@ -1,265 +1,283 @@
-<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-Client-Content">
-  <style>
-    /* Container untuk merapikan isi konten di bawah tab */
-    .tab-content-container {
-      border: 0px solid #dee2e6;
-      border-top: none;
-      background: #f5f5f5;
-    }
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org"
+	id="panel-Client-Content">
+	<style>
+/* Container untuk merapikan isi konten di bawah tab */
+.tab-content-container {
+	border: 0px solid #dee2e6;
+	border-top: none;
+	background: #f5f5f5;
+}
 
-    /* #formClient,
+/* #formClient,
         #view-input-client {
             height: 100%;
             overflow: hidden;
         } */
+.container-fluid {
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
 
-    .container-fluid {
-      padding-left: 10px !important;
-      padding-right: 10px !important;
-    }
+/* Garis tipis pemisah */
+.border-top {
+	border-top: 1px solid #eee !important;
+}
 
-    /* Garis tipis pemisah */
-    .border-top {
-      border-top: 1px solid #eee !important;
-    }
+/* untuk tombol export dll */
+/* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+.dropdown-toggle::after {
+	vertical-align: middle;
+}
 
-    /* untuk tombol export dll */
-    /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
-    .dropdown-toggle::after {
-      vertical-align: middle;
-    }
+/* Efek hover pada item dropdown */
+.dropdown-item:hover {
+	background-color: #f8f9fa;
+	color: #2b7de9;
+}
 
-    /* Efek hover pada item dropdown */
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-      color: #2b7de9;
-    }
+/* Memberikan warna ikon agar lebih informatif */
+.dropdown-item i {
+	width: 20px;
+	text-align: center;
+}
 
-    /* Memberikan warna ikon agar lebih informatif */
-    .dropdown-item i {
-      width: 20px;
-      text-align: center;
-    }
+.card-body-easyui {
+	padding: 15px !important;
+	border-radius: 0 0 4px 4px;
+}
+</style>
+	<ul class="nav nav-tabs custom-terminal-tabs" id="clientTab"
+		style="position: sticky; top: 0">
+		<li class="nav-item">
+			<button class="nav-link text-light" id="btn-tab-list-client"
+				onclick="clientModel.switchTabClient('view-list-client')">
+				<i class="fas fa-list me-1"></i>
+			</button>
+		</li>
 
-    .card-body-easyui {
-      padding: 15px !important;
-      border-radius: 0 0 4px 4px;
-    }
-  </style>
-  <ul class="nav nav-tabs custom-terminal-tabs" id="clientTab" style="position: sticky; top: 0">
-    <li class="nav-item">
-      <button class="nav-link text-light" id="btn-tab-list-client"
-        onclick="clientModel.switchTabClient('view-list-client')">
-        <i class="fas fa-list me-1"></i>
-      </button>
-    </li>
+		<li class="nav-item">
+			<button class="nav-link active" id="btn-tab-input-client"
+				onclick="clientModel.switchTabClient('view-input-client')">
+				<i class="fas fa-edit me-1" id="txtinput"></i> <span
+					id="text-label-client">Data Baru</span>
+			</button>
+		</li>
 
-    <li class="nav-item">
-      <button class="nav-link active" id="btn-tab-input-client"
-        onclick="clientModel.switchTabClient('view-input-client')">
-        <i class="fas fa-edit me-1" id="txtinput"></i>
-        <span id="text-label-client">Data Baru</span>
-      </button>
-    </li>
+		<li class="nav-item" id="li-tab-detail-client" style="display: none">
+			<button class="nav-link text-light" id="btn-tab-detail-client">
+				<i class="fas fa-id-card me-1"></i> Detail: <span
+					id="tab-label-client"></span> <span class="ms-2 badge bg-danger"
+					onclick="clientModel.closeEdit(event)" style="cursor: pointer">×</span>
+			</button>
+		</li>
+	</ul>
 
-    <li class="nav-item" id="li-tab-detail-client" style="display: none">
-      <button class="nav-link text-light" id="btn-tab-detail-client">
-        <i class="fas fa-id-card me-1"></i> Detail:
-        <span id="tab-label-client"></span>
-        <span class="ms-2 badge bg-danger" onclick="clientModel.closeEdit(event)" style="cursor: pointer">×</span>
-      </button>
-    </li>
-  </ul>
+	<div class="tab-content-container p-0">
+		<form id="formClient">
+			<div id="view-input-client" style="display: block">
+				<div class="container-fluid py-2">
+					<div class="row g-3">
+						<div class="col-md-12">
+							<div class="card border-0 shadow-sm"
+								style="width: 100%; border-radius: 0px">
+								<div class="card-body card-body-easyui p-3">
+									<div class="row">
+										<input type="hidden" id="client_id" name="clientId" />
+										<div class="col-md-6 pe-md-4">
+											<div class="accurate-form-group">
+												<label>Kode</label> <input type="text" id="client_code"
+													name="clientCode" readonly
+													class="form-control form-control-sm bg-light" />
+											</div>
 
-  <div class="tab-content-container p-0">
-    <form id="formClient">
-      <div id="view-input-client" style="display: block">
-        <div class="container-fluid py-2">
-          <div class="row g-3">
-            <div class="col-md-12">
-              <div class="card border-0 shadow-sm" style="width: 100%; border-radius: 0px">
-                <div class="card-body card-body-easyui p-3">
-                  <div class="row">
-                    <input type="hidden" id="client_id" name="clientId" />
-                    <div class="col-md-6 pe-md-4">
-                      <div class="accurate-form-group">
-                        <label>Kode</label>
-                        <input type="text" id="client_code" name="clientCode" readonly
-                          class="form-control form-control-sm bg-light" />
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nama Lengkap <span>*</span></label>
+												<div class="form-field">
+													<input type="text" id="client_name" name="clientName"
+														class="form-control form-control-sm"
+														placeholder="PT. Jaya Maju Bersama" /> <small
+														id="err-clientName"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nama Lengkap <span>*</span></label>
-                        <div class="form-field">
-                          <input type="text" id="client_name" name="clientName" class="form-control form-control-sm"
-                            placeholder="PT. Jaya Maju Bersama" />
-                          <small id="err-clientName"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label> Tipe Client <span>*</span></label>
+												<div class="form-field">
+													<select id="client_type" name="clientType"
+														class="form-control form-control-sm">
+														<option value="" disabled selected>-- Pilih Tipe
+															Client --</option>
+														<option value="Perorangan">👤 Perorangan</option>
+														<option value="Perusahaan">🏢 Perusahaan</option>
+														<option value="Pemerintah">🏛 Pemerintah</option>
+													</select> <small class="text-danger" id="err-clientType"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label> Tipe Client <span>*</span></label>
-                        <div class="form-field">
-                          <select id="client_type" name="clientType" class="form-control form-control-sm">
-                            <option value="" disabled selected>
-                              -- Pilih Tipe Client --
-                            </option>
-                            <option value="Perorangan">👤 Perorangan</option>
-                            <option value="Perusahaan">🏢 Perusahaan</option>
-                            <option value="Pemerintah">🏛 Pemerintah</option>
-                          </select>
-                          <small class="text-danger" id="err-clientType"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Npwp</label>
+												<div class="form-field">
+													<input type="text" id="client_npwp" name="clientNpwp"
+														class="form-control form-control-sm"
+														placeholder="Nomor Pokok Wajib Pajak" /> <small
+														class="text-danger" id="err-clientNpwp"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Npwp</label>
-                        <div class="form-field">
-                          <input type="text" id="client_npwp" name="clientNpwp" class="form-control form-control-sm"
-                            placeholder="Nomor Pokok Wajib Pajak" />
-                          <small class="text-danger" id="err-clientNpwp"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nik</label>
+												<div class="form-field">
+													<input type="text" id="client_nik" name="clientNik"
+														class="form-control form-control-sm"
+														placeholder="Nomor Induk Kependudukan " /> <small
+														class="text-danger" id="err-clientNik"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nik</label>
-                        <div class="form-field">
-                          <input type="text" id="client_nik" name="clientNik" class="form-control form-control-sm"
-                            placeholder="Nomor Induk Kependudukan " />
-                          <small class="text-danger" id="err-clientNik"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nitku</label>
+												<div class="form-field">
+													<input type="text" id="client_nitku" name="clientNitku"
+														class="form-control form-control-sm"
+														placeholder="Nomor Identitas Tempat Kegiatan Usaha" /> <small
+														class="text-danger" id="err-clientNitku"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nitku</label>
-                        <div class="form-field">
-                          <input type="text" id="client_nitku" name="clientNitku" class="form-control form-control-sm"
-                            placeholder="Nomor Identitas Tempat Kegiatan Usaha" />
-                          <small class="text-danger" id="err-clientNitku"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Pkp <span class="text-danger">*</span></label>
+												<div class="form-field">
+													<select id="client_is_pkp" name="clientIsPkp"
+														class="form-control form-control-sm">
+														<option disabled selected>-- Pilih Status PKP --
+														</option>
+														<option value="true">Ya</option>
+														<option value="false">Tidak</option>
+													</select> <small class="text-danger" id="err-clientIsPkp"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Pkp <span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <select id="client_is_pkp" name="clientIsPkp" class="form-control form-control-sm">
-                            <option disabled selected>
-                              -- Pilih Status PKP --
-                            </option>
-                            <option value="true">Ya</option>
-                            <option value="false">Tidak</option>
-                          </select>
-                          <small class="text-danger" id="err-clientIsPkp"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label style="padding-top: 5px">Alamat</label>
+												<div class="form-field">
+													<textarea id="client_address" name="clientAddress"
+														class="form-control form-control-sm" rows="3"
+														placeholder="Jl. ZA. Pagar Alam, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141"></textarea>
+													<small class="text-danger" id="err-clientAddress"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label style="padding-top: 5px">Alamat</label>
-                        <div class="form-field">
-                          <textarea id="client_address" name="clientAddress" class="form-control form-control-sm"
-                            rows="3"
-                            placeholder="Jl. ZA. Pagar Alam, Gedong Meneng, Kec. Rajabasa, Kota Bandar Lampung, Lampung 35141"></textarea>
-                          <small class="text-danger" id="err-clientAddress"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Kota</label>
+												<div class="form-field">
+													<input type="text" id="client_city" name="clientCity"
+														class="form-control form-control-sm"
+														placeholder="Bandar Lampung" /> <small
+														class="text-danger" id="err-clientCity"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Kota</label>
-                        <div class="form-field">
-                          <input type="text" id="client_city" name="clientCity" class="form-control form-control-sm"
-                            placeholder="Bandar Lampung" />
-                          <small class="text-danger" id="err-clientCity"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Provinsi</label>
+												<div class="form-field">
+													<input type="text" id="client_province"
+														name="clientProvince" class="form-control form-control-sm"
+														placeholder="Lampung" /> <small class="text-danger"
+														id="err-clientProvince"></small>
+												</div>
+											</div>
+										</div>
 
-                      <div class="accurate-form-group">
-                        <label>Provinsi</label>
-                        <div class="form-field">
-                          <input type="text" id="client_province" name="clientProvince"
-                            class="form-control form-control-sm" placeholder="Lampung" />
-                          <small class="text-danger" id="err-clientProvince"></small>
-                        </div>
-                      </div>
-                    </div>
+										<div class="col-md-6 ps-md-4">
+											<div class="accurate-form-group">
+												<label>Kode Pos</label>
+												<div class="form-field">
+													<input type="text" id="client_postal_code"
+														name="clientPostalCode"
+														class="form-control form-control-sm" placeholder="12345" />
+													<small class="text-danger" id="err-clientPostalCode"></small>
+												</div>
+											</div>
 
-                    <div class="col-md-6 ps-md-4">
-                      <div class="accurate-form-group">
-                        <label>Kode Pos</label>
-                        <div class="form-field">
-                          <input type="text" id="client_postal_code" name="clientPostalCode"
-                            class="form-control form-control-sm" placeholder="12345" />
-                          <small class="text-danger" id="err-clientPostalCode"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Negara</label>
+												<div class="form-field">
+													<input type="text" id="client_country" name="clientCountry"
+														class="form-control form-control-sm"
+														placeholder="Indonesia" /> <small class="text-danger"
+														id="err-clientCountry"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Negara</label>
-                        <div class="form-field">
-                          <input type="text" id="client_country" name="clientCountry"
-                            class="form-control form-control-sm" placeholder="Indonesia" />
-                          <small class="text-danger" id="err-clientCountry"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nama Kontak</label>
+												<div class="form-field">
+													<input type="text" id="client_contact_person"
+														name="clientContactPerson"
+														class="form-control form-control-sm"
+														placeholder="Syahrini" /> <small class="text-danger"
+														id="err-clientContactPerson"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nama Kontak</label>
-                        <div class="form-field">
-                          <input type="text" id="client_contact_person" name="clientContactPerson"
-                            class="form-control form-control-sm" placeholder="Syahrini" />
-                          <small class="text-danger" id="err-clientContactPerson"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Handphone</label>
+												<div class="form-field">
+													<input type="text" id="client_contact_phone"
+														name="clientContactPhone"
+														class="form-control form-control-sm"
+														placeholder="085269530000" /> <small class="text-danger"
+														id="err-clientContactPhone"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Handphone</label>
-                        <div class="form-field">
-                          <input type="text" id="client_contact_phone" name="clientContactPhone"
-                            class="form-control form-control-sm" placeholder="085269530000" />
-                          <small class="text-danger" id="err-clientContactPhone"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Email</label>
+												<div class="form-field">
+													<input type="email" id="client_email" name="clientEmail"
+														class="form-control form-control-sm"
+														placeholder="jayamajubersama@gmail.com" /> <small
+														class="text-danger" id="err-clientEmail"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Email</label>
-                        <div class="form-field">
-                          <input type="email" id="client_email" name="clientEmail" class="form-control form-control-sm"
-                            placeholder="jayamajubersama@gmail.com" />
-                          <small class="text-danger" id="err-clientEmail"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nama Bank</label>
+												<div class="form-field">
+													<input type="text" id="client_bank_name"
+														name="clientBankName" class="form-control form-control-sm"
+														placeholder="BNI" /> <small class="text-danger"
+														id="err-clientBankName"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nama Bank</label>
-                        <div class="form-field">
-                          <input type="text" id="client_bank_name" name="clientBankName"
-                            class="form-control form-control-sm" placeholder="BNI" />
-                          <small class="text-danger" id="err-clientBankName"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>No. Rekening</label>
+												<div class="form-field">
+													<input type="text" id="client_account_number"
+														name="clientAccountNumber"
+														class="form-control form-control-sm"
+														placeholder="0123456789" /> <small class="text-danger"
+														id="err-clientAccountNumber"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>No. Rekening</label>
-                        <div class="form-field">
-                          <input type="text" id="client_account_number" name="clientAccountNumber"
-                            class="form-control form-control-sm" placeholder="0123456789" />
-                          <small class="text-danger" id="err-clientAccountNumber"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Pemilik</label>
+												<div class="form-field">
+													<input type="text" id="client_account_name"
+														name="clientAccountName"
+														class="form-control form-control-sm"
+														placeholder="Contoh : PT Jaya Maju Bersama" /> <small
+														class="text-danger" id="err-clientAccountName"></small>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
-                      <div class="accurate-form-group">
-                        <label>Pemilik</label>
-                        <div class="form-field">
-                          <input type="text" id="client_account_name" name="clientAccountName"
-                            class="form-control form-control-sm" placeholder="Contoh : PT Jaya Maju Bersama" />
-                          <small class="text-danger" id="err-clientAccountName"></small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- <div class="p-2">
+							<!-- <div class="p-2">
                 <button type="submit" form="formClient" class="btn btn-primary" style="
                     --bs-btn-padding-y: 0.35rem;
                     --bs-btn-padding-x: 0.5rem;
@@ -276,121 +294,118 @@
                   <i class="bi bi-x-circle"></i> Batal
                 </button>
               </div> -->
-              <div class="card mt-1 shadow-sm border-0">
-                <div class="card-body text-center">
-                  <div class="d-flex justify-content-center gap-3">
-                    <button type="submit" class="btn btn-primary px-4">
-                      <i class="bi bi-floppy"></i> Simpan
-                    </button>
-                    <button type="button" class="btn btn-danger px-4" id="btn-batal-client">
-                      <i class="bi bi-x-circle"></i> Batal
-                    </button>
-                  </div>
-                </div>
-              </div>
+							<div class="card mt-1 shadow-sm border-0">
+								<div class="card-body text-center">
+									<div class="d-flex justify-content-center gap-3">
+										<button type="submit" class="btn btn-primary px-4">
+											<i class="bi bi-floppy"></i> Simpan
+										</button>
+										<button type="button" class="btn btn-danger px-4"
+											id="btn-batal-client">
+											<i class="bi bi-x-circle"></i> Batal
+										</button>
+									</div>
+								</div>
+							</div>
 
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 
-    <div id="view-list-client" style="display: none; padding: 5px">
-      <div class="toolbar-easyui">
-        <div class="btn-separator"></div>
-        <button id="btn-tambah-client" class="btn-tambah fw-bold">
-          <i class="fas fa-plus"></i> Tambah
-        </button>
-        <button id="btn-refresh-client" class="btn-segarkan">
-          <i class="fas fa-sync-alt"></i> Refresh
-        </button>
+		<div id="view-list-client" style="display: none; padding: 5px">
+			<div class="toolbar-easyui">
+				<div class="btn-separator"></div>
+				<button id="btn-tambah-client" class="btn-tambah fw-bold">
+					<i class="fas fa-plus"></i> Tambah
+				</button>
+				<button id="btn-refresh-client" class="btn-segarkan">
+					<i class="fas fa-sync-alt"></i> Refresh
+				</button>
 
-        <div class="dropdown d-inline-block" style="position: relative">
-          <button class="btn-excel dropdown-toggle" type="button" onclick="clientModel.toggleExcelMenu(event)">
-            <i class="fas fa-file-excel me-1"></i> Export
-          </button>
+				<div class="dropdown d-inline-block" style="position: relative">
+					<button class="btn-excel dropdown-toggle" type="button"
+						onclick="clientModel.toggleExcelMenu(event)">
+						<i class="fas fa-file-excel me-1"></i> Export
+					</button>
 
-          <ul class="dropdown-menu shadow border" id="menu-excel-client" style="
-              display: none;
-              position: absolute !important;
-              left: 0;
-              top: 100%;
-              z-index: 99999 !important;
-              min-width: 180px;
-              background: white;
-              list-style: none;
-              padding: 5px 0;
-              margin: 0;
-            ">
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/export">
-                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
-                Excel
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/template">
-                <i class="fas fa-download me-2 text-info"></i> Download Template
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" style="margin: 5px 0" />
-            </li>
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="javascript:void(0)" onclick="
+					<ul class="dropdown-menu shadow border" id="menu-excel-client"
+						style="display: none; position: absolute !important; left: 0; top: 100%; z-index: 99999 !important; min-width: 180px; background: white; list-style: none; padding: 5px 0; margin: 0;">
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="/api/v1/clients/export"> <i
+								class="fas fa-file-export me-2 text-success"></i> Export Ke
+								Excel
+						</a></li>
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="/api/v1/clients/template"> <i
+								class="fas fa-download me-2 text-info"></i> Download Template
+						</a></li>
+						<li>
+							<hr class="dropdown-divider" style="margin: 5px 0" />
+						</li>
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="javascript:void(0)"
+							onclick="
                   document.getElementById('menu-excel-client').style.display =
                     'none'
-                " data-bs-toggle="modal" data-bs-target="#importModal">
-                <i class="fas fa-file-upload me-2 text-warning"></i> Import
-                Excel
-              </a>
-            </li>
-          </ul>
-        </div>
-        <button class="btn-print"><i class="fas fa-print"></i> Print</button>
+                "
+							data-bs-toggle="modal" data-bs-target="#importModal"> <i
+								class="fas fa-file-upload me-2 text-warning"></i> Import Excel
+						</a></li>
+					</ul>
+				</div>
+				<button class="btn-print">
+					<i class="fas fa-print"></i> Print
+				</button>
 
-        <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
-          <div class="search-container-terminal me-2">
-            <input type="text" id="search-client-input" placeholder="Search..." class="input-hugo-terminal" />
-          </div>
-          <button id="btn-search-client" class="btn-cari">
-            <i class="fas fa-search"></i> Submit
-          </button>
-        </div>
-      </div>
+				<div
+					style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+					<div class="search-container-terminal me-2">
+						<input type="text" id="search-client-input"
+							placeholder="Search..." class="input-hugo-terminal" />
+					</div>
+					<button id="btn-search-client" class="btn-cari">
+						<i class="fas fa-search"></i> Submit
+					</button>
+				</div>
+			</div>
 
-      <div class="table-wrapper table-wrapper-client" id="client-wrapper">
-        <table id="client-table">
-          <thead>
-            <tr>
-              <th class="kolom-sticky-1 resizer">Kode</th>
-              <th class="kolom-sticky-2 resizer">Perusahaan</th>
-              <th class="kolom-sticky-3 resizer">Tipe Klien</th>
-              <th class="resizer" style="width: 150px">Npwp</th>
-              <th class="resizer" style="width: 150px">Nik</th>
-              <th class="resizer" style="width: 150px">Nitku</th>
-              <th class="resizer" style="width: 100px">Pkp</th>
-              <th class="resizer" style="width: 200px">Alamat</th>
-              <th class="resizer" style="width: 160px">Kota</th>
-              <th class="resizer" style="width: 160px">Propinsi</th>
-              <th class="resizer" style="width: 100px">Kode Pos</th>
-              <th class="resizer" style="width: 150px">Negara</th>
-              <th class="resizer" style="width: 150px">Email</th>
-              <th class="resizer" style="width: 150px">Nama Kontak</th>
-              <th class="resizer" style="width: 130px">Telepon</th>
-              <th class="resizer" style="width: 100px">Status</th>
-              <th class="resizer" style="width: 100px">Bank</th>
-              <th class="resizer" style="width: 120px">Rekening</th>
-              <th class="resizer" style="width: 150px">Pemilik Rekening</th>
-            </tr>
-          </thead>
-          <tbody id="client-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+			<div class="table-wrapper table-wrapper-client" id="client-wrapper">
+				<table id="client-table">
+					<thead>
+						<tr>
+							<th class="kolom-sticky-1 resizer">Kode</th>
+							<th class="kolom-sticky-2 resizer">Perusahaan</th>
+							<th class="kolom-sticky-3 resizer">Tipe Klien</th>
+							<th class="resizer" style="width: 150px">Npwp</th>
+							<th class="resizer" style="width: 150px">Nik</th>
+							<th class="resizer" style="width: 150px">Nitku</th>
+							<th class="resizer" style="width: 100px">Pkp</th>
+							<th class="resizer" style="width: 200px">Alamat</th>
+							<th class="resizer" style="width: 160px">Kota</th>
+							<th class="resizer" style="width: 160px">Propinsi</th>
+							<th class="resizer" style="width: 100px">Kode Pos</th>
+							<th class="resizer" style="width: 150px">Negara</th>
+							<th class="resizer" style="width: 150px">Email</th>
+							<th class="resizer" style="width: 150px">Nama Kontak</th>
+							<th class="resizer" style="width: 130px">Telepon</th>
+							<th class="resizer" style="width: 100px">Status</th>
+							<th class="resizer" style="width: 100px">Bank</th>
+							<th class="resizer" style="width: 120px">Rekening</th>
+							<th class="resizer" style="width: 150px">Pemilik Rekening</th>
+						</tr>
+					</thead>
+					<tbody id="client-table-body"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-  <script type="module" th:inline="javascript">
+	<script type="module" th:inline="javascript">
     const clientModel = {
       cursorCreatedAt: null,
       cursorId: null,

@@ -13,19 +13,17 @@ import com.logikaintermedia.erp.validation.OnCreate;
 @RestController
 @RequestMapping("api/company")
 public class CompanyController {
-    private final CompanyService service;
+	private final CompanyService service;
 
-    public CompanyController(CompanyService service) {
-        this.service = service;
-    }
+	public CompanyController(CompanyService service) {
+		this.service = service;
+	}
 
-    @PostMapping
-    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody CompanyRequest entity) {
-        int result = service.insert(entity);
+	@PostMapping
+	public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody CompanyRequest entity) {
+		int result = service.insert(entity);
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Register Berhasil", result));
-    }
+		return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.created("Register Berhasil", result));
+	}
 
 }

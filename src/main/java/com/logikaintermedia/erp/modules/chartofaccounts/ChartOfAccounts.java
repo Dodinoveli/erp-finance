@@ -7,28 +7,28 @@ import lombok.Data;
 
 @Data
 public class ChartOfAccounts {
-    private String accountCode;
-    private String accountName;
-    private String accountType;
-    private String normalBalance;
-    private UUID parentId;
-    private Short accountLevel;
-    private Boolean isHeader;
-    private Boolean isPostable;
-    private String description;
-    private Integer sortOrder;
-    private OffsetDateTime createdAt;
-    private OffsetDateTime updatedAt;
+	private String accountCode;
+	private String accountName;
+	private String accountType;
+	private String normalBalance;
+	private UUID parentId;
+	private Short accountLevel;
+	private Boolean isHeader;
+	private Boolean isPostable;
+	private String description;
+	private Integer sortOrder;
+	private OffsetDateTime createdAt;
+	private OffsetDateTime updatedAt;
 
-    private UUID accountId;
-    private UUID companyId;
+	private UUID accountId;
+	private UUID companyId;
 
-    // parent
-    private String parentAccountCode;
-    private String parentAccountName;
+	// parent
+	private String parentAccountCode;
+	private String parentAccountName;
 
-    private UUID childAccountId;
-    private String childAccountCode;
-    private String childAccountName;
+	private UUID childAccountId;
+	private String childAccountCode;
+	private String childAccountName;
 
 }

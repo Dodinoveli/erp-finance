@@ -1,167 +1,133 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="container-fluid">
-                <div class="detail-card mt-2">
-                    <div class="detail-header">
-                        <div class="detail-heading">
-                            <div class="detail-title">
-                                <h1 th:text="${client.clientName}"></h1>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="detail-card">
-                    <div class="card-heading">
-                        <div class="card-heading-icon"> <i class="bi bi-people"></i></div>
-                        <h2>
-                            Informasi Client
-                        </h2>
-                    </div>
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="container-fluid">
+				<div class="detail-card mt-2">
+					<div class="detail-header">
+						<div class="detail-heading">
+							<div class="detail-title">
+								<h1 th:text="${client.clientName}"></h1>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="detail-card">
+					<div class="card-heading">
+						<div class="card-heading-icon">
+							<i class="bi bi-people"></i>
+						</div>
+						<h2>Informasi Client</h2>
+					</div>
 
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">
-                                Kontak
-                            </span>
-                            <div class="info-value" th:text="${client.clientContactPerson}"></div>
-                        </div>
+					<div class="info-grid">
+						<div class="info-item">
+							<span class="info-label"> Kontak </span>
+							<div class="info-value" th:text="${client.clientContactPerson}"></div>
+						</div>
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Email
-                            </span>
-                            <div class="info-value" th:text="${client.clientEmail}"></div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Email </span>
+							<div class="info-value" th:text="${client.clientEmail}"></div>
+						</div>
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Telepon
-                            </span>
-                            <div class="info-value" th:text="${client.clientContactPhone}"></div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Telepon </span>
+							<div class="info-value" th:text="${client.clientContactPhone}"></div>
+						</div>
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Dibuat
-                            </span>
-                            <div class="info-value"
-                                th:text="${#temporals.format(client.clientCreatedAt,'dd MMMM yyyy')}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Dibuat </span>
+							<div class="info-value"
+								th:text="${#temporals.format(client.clientCreatedAt,'dd MMMM yyyy')}">
+							</div>
+						</div>
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Alamat
-                            </span>
-                            <div class="info-value normal" th:text="${client.clientAddress}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Alamat </span>
+							<div class="info-value normal" th:text="${client.clientAddress}">
+							</div>
+						</div>
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Status
-                            </span>
+						<div class="info-item">
+							<span class="info-label"> Status </span>
 
-                            <div class="info-value normal">
-                                <!-- Jika clientIsActive = true -->
-                                <b> <span th:if="${client.clientIsActive}" class="status-aktif">Aktif</span></b>
-                                <!-- Jika clientIsActive = false -->
-                                <b><span th:unless="${client.clientIsActive}"
-                                        class="status-tidak-aktif">Nonaktif</span></b>
-                            </div>
-                        </div>
-                    </div>
+							<div class="info-value normal">
+								<!-- Jika clientIsActive = true -->
+								<b> <span th:if="${client.clientIsActive}"
+									class="status-aktif">Aktif</span></b>
+								<!-- Jika clientIsActive = false -->
+								<b><span th:unless="${client.clientIsActive}"
+									class="status-tidak-aktif">Nonaktif</span></b>
+							</div>
+						</div>
+					</div>
 
-                </div>
+				</div>
 
-                <div class="detail-card">
-                    <div class="card-heading">
-                        <div class="card-heading-icon">
-                            <i class="bi bi-file-earmark-text"></i>
-                        </div>
-                        <h2>
-                            Informasi Pajak (Coretax)
-                        </h2>
-                    </div>
+				<div class="detail-card">
+					<div class="card-heading">
+						<div class="card-heading-icon">
+							<i class="bi bi-file-earmark-text"></i>
+						</div>
+						<h2>Informasi Pajak (Coretax)</h2>
+					</div>
 
 
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <span class="info-label">
-                                Tipe Identitas
-                            </span>
-                            <div class="info-value">
-                                NPWP (PKP)
-                            </div>
-                        </div>
+					<div class="info-grid">
+						<div class="info-item">
+							<span class="info-label"> Tipe Identitas </span>
+							<div class="info-value">NPWP (PKP)</div>
+						</div>
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                NPWP
-                            </span>
-                            <div class="info-value" th:text="${client.clientNpwp}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> NPWP </span>
+							<div class="info-value" th:text="${client.clientNpwp}"></div>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                NITKU
-                            </span>
+						<div class="info-item">
+							<span class="info-label"> NITKU </span>
 
-                            <div class="info-value" th:text="${client.clientNitku}">
-                            </div>
-                        </div>
+							<div class="info-value" th:text="${client.clientNitku}"></div>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                NIK
-                            </span>
-                            <div class="info-value" th:text="${client.clientNik}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
+						<div class="info-item">
+							<span class="info-label"> NIK </span>
+							<div class="info-value" th:text="${client.clientNik}"></div>
+						</div>
+					</div>
+				</div>
 
-                <div class="three-column">
-                    <!-- BUSINESS -->
-                    <div class="small-card">
-                        <div class="card-heading">
-                            <div class="card-heading-icon">
-                                <i class="bi bi-building"></i>
-                            </div>
-                            <h2>
-                                Informasi Bisnis
-                            </h2>
-                        </div>
+				<div class="three-column">
+					<!-- BUSINESS -->
+					<div class="small-card">
+						<div class="card-heading">
+							<div class="card-heading-icon">
+								<i class="bi bi-building"></i>
+							</div>
+							<h2>Informasi Bisnis</h2>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Kategori Client
-                            </span>
-                            <div class="info-value" th:text="${client.clientType}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Kategori Client </span>
+							<div class="info-value" th:text="${client.clientType}"></div>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Mata Uang
-                            </span>
-                            <div class="info-value">
-                                IDR - Rupiah
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Mata Uang </span>
+							<div class="info-value">IDR - Rupiah</div>
+						</div>
 
 
-                        <!-- <div class="info-item">
+						<!-- <div class="info-item">
                         <span class="info-label">
                             Syarat Pembayaran
                         </span>
@@ -170,54 +136,46 @@
                         </div>
                     </div> -->
 
-                    </div>
+					</div>
 
 
-                    <!-- BANK -->
+					<!-- BANK -->
 
-                    <div class="small-card">
-                        <div class="card-heading">
-                            <div class="card-heading-icon">
-                                <i class="bi bi-bank"></i>
-                            </div>
-                            <h2>
-                                Informasi Bank
-                            </h2>
-                        </div>
+					<div class="small-card">
+						<div class="card-heading">
+							<div class="card-heading-icon">
+								<i class="bi bi-bank"></i>
+							</div>
+							<h2>Informasi Bank</h2>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Nama Bank
-                            </span>
-                            <div class="info-value" th:text="${client.clientBankName}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Nama Bank </span>
+							<div class="info-value" th:text="${client.clientBankName}">
+							</div>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                No. Rekening
-                            </span>
-                            <div class="info-value" th:text="${client.clientAccountNumber}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> No. Rekening </span>
+							<div class="info-value" th:text="${client.clientAccountNumber}">
+							</div>
+						</div>
 
 
-                        <div class="info-item">
-                            <span class="info-label">
-                                Atas Nama
-                            </span>
-                            <div class="info-value" th:text="${client.clientAccountName}">
-                            </div>
-                        </div>
+						<div class="info-item">
+							<span class="info-label"> Atas Nama </span>
+							<div class="info-value" th:text="${client.clientAccountName}">
+							</div>
+						</div>
 
-                    </div>
+					</div>
 
 
-                    <!-- NOTE -->
+					<!-- NOTE -->
 
-                    <!-- <div class="small-card">
+					<!-- <div class="small-card">
                     <div class="card-heading">
                         <div class="card-heading-icon">
                             📝
@@ -234,14 +192,14 @@
                         </div>
                     </div>
                 </div> -->
-                </div>
+				</div>
 
 
-                <!-- =========================================
+				<!-- =========================================
      RIWAYAT AKTIVITAS
 ========================================= -->
 
-                <!-- <div class="detail-card">
+				<!-- <div class="detail-card">
                 <div class="card-heading">
                     <div class="card-heading-icon">
                         ◷
@@ -282,27 +240,28 @@
             </div> -->
 
 
-                <!-- =========================================
+				<!-- =========================================
      BUTTON DI BAWAH
 ========================================= -->
 
-                <div class="detail-actions">
-                    <button type="button" class="btn btn-light" th:data-url="@{/client}"
-                        onclick="library.navigate(this.dataset.url)">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </button>
-                    <a href="javascript:void(0)" class="btn btn-warning"
-                        th:data-url="@{/client/edit/{id}(id=${client.clientId})}"
-                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
-                    <button type="button" class="btn btn-danger">
-                        <i class="bi bi-eye-slash"></i> Nonaktifkan
-                    </button>
-                </div>
-            </div>
-        </main>
-    </div>
+				<div class="detail-actions">
+					<button type="button" class="btn btn-light"
+						th:data-url="@{/client}"
+						onclick="library.navigate(this.dataset.url)">
+						<i class="bi bi-arrow-left"></i> Kembali
+					</button>
+					<a href="javascript:void(0)" class="btn btn-warning"
+						th:data-url="@{/client/edit/{id}(id=${client.clientId})}"
+						onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+						<i class="bi bi-pencil-square"></i> Edit
+					</a>
+					<button type="button" class="btn btn-danger">
+						<i class="bi bi-eye-slash"></i> Nonaktifkan
+					</button>
+				</div>
+			</div>
+		</main>
+	</div>
 </body>
 
 </html>

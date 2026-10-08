@@ -1,74 +1,72 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
 
 
-            <div class="container-fluid py-1">
-                <!-- TABLE CARD -->
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body border-bottom">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-12">
-                                <div class="d-flex gap-2 align-items-center flex-wrap">
-                                    <button type="button" class="btn btn-light" th:data-url="@{/coa}"
-                                        onclick="library.navigate(this.dataset.url)">
-                                        <i class="bi bi-arrow-left"></i> Kembali
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <span class="fw-semibold">Parent :</span>
-                                <span th:text="${parent.accountCode}">Kas</span> -
-                                <span th:text="${parent.accountName}">Kas</span>
-                            </div>
+			<div class="container-fluid py-1">
+				<!-- TABLE CARD -->
+				<div class="card border-0 shadow-sm">
+					<div class="card-body border-bottom">
+						<div class="row g-3 align-items-center">
+							<div class="col-12">
+								<div class="d-flex gap-2 align-items-center flex-wrap">
+									<button type="button" class="btn btn-light"
+										th:data-url="@{/coa}"
+										onclick="library.navigate(this.dataset.url)">
+										<i class="bi bi-arrow-left"></i> Kembali
+									</button>
+								</div>
+							</div>
+							<div class="col">
+								<span class="fw-semibold">Parent :</span> <span
+									th:text="${parent.accountCode}">Kas</span> - <span
+									th:text="${parent.accountName}">Kas</span>
+							</div>
 
-                        </div>
-                    </div>
+						</div>
+					</div>
 
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col" style="width: 150px;">Kode Akun</th>
-                                <th scope="col">Nama Akun</th>
-                            </tr>
-                        </thead>
-                        <tbody id="accountRows">
-                            <tr th:each="account : ${accounts}">
-                                <td th:text="${account.accountCode}">
-                                </td>
-                                <!-- <td th:text="${account.accountName}"></td> -->
-                                <td th:text="${account.accountName}">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col" style="width: 150px;">Kode Akun</th>
+								<th scope="col">Nama Akun</th>
+							</tr>
+						</thead>
+						<tbody id="accountRows">
+							<tr th:each="account : ${accounts}">
+								<td th:text="${account.accountCode}"></td>
+								<!-- <td th:text="${account.accountName}"></td> -->
+								<td th:text="${account.accountName}"></td>
+							</tr>
+						</tbody>
+					</table>
 
-                </div>
-                <div class="detail-actions">
-                    <!-- <button type="button" class="btn btn-light" th:data-url="@{/client}"
+				</div>
+				<div class="detail-actions">
+					<!-- <button type="button" class="btn btn-light" th:data-url="@{/client}"
                         onclick="library.navigate(this.dataset.url)">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </button> -->
-                    <a href="javascript:void(0)" class="btn btn-warning"
-                        th:data-url="@{/coa/edit/{id}(id=${parent.accountId})}"
-                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                        <i class="bi bi-pencil-square"></i> Edit
-                    </a>
+					<a href="javascript:void(0)" class="btn btn-warning"
+						th:data-url="@{/coa/edit/{id}(id=${parent.accountId})}"
+						onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+						<i class="bi bi-pencil-square"></i> Edit
+					</a> <a href="javascript:void(0)" class="btn btn-primary"
+						th:data-url="@{/coa/add/{id}(id=${parent.accountId})}"
+						onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+						<i class="bi bi-plus"></i> Baru
+					</a>
+				</div>
+			</div>
+		</main>
 
-                    <a href="javascript:void(0)" class="btn btn-primary"
-                        th:data-url="@{/coa/add/{id}(id=${parent.accountId})}"
-                        onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                        <i class="bi bi-plus"></i> Baru
-                    </a>
-                </div>
-            </div>
-        </main>
-
-    </div>
+	</div>
 
 </body>
 

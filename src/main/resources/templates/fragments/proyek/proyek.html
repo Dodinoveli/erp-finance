@@ -1,297 +1,309 @@
-<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-proyek-Content">
-  <style>
-    /* Container untuk merapikan isi konten di bawah tab */
-    .tab-content-container {
-      border: 0px solid #dee2e6;
-      border-top: none;
-      background: #f5f5f5;
-    }
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org"
+	id="panel-proyek-Content">
+	<style>
+/* Container untuk merapikan isi konten di bawah tab */
+.tab-content-container {
+	border: 0px solid #dee2e6;
+	border-top: none;
+	background: #f5f5f5;
+}
+
+.container-fluid {
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
+
+/* Garis tipis pemisah */
+.border-top {
+	border-top: 1px solid #eee !important;
+}
+
+/* untuk tombol export dll */
+/* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+.dropdown-toggle::after {
+	vertical-align: middle;
+}
+
+/* Efek hover pada item dropdown */
+.dropdown-item:hover {
+	background-color: #f8f9fa;
+	color: #2b7de9;
+}
+
+/* Memberikan warna ikon agar lebih informatif */
+.dropdown-item i {
+	width: 20px;
+	text-align: center;
+}
+
+.card-body-easyui {
+	padding: 15px !important;
+	border-radius: 0 0 4px 4px;
+}
+</style>
+	<ul class="nav nav-tabs custom-terminal-tabs">
+		<li class="nav-item">
+			<button class="nav-link text-light" id="btn-tab-list-bankaccounts"
+				onclick="proyek.switchTabProyek('view-list-proyek')">
+				<i class="fas fa-list me-1"></i>
+			</button>
+		</li>
+
+		<li class="nav-item">
+			<button class="nav-link active" id="btn-tab-input-proyek"
+				onclick="proyek.switchTabProyek('view-input-proyek')">
+				<i class="fas fa-edit me-1" id="txtinput"></i> <span
+					id="text-label-proyek">Data Baru</span>
+			</button>
+		</li>
+
+		<li class="nav-item" id="li-tab-detail-client" style="display: none">
+			<button class="nav-link text-light" id="btn-tab-detail-client">
+				<i class="fas fa-id-card me-1"></i> Detail: <span
+					id="tab-label-client"></span> <span class="ms-2 badge bg-danger"
+					onclick="proyek.closeEdit(event)" style="cursor: pointer">×</span>
+			</button>
+		</li>
+	</ul>
+
+	<div class="tab-content-container p-0">
+		<div id="view-input-proyek" style="display: block">
+			<form id="formBankAccount">
+				<input type="hidden" id="project_id" name="projectId" />
+
+				<div class="container-fluid py-2">
+					<div class="row g-3">
+						<div class="col-md-12">
+							<div class="card border-0 shadow-sm">
+								<div class="card-body p-3">
+									<p class="fw-bold">Header</p>
+									<div class="row">
+										<!-- LEFT -->
+										<div class="col-md-6 pe-md-4">
+											<div class="accurate-form-group">
+												<label>Po Number/ Spk<span class="text-danger">*</span></label>
+												<div class="form-field">
+													<input type="text" id="project_code" name="projectCode"
+														class="form-control form-control-sm"
+														placeholder="Contoh: PO/2026/08/0142, sesuaikan dengan no po anda " />
+													<small class="text-danger" id="err-projectCode"></small>
+												</div>
+											</div>
+
+											<div class="accurate-form-group">
+												<label>Tanggal Po</label>
+												<div class="form-field">
+													<input type="date" id="po_date" name="poDate"
+														class="form-control form-control-sm" /> <small
+														class="text-danger" id="err-poDate"></small>
+												</div>
+											</div>
+
+											<div class="accurate-form-group">
+												<label>Judul Proyek <span class="text-danger">*</span></label>
+												<div class="form-field">
+													<input type="text" id="name" name="name"
+														class="form-control form-control-sm"
+														placeholder="Contoh: Pembangunan Gedung Rawat Inap 5 Lantai RSUD Kota" />
+													<small class="text-danger" id="err-name"></small>
+												</div>
+											</div>
+
+											<div class="accurate-form-group">
+												<label>Deskripsi <span class="text-danger">*</span></label>
+												<div class="form-field">
+													<textarea name="description" id="description"
+														class="form-control form-control-sm" rows="3"
+														placeholder="Contoh: Pekerjaan Pembuatan gudang"></textarea>
+													<small class="text-danger" id="err-description"></small>
+												</div>
+											</div>
 
 
-    .container-fluid {
-      padding-left: 10px !important;
-      padding-right: 10px !important;
-    }
+										</div>
 
-    /* Garis tipis pemisah */
-    .border-top {
-      border-top: 1px solid #eee !important;
-    }
+										<!-- RIGHT -->
+										<div class="col-md-6 ps-md-4">
+											<div class="accurate-form-group">
+												<label>Client</label>
+												<div class="form-field">
+													<select id="client_id" name="clientId"
+														class="form-control form-control-sm">
+													</select> <small class="text-danger" id="err-clientId"></small>
+												</div>
+											</div>
 
-    /* untuk tombol export dll */
-    /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
-    .dropdown-toggle::after {
-      vertical-align: middle;
-    }
-
-    /* Efek hover pada item dropdown */
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-      color: #2b7de9;
-    }
-
-    /* Memberikan warna ikon agar lebih informatif */
-    .dropdown-item i {
-      width: 20px;
-      text-align: center;
-    }
-
-    .card-body-easyui {
-      padding: 15px !important;
-      border-radius: 0 0 4px 4px;
-    }
-  </style>
-  <ul class="nav nav-tabs custom-terminal-tabs">
-    <li class="nav-item">
-      <button class="nav-link text-light" id="btn-tab-list-bankaccounts"
-        onclick="proyek.switchTabProyek('view-list-proyek')">
-        <i class="fas fa-list me-1"></i>
-      </button>
-    </li>
-
-    <li class="nav-item">
-      <button class="nav-link active" id="btn-tab-input-proyek" onclick="proyek.switchTabProyek('view-input-proyek')">
-        <i class="fas fa-edit me-1" id="txtinput"></i>
-        <span id="text-label-proyek">Data Baru</span>
-      </button>
-    </li>
-
-    <li class="nav-item" id="li-tab-detail-client" style="display: none">
-      <button class="nav-link text-light" id="btn-tab-detail-client">
-        <i class="fas fa-id-card me-1"></i> Detail:
-        <span id="tab-label-client"></span>
-        <span class="ms-2 badge bg-danger" onclick="proyek.closeEdit(event)" style="cursor: pointer">×</span>
-      </button>
-    </li>
-  </ul>
-
-  <div class="tab-content-container p-0">
-    <div id="view-input-proyek" style="display: block">
-      <form id="formBankAccount">
-        <input type="hidden" id="project_id" name="projectId" />
-
-        <div class="container-fluid py-2">
-          <div class="row g-3">
-            <div class="col-md-12">
-              <div class="card border-0 shadow-sm">
-                <div class="card-body p-3">
-                  <p class="fw-bold">Header</p>
-                  <div class="row">
-                    <!-- LEFT -->
-                    <div class="col-md-6 pe-md-4">
-                      <div class="accurate-form-group">
-                        <label>Po Number/ Spk<span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <input type="text" id="project_code" name="projectCode" class="form-control form-control-sm"
-                            placeholder="Contoh: PO/2026/08/0142, sesuaikan dengan no po anda " />
-                          <small class="text-danger" id="err-projectCode"></small>
-                        </div>
-                      </div>
-
-                      <div class="accurate-form-group">
-                        <label>Tanggal Po</label>
-                        <div class="form-field">
-                          <input type="date" id="po_date" name="poDate" class="form-control form-control-sm" />
-                          <small class="text-danger" id="err-poDate"></small>
-                        </div>
-                      </div>
-
-                      <div class="accurate-form-group">
-                        <label>Judul Proyek <span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <input type="text" id="name" name="name" class="form-control form-control-sm"
-                            placeholder="Contoh: Pembangunan Gedung Rawat Inap 5 Lantai RSUD Kota" />
-                          <small class="text-danger" id="err-name"></small>
-                        </div>
-                      </div>
-
-                      <div class="accurate-form-group">
-                        <label>Deskripsi <span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <textarea name="description" id="description" class="form-control form-control-sm" rows="3"
-                            placeholder="Contoh: Pekerjaan Pembuatan gudang"></textarea>
-                          <small class="text-danger" id="err-description"></small>
-                        </div>
-                      </div>
-
-
-                    </div>
-
-                    <!-- RIGHT -->
-                    <div class="col-md-6 ps-md-4">
-                      <div class="accurate-form-group">
-                        <label>Client</label>
-                        <div class="form-field">
-                          <select id="client_id" name="clientId" class="form-control form-control-sm">
-                          </select>
-                          <small class="text-danger" id="err-clientId"></small>
-                        </div>
-                      </div>
-
-                      <div class="accurate-form-group">
-                        <label>Jenis Proyek <span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <select id="project_type" name="projectType" class="form-control form-control-sm">
-                            <option value="">-- Pilih Jenis Proyek --</option>
-                            <option value="Konstruksi">Konstruksi & Bangunan</option>
-                            <option value="Sipil">Sipil & Infrastruktur</option>
-                            <option value="Elektrikal">Mekanikal & Elektrikal (MEP)</option>
-                            <option value="Pengadaan">Pengadaan Barang (Procurement)</option>
-                            <option value="Konsultansi">Konsultansi & Perencanaan</option>
-                            <option value="Renovasi">Renovasi & Perawatan (Maintenance)</option>
-                            <option value="IT">Teknologi Informasi (IT)</option>
-                            <option value="Multi-Disiplin">Multi-Disiplin / EPC (Campuran)</option>
-                            <option value="General">General / Lain-lain</option>
-                          </select>
-                          <small class="text-danger" id="err-projectType"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Jenis Proyek <span class="text-danger">*</span></label>
+												<div class="form-field">
+													<select id="project_type" name="projectType"
+														class="form-control form-control-sm">
+														<option value="">-- Pilih Jenis Proyek --</option>
+														<option value="Konstruksi">Konstruksi & Bangunan</option>
+														<option value="Sipil">Sipil & Infrastruktur</option>
+														<option value="Elektrikal">Mekanikal & Elektrikal
+															(MEP)</option>
+														<option value="Pengadaan">Pengadaan Barang
+															(Procurement)</option>
+														<option value="Konsultansi">Konsultansi &
+															Perencanaan</option>
+														<option value="Renovasi">Renovasi & Perawatan
+															(Maintenance)</option>
+														<option value="IT">Teknologi Informasi (IT)</option>
+														<option value="Multi-Disiplin">Multi-Disiplin /
+															EPC (Campuran)</option>
+														<option value="General">General / Lain-lain</option>
+													</select> <small class="text-danger" id="err-projectType"></small>
+												</div>
+											</div>
 
 
 
-                      <div class="accurate-form-group">
-                        <label>Lokasi</label>
-                        <div class="form-field">
-                          <input type="text" id="location" name="location" class="form-control form-control-sm"
-                            placeholder="Lampung" />
-                          <small class="text-danger" id="err-location"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Lokasi</label>
+												<div class="form-field">
+													<input type="text" id="location" name="location"
+														class="form-control form-control-sm" placeholder="Lampung" />
+													<small class="text-danger" id="err-location"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nilai Kontrak</label>
-                        <div class="form-field">
-                          <input type="text" id="contract_input_value" name="contractInputValue"
-                            class="form-control form-control-sm" placeholder="100.000.000" />
-                          <small class="text-danger" id="err-contractInputValue"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nilai Kontrak</label>
+												<div class="form-field">
+													<input type="text" id="contract_input_value"
+														name="contractInputValue"
+														class="form-control form-control-sm"
+														placeholder="100.000.000" /> <small class="text-danger"
+														id="err-contractInputValue"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Kena PPN 12% ? <span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <select id="tax_type" name="taxType" class="form-control form-control-sm">
-                            <option value="">-- Pilih Skema PPN --</option>
-                            <option value="EXCLUSIVE">Nilai di atas BELUM termasuk PPN (Exclusive)</option>
-                            <option value="INCLUSIVE">Nilai di atas SUDAH termasuk PPN (Inclusive)</option>
-                            <option value="NON_PPN">Nilai di atas TIDAK kena PPN</option>
-                          </select>
-                          <small class="text-danger" id="err-taxType"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Kena PPN 12% ? <span class="text-danger">*</span></label>
+												<div class="form-field">
+													<select id="tax_type" name="taxType"
+														class="form-control form-control-sm">
+														<option value="">-- Pilih Skema PPN --</option>
+														<option value="EXCLUSIVE">Nilai di atas BELUM
+															termasuk PPN (Exclusive)</option>
+														<option value="INCLUSIVE">Nilai di atas SUDAH
+															termasuk PPN (Inclusive)</option>
+														<option value="NON_PPN">Nilai di atas TIDAK kena
+															PPN</option>
+													</select> <small class="text-danger" id="err-taxType"></small>
+												</div>
+											</div>
 
-                    </div>
-                  </div>
-                </div>
-              </div>
+										</div>
+									</div>
+								</div>
+							</div>
 
-              <div class="card mt-1 shadow-sm border-0">
-                <div class="card-body text-center">
-                  <div class="d-flex justify-content-center gap-3">
-                    <button type="submit" class="btn btn-primary px-4">
-                      <i class="bi bi-floppy"></i> Simpan
-                    </button>
-                    <button type="button" class="btn btn-danger px-4" id="btn-batal-bankaccounts">
-                      <i class="bi bi-x-circle"></i> Batal
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
+							<div class="card mt-1 shadow-sm border-0">
+								<div class="card-body text-center">
+									<div class="d-flex justify-content-center gap-3">
+										<button type="submit" class="btn btn-primary px-4">
+											<i class="bi bi-floppy"></i> Simpan
+										</button>
+										<button type="button" class="btn btn-danger px-4"
+											id="btn-batal-bankaccounts">
+											<i class="bi bi-x-circle"></i> Batal
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
 
-    </div>
-    <div id="view-list-proyek" style="display: none; padding: 5px">
-      <div class="toolbar-easyui">
-        <div class="btn-separator"></div>
-        <button id="btn-tambah-proyek" class="btn-tambah fw-bold">
-          <i class="fas fa-plus"></i>
-        </button>
-        <button id="btn-refresh-proyek" class="btn-segarkan">
-          <i class="fas fa-sync-alt"></i>
-        </button>
+		</div>
+		<div id="view-list-proyek" style="display: none; padding: 5px">
+			<div class="toolbar-easyui">
+				<div class="btn-separator"></div>
+				<button id="btn-tambah-proyek" class="btn-tambah fw-bold">
+					<i class="fas fa-plus"></i>
+				</button>
+				<button id="btn-refresh-proyek" class="btn-segarkan">
+					<i class="fas fa-sync-alt"></i>
+				</button>
 
-        <div class="dropdown d-inline-block" style="position: relative">
-          <button class="btn-excel dropdown-toggle" type="button" onclick="proyek.toggleExcelMenu(event)">
-            <i class="fas fa-file-excel me-1"></i>
-          </button>
+				<div class="dropdown d-inline-block" style="position: relative">
+					<button class="btn-excel dropdown-toggle" type="button"
+						onclick="proyek.toggleExcelMenu(event)">
+						<i class="fas fa-file-excel me-1"></i>
+					</button>
 
-          <ul class="dropdown-menu shadow border" id="menu-excel-proyek" style="
-              display: none;
-              position: absolute !important;
-              left: 0;
-              top: 100%;
-              z-index: 99999 !important;
-              min-width: 180px;
-              background: white;
-              list-style: none;
-              padding: 5px 0;
-              margin: 0;
-            ">
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/export">
-                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
-                Excel
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/template">
-                <i class="fas fa-download me-2 text-info"></i> Download Template
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" style="margin: 5px 0" />
-            </li>
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="javascript:void(0)" onclick="
+					<ul class="dropdown-menu shadow border" id="menu-excel-proyek"
+						style="display: none; position: absolute !important; left: 0; top: 100%; z-index: 99999 !important; min-width: 180px; background: white; list-style: none; padding: 5px 0; margin: 0;">
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="/api/v1/clients/export"> <i
+								class="fas fa-file-export me-2 text-success"></i> Export Ke
+								Excel
+						</a></li>
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="/api/v1/clients/template"> <i
+								class="fas fa-download me-2 text-info"></i> Download Template
+						</a></li>
+						<li>
+							<hr class="dropdown-divider" style="margin: 5px 0" />
+						</li>
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="javascript:void(0)"
+							onclick="
                   document.getElementById('menu-excel-proyek').style.display =
                     'none'
-                " data-bs-toggle="modal" data-bs-target="#importModal">
-                <i class="fas fa-file-upload me-2 text-warning"></i> Import
-                Excel
-              </a>
-            </li>
-          </ul>
-        </div>
-        <button class="btn-print"><i class="fas fa-print"></i></button>
+                "
+							data-bs-toggle="modal" data-bs-target="#importModal"> <i
+								class="fas fa-file-upload me-2 text-warning"></i> Import Excel
+						</a></li>
+					</ul>
+				</div>
+				<button class="btn-print">
+					<i class="fas fa-print"></i>
+				</button>
 
-        <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
-          <div class="search-container-terminal me-2">
-            <input type="text" id="search-proyek-input" placeholder="Search client..." class="input-hugo-terminal"
-              readonly />
-          </div>
-          <button id="btn-search-proyek" class="btn-cari">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
+				<div
+					style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+					<div class="search-container-terminal me-2">
+						<input type="text" id="search-proyek-input"
+							placeholder="Search client..." class="input-hugo-terminal"
+							readonly />
+					</div>
+					<button id="btn-search-proyek" class="btn-cari">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
 
-      <div class="table-wrapper table-wrapper-proyek" id="proyek-wrapper">
-        <table id="client-table">
-          <thead>
-            <tr>
-              <th class="kolom-sticky-1 resizer">Po Number</th>
-              <th class="kolom-sticky-2 resizer">Proyek</th>
-              <th class="resizer" style="width: 200px">Client</th>
-              <th class="resizer" style="width: 180px">Jenis Proyek</th>
-              <th class="resizer" style="width: 200px">Lokasi</th>
-              <th class="resizer" style="width: 150px;">Nilai Kontrak</th>
-              <th class="resizer" style="width: 150px">DPP</th>
-              <th class="resizer" style="width: 100px">PPN 12%</th>
-              <th class="resizer" style="width: 150px">PPN (Rp)</th>
-              <th class="resizer" style="width: 100px">Total</th>
-              <th class="resizer" style="width: 150px">Skema</th>
-            </tr>
-          </thead>
-          <tbody id="proyek-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+			<div class="table-wrapper table-wrapper-proyek" id="proyek-wrapper">
+				<table id="client-table">
+					<thead>
+						<tr>
+							<th class="kolom-sticky-1 resizer">Po Number</th>
+							<th class="kolom-sticky-2 resizer">Proyek</th>
+							<th class="resizer" style="width: 200px">Client</th>
+							<th class="resizer" style="width: 180px">Jenis Proyek</th>
+							<th class="resizer" style="width: 200px">Lokasi</th>
+							<th class="resizer" style="width: 150px;">Nilai Kontrak</th>
+							<th class="resizer" style="width: 150px">DPP</th>
+							<th class="resizer" style="width: 100px">PPN 12%</th>
+							<th class="resizer" style="width: 150px">PPN (Rp)</th>
+							<th class="resizer" style="width: 100px">Total</th>
+							<th class="resizer" style="width: 150px">Skema</th>
+						</tr>
+					</thead>
+					<tbody id="proyek-table-body"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-  <script type="module" th:inline="javascript">
+	<script type="module" th:inline="javascript">
     const proyek = {
       cursorCreatedAt: null,
       cursorId: null,

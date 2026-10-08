@@ -9,23 +9,23 @@ import lombok.Data;
 
 @Data
 public class UserRequest {
-    private UUID userId;
+	private UUID userId;
 
-    @NotBlank(message = "username wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-    private String userName;
+	@NotBlank(message = "username wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String userName;
 
-    @NotBlank(message = "password wajib diisi", groups = { OnCreate.class, OnUpdate.class })
-    private String password;
+	@NotBlank(message = "password wajib diisi", groups = { OnCreate.class, OnUpdate.class })
+	private String password;
 
-    private String deviceId;
-    private String ipAddress;
-    private String userAgent;
+	private String deviceId;
+	private String ipAddress;
+	private String userAgent;
 
-    private String fullName;
-    private String email;
-    private String phone;
-    private Boolean isActive;
-    private UUID companyId;
-    private OffsetDateTime createdAt;
-    private OffsetDateTime updatedAt;
+	private String fullName;
+	private String email;
+	private String phone;
+	private Boolean isActive;
+	private UUID companyId;
+	private OffsetDateTime createdAt;
+	private OffsetDateTime updatedAt;
 }

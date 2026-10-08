@@ -10,31 +10,25 @@ import org.springframework.lang.NonNull;
 
 public class ChartOfAccountsTemplatesMaper implements RowMapper<ChartOfAccountsTemplates> {
 
-    @Override
-    @Nullable
-    public ChartOfAccountsTemplates mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
-        UUID parentId = null;
-        String parentIdStr = rs.getString("parent_template_id");
-        if (parentIdStr != null) {
-            parentId = UUID.fromString(parentIdStr);
-        }
+	@Override
+	@Nullable
+	public ChartOfAccountsTemplates mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
+		UUID parentId = null;
+		String parentIdStr = rs.getString("parent_template_id");
+		if (parentIdStr != null) {
+			parentId = UUID.fromString(parentIdStr);
+		}
 
-        return ChartOfAccountsTemplates.builder()
-                .templateAccountId(UUID.fromString(rs.getString("template_account_id")))
-                .accountCode(rs.getString("account_code"))
-                .accountName(rs.getString("account_name"))
-                .accountType(rs.getString("account_type"))
-                .normalBalance(rs.getString("normal_balance"))
-                .parentTemplateId(parentId)
-                .accountLevel(rs.getShort("account_level"))
-                .isHeader(rs.getBoolean("is_header"))
-                .isPostable(rs.getBoolean("is_postable"))
-                .description(rs.getString("description"))
-                .sortOrder(rs.getInt("sort_order"))
-                .createdAt(rs.getObject("created_at", OffsetDateTime.class))
-                .updatedAt(rs.getObject("updated_at", OffsetDateTime.class))
-                .build();
+		return ChartOfAccountsTemplates.builder()
+				.templateAccountId(UUID.fromString(rs.getString("template_account_id")))
+				.accountCode(rs.getString("account_code")).accountName(rs.getString("account_name"))
+				.accountType(rs.getString("account_type")).normalBalance(rs.getString("normal_balance"))
+				.parentTemplateId(parentId).accountLevel(rs.getShort("account_level"))
+				.isHeader(rs.getBoolean("is_header")).isPostable(rs.getBoolean("is_postable"))
+				.description(rs.getString("description")).sortOrder(rs.getInt("sort_order"))
+				.createdAt(rs.getObject("created_at", OffsetDateTime.class))
+				.updatedAt(rs.getObject("updated_at", OffsetDateTime.class)).build();
 
-    }
+	}
 
 }

@@ -1,44 +1,47 @@
 <!doctype html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <main class="main">
-            <div class="container-fluid mt-2">
-                <form id="formTrx">
-                    <div class="card p-2">
-                        <div class="card-body">
-                            <input type="hidden" id="company_id" name="companyId" th:value="${trx.companyid}" />
-                            <div class="row g-3">
-                                <div class="col-md-12">
-                                    <div class="mb-3">
-                                        <label class="lbl-normal">Kode Dokumen</label>
-                                        <div class="form-field">
-                                            <input type="text" class="form-control input-underline bg-secondary-subtle"
-                                                id="companyCode" name="companyCode" placeholder="MJK"
-                                                th:value="${trx.companycode}" />
-                                            <small class="text-danger" id="err-companyCode"></small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="container-fluid mt-2">
+				<form id="formTrx">
+					<div class="card p-2">
+						<div class="card-body">
+							<input type="hidden" id="company_id" name="companyId"
+								th:value="${trx.companyid}" />
+							<div class="row g-3">
+								<div class="col-md-12">
+									<div class="mb-3">
+										<label class="lbl-normal">Kode Dokumen</label>
+										<div class="form-field">
+											<input type="text"
+												class="form-control input-underline bg-secondary-subtle"
+												id="companyCode" name="companyCode" placeholder="MJK"
+												th:value="${trx.companycode}" /> <small class="text-danger"
+												id="err-companyCode"></small>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="detail-actions">
-                        <button type="submit" class="btn btn-simpan">
-                            <i class="bi bi-floppy"></i> Simpan
-                        </button>
-                        <a th:href="@{/transactioncode}" class="btn btn-batal" hx-get="/transactioncode"
-                            hx-target="#page-content" hx-push-url="true" hx-indicator="#loading"><i
-                                class="bi bi-x-lg"></i> Batal
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </main>
-        <script th:inline="javascript">
+					<div class="detail-actions">
+						<button type="submit" class="btn btn-simpan">
+							<i class="bi bi-floppy"></i> Simpan
+						</button>
+						<a th:href="@{/transactioncode}" class="btn btn-batal"
+							hx-get="/transactioncode" hx-target="#page-content"
+							hx-push-url="true" hx-indicator="#loading"><i
+							class="bi bi-x-lg"></i> Batal </a>
+					</div>
+				</form>
+			</div>
+		</main>
+		<script th:inline="javascript">
 
             var editCode = {
                 init: function () {
@@ -139,7 +142,7 @@
             window.editCode = editCode;
             editCode.init();
         </script>
-    </div>
+	</div>
 </body>
 
 </html>

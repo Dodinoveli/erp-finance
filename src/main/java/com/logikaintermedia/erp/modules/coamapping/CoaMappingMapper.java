@@ -9,16 +9,16 @@ import org.springframework.lang.Nullable;
 
 public class CoaMappingMapper implements RowMapper<CoaMapping> {
 
-    @Override
-    @Nullable
-    public CoaMapping mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
-        CoaMapping mapping = new CoaMapping();
-        mapping.setMappingId(rs.getObject("mapping_id", UUID.class));
-        mapping.setTransactionType(TransactionType.valueOf(rs.getString("transaction_type")));
-        mapping.setPaymentType(PaymentType.valueOf(rs.getString("payment_type")));
-        mapping.setDescription(rs.getString("description"));
-        mapping.setCompanyId(rs.getObject("company_id", UUID.class));
-        return mapping;
-    }
+	@Override
+	@Nullable
+	public CoaMapping mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
+		CoaMapping mapping = new CoaMapping();
+		mapping.setMappingId(rs.getObject("mapping_id", UUID.class));
+		mapping.setTransactionType(TransactionType.valueOf(rs.getString("transaction_type")));
+		mapping.setPaymentType(PaymentType.valueOf(rs.getString("payment_type")));
+		mapping.setDescription(rs.getString("description"));
+		mapping.setCompanyId(rs.getObject("company_id", UUID.class));
+		return mapping;
+	}
 
 }

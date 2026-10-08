@@ -9,51 +9,51 @@ import lombok.Data;
 
 @Data
 public class ClientResponse {
-    private UUID clientId;
-    private String clientCode;
-    private String clientName;
-    private String clientType;
+	private UUID clientId;
+	private String clientCode;
+	private String clientName;
+	private ClientType clientType;
 
-    private String clientNpwp;
-    private String clientNik;
-    private String clientNitku;
-    private Boolean clientIsPkp;
+	private String clientNpwp;
+	private String clientNik;
+	private String clientNitku;
+	private Boolean clientIsPkp;
 
-    private String clientAddress;
-    private String clientCity;
-    private String clientProvince;
-    private String clientPostalCode;
-    private String clientCountry;
-    private String clientEmail;
+	private String clientAddress;
+	private String clientCity;
+	private String clientProvince;
+	private String clientPostalCode;
+	private String clientCountry;
+	private String clientEmail;
 
-    private String clientContactPerson;
-    private String clientContactPhone;
+	private String clientContactPerson;
+	private String clientContactPhone;
 
-    private Boolean clientIsActive;
+	private Boolean clientIsActive;
 
-    private UUID companyId;
+	private UUID companyId;
 
-    private OffsetDateTime clientCreatedAt;
-    private UUID clientCreatedBy;
+	private OffsetDateTime clientCreatedAt;
+	private UUID clientCreatedBy;
 
-    private OffsetDateTime clientUpdatedAt;
-    private UUID clientUpdatedBy;
+	private OffsetDateTime clientUpdatedAt;
+	private UUID clientUpdatedBy;
 
-    private OffsetDateTime clientDeletedAt;
+	private OffsetDateTime clientDeletedAt;
 
-    private String clientBankName;
-    private String clientAccountNumber;
-    private String clientAccountName;
+	private String clientBankName;
+	private String clientAccountNumber;
+	private String clientAccountName;
 
-    public static ClientResponse from(Client entity) {
-        ClientResponse response = new ClientResponse();
-        response.setClientId(entity.getClientId());
-        response.setClientName(entity.getClientName());
-        response.setClientCode(entity.getClientCode());
-        response.setClientContactPerson(entity.getClientContactPerson());
-        response.setClientEmail(EncryptionUtil.decryptSafely(entity.getClientEmail()));
-        response.setClientContactPhone(EncryptionUtil.decryptSafely(entity.getClientContactPhone()));
-        response.setClientIsActive(entity.getClientIsActive());
-        return response;
-    }
+	public static ClientResponse from(Client entity) {
+		ClientResponse response = new ClientResponse();
+		response.setClientId(entity.getClientId());
+		response.setClientName(entity.getClientName());
+		response.setClientCode(entity.getClientCode());
+		response.setClientContactPerson(entity.getClientContactPerson());
+		response.setClientEmail(EncryptionUtil.decryptSafely(entity.getClientEmail()));
+		response.setClientContactPhone(EncryptionUtil.decryptSafely(entity.getClientContactPhone()));
+		response.setClientIsActive(entity.getClientIsActive());
+		return response;
+	}
 }

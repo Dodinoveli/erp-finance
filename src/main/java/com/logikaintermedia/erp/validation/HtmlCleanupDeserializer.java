@@ -12,16 +12,16 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 @JsonComponent
 public class HtmlCleanupDeserializer extends JsonDeserializer<String> {
 
-    @Override
-    public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
-        String value = p.getValueAsString();
-        if (value == null) {
-            return null;
-        }
+	@Override
+	public String deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JacksonException {
+		String value = p.getValueAsString();
+		if (value == null) {
+			return null;
+		}
 
-        // Jsoup.clean akan menghapus semua tag HTML termasuk <script>, <div>, dll.
-        // Menghasilkan teks murni saja. lewat request body
-        return Jsoup.clean(value, Safelist.none());
-    }
+		// Jsoup.clean akan menghapus semua tag HTML termasuk <script>, <div>, dll.
+		// Menghasilkan teks murni saja. lewat request body
+		return Jsoup.clean(value, Safelist.none());
+	}
 
 }

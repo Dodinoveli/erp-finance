@@ -1,121 +1,123 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 
 <body>
-    <div layout:fragment="content" th:fragment="content">
-        <div class="detail-container p-2">
-            <main class="main">
-                <form id="formBankAccountEdit" th:object="${accounts}">
-                    <div class="card p-1">
-                        <div class="card-body">
-                            <input type="hidden" id="bank_account_id" name="bankAccountId"
-                                th:field="*{bankAccountId}" />
+	<div layout:fragment="content" th:fragment="content">
+		<div class="detail-container p-2">
+			<main class="main">
+				<form id="formBankAccountEdit" th:object="${accounts}">
+					<div class="card p-1">
+						<div class="card-body">
+							<input type="hidden" id="bank_account_id" name="bankAccountId"
+								th:field="*{bankAccountId}" />
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Kode</label>
-                                    <div class="form-field">
-                                        <input type="text" class="form-control input-underline" id="account_code"
-                                            name="accountCode" th:field="*{accountCode}"
-                                            placeholder="Contoh: BCA01 atau KAS01 "> <small class="text-danger"
-                                            id="err-accountCode"> </small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Nama AKun</label>
-                                    <div class="form-field">
-                                        <input type="text" id="account_name" name="accountName"
-                                            class="form-control input-underline" th:field="*{accountName}"
-                                            placeholder="Contoh: Bank BCA Operasional atau Kas Kantor">
-                                        <small class="text-danger" id="err-accountName"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row g-3">
-                                <div class="col-md-12">
-                                    <label class="lbl-normal">Tipe Akun</label>
-                                    <div class="form-field">
-                                        <select id="account_id" name="accountId" class="form-select select-underline"
-                                            th:field="*{accountId}" aria-label="Default select example">
-                                            <option value="">-- Pilih Akun --</option>
-                                            <option th:value="${accounts.coa.childAccountId}"
-                                                th:attr="data-parent-account-name=${accounts.coa.parentAccountName}"
-                                                th:text="${accounts.coa.childAccountCode + '-' + accounts.coa.childAccountName}">
-                                            </option>
-                                            <option th:each="coa : ${coaAccounts}"
-                                                th:attr="data-parent-account-name=${coa.parentAccountName}"
-                                                th:value="${coa.childAccountId}"
-                                                th:text="${coa.childAccountCode + '-' + coa.childAccountName}">
-                                            </option>
-                                        </select>
-                                        <input type="hidden" name="accountType"
-                                            th:value="${accounts.coa.parentAccountName}">
-                                        <small class="text-danger" id="err-accountId"></small>
-                                    </div>
-                                    <!-- <input type="hidden" id="coa_id" name="coaId" th:field="*{coaId}" /> -->
-                                </div>
-                            </div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="lbl-normal">Kode</label>
+									<div class="form-field">
+										<input type="text" class="form-control input-underline"
+											id="account_code" name="accountCode"
+											th:field="*{accountCode}"
+											placeholder="Contoh: BCA01 atau KAS01 "> <small
+											class="text-danger" id="err-accountCode"> </small>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="lbl-normal">Nama AKun</label>
+									<div class="form-field">
+										<input type="text" id="account_name" name="accountName"
+											class="form-control input-underline"
+											th:field="*{accountName}"
+											placeholder="Contoh: Bank BCA Operasional atau Kas Kantor">
+										<small class="text-danger" id="err-accountName"></small>
+									</div>
+								</div>
+							</div>
+							<div class="row g-3">
+								<div class="col-md-12">
+									<label class="lbl-normal">Tipe Akun</label>
+									<div class="form-field">
+										<select id="account_id" name="accountId"
+											class="form-select select-underline" th:field="*{accountId}"
+											aria-label="Default select example">
+											<option value="">-- Pilih Akun --</option>
+											<option th:value="${accounts.coa.childAccountId}"
+												th:attr="data-parent-account-name=${accounts.coa.parentAccountName}"
+												th:text="${accounts.coa.childAccountCode + '-' + accounts.coa.childAccountName}">
+											</option>
+											<option th:each="coa : ${coaAccounts}"
+												th:attr="data-parent-account-name=${coa.parentAccountName}"
+												th:value="${coa.childAccountId}"
+												th:text="${coa.childAccountCode + '-' + coa.childAccountName}">
+											</option>
+										</select> <input type="hidden" name="accountType"
+											th:value="${accounts.coa.parentAccountName}"> <small
+											class="text-danger" id="err-accountId"></small>
+									</div>
+									<!-- <input type="hidden" id="coa_id" name="coaId" th:field="*{coaId}" /> -->
+								</div>
+							</div>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Nama Bank</label>
-                                    <div class="form-field">
-                                        <input type="text" id="bank_name" name="bankName"
-                                            class="form-control input-underline" th:field="*{bankName}"
-                                            placeholder="Contoh: Bank Bca">
-                                        <small class="text-danger" id="err-bankName"></small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Cabang</label>
-                                    <div class="form-field">
-                                        <input type="text" id="bank_branch" name="bankBranch"
-                                            class="form-control input-underline" th:field="*{bankBranch}"
-                                            placeholder="Contoh: Bandar Lampung">
-                                        <small class="text-danger" id="err-bankBranch"></small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row -g3">
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">No Rekening</label>
-                                    <div class="form-field">
-                                        <input type="text" id="account_number" name="accountNumber"
-                                            class="form-control input-underline" th:field="*{accountNumber}">
-                                        <small class="text-danger" id="err-accountNumber"></small>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="lbl-normal">Pemilik</label>
-                                    <div class="form-field">
-                                        <input type="text" id="account_holder" name="accountHolder"
-                                            class="form-control input-underline" th:field="*{accountHolder}">
-                                        <small class="text-danger" id="err-accountHolder"></small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+							<div class="row g-3">
+								<div class="col-md-6">
+									<label class="lbl-normal">Nama Bank</label>
+									<div class="form-field">
+										<input type="text" id="bank_name" name="bankName"
+											class="form-control input-underline" th:field="*{bankName}"
+											placeholder="Contoh: Bank Bca"> <small
+											class="text-danger" id="err-bankName"></small>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="lbl-normal">Cabang</label>
+									<div class="form-field">
+										<input type="text" id="bank_branch" name="bankBranch"
+											class="form-control input-underline" th:field="*{bankBranch}"
+											placeholder="Contoh: Bandar Lampung"> <small
+											class="text-danger" id="err-bankBranch"></small>
+									</div>
+								</div>
+							</div>
+							<div class="row -g3">
+								<div class="col-md-6">
+									<label class="lbl-normal">No Rekening</label>
+									<div class="form-field">
+										<input type="text" id="account_number" name="accountNumber"
+											class="form-control input-underline"
+											th:field="*{accountNumber}"> <small
+											class="text-danger" id="err-accountNumber"></small>
+									</div>
+								</div>
+								<div class="col-md-6">
+									<label class="lbl-normal">Pemilik</label>
+									<div class="form-field">
+										<input type="text" id="account_holder" name="accountHolder"
+											class="form-control input-underline"
+											th:field="*{accountHolder}"> <small
+											class="text-danger" id="err-accountHolder"></small>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-                    <div class="detail-actions">
-                        <button type="submit" class="btn btn-primary">
-                            Simpan
-                        </button>
-                        <a href="javascript:void(0)" class="btn btn-batal"
-                            th:data-url="@{/bankaccount/detail/{id}(id=${accounts.bankAccountId})}"
-                            onclick="event.preventDefault(); library.navigate(this.dataset.url);">
-                            Batal
-                        </a>
-                        <!-- <button type="button" class="btn btn-batal" th:data-url="@{/bankaccount/detail/${accountId}}"
+					<div class="detail-actions">
+						<button type="submit" class="btn btn-primary">Simpan</button>
+						<a href="javascript:void(0)" class="btn btn-batal"
+							th:data-url="@{/bankaccount/detail/{id}(id=${accounts.bankAccountId})}"
+							onclick="event.preventDefault(); library.navigate(this.dataset.url);">
+							Batal </a>
+						<!-- <button type="button" class="btn btn-batal" th:data-url="@{/bankaccount/detail/${accountId}}"
                             onclick="library.navigate(this.dataset.url)">Batal
                         </button> -->
-                        <!-- https://kawallaba.my.id/bankaccount/detail/01a0c4f1-fafd-7404-93fd-c35dd24d65af -->
-                    </div>
-                </form>
-            </main>
-        </div>
-    </div>
+						<!-- https://kawallaba.my.id/bankaccount/detail/01a0c4f1-fafd-7404-93fd-c35dd24d65af -->
+					</div>
+				</form>
+			</main>
+		</div>
+	</div>
 </body>
 
 </html>

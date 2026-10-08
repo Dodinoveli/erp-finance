@@ -10,35 +10,33 @@ import org.springframework.lang.NonNull;
 
 public class ProjectMapper implements RowMapper<Project> {
 
-    @Override
-    public Project mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
-        Project mdl = new Project();
-        mdl.setProjectId(rs.getObject("project_id", UUID.class));
-        mdl.setProjectCode(rs.getString("project_code"));
-        mdl.setProjectPo(rs.getString("project_po"));
-        mdl.setName(rs.getString("name"));
-        mdl.setDescription(rs.getString("description"));
-        mdl.setClientId(rs.getObject("client_id", UUID.class));
-        mdl.setClientName(rs.getString("client_name"));
-        mdl.setProjectType(rs.getString("project_type"));
-        mdl.setContractValue(rs.getBigDecimal("contract_value"));
-        mdl.setLocation(rs.getString("location"));
-        mdl.setCompanyId(rs.getObject("company_id", UUID.class));
-        mdl.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
-        mdl.setUpdatedAt(rs.getObject("updated_at", OffsetDateTime.class));
-        mdl.setUserId(rs.getObject("user_id", UUID.class));
-        mdl.setVatRate(rs.getBigDecimal("vat_rate"));
-        Date poDate = rs.getDate("po_date");
-        if (poDate != null) {
-            mdl.setPoDate(poDate.toLocalDate());
-        }
-
-        mdl.setTaxType(rs.getString("tax_type"));
-        mdl.setTotalTax(rs.getBigDecimal("total_tax"));
-        mdl.setTotalAmount(rs.getBigDecimal("total_amount"));
-        mdl.setDpp(
-                rs.getBigDecimal("dpp"));
-        return mdl;
-    }
+	@Override
+	public Project mapRow(@NonNull ResultSet rs, int rowNum) throws SQLException {
+		Project mdl = new Project();
+		mdl.setProjectId(rs.getObject("project_id", UUID.class));
+		mdl.setProjectCode(rs.getString("project_code"));
+		mdl.setProjectPo(rs.getString("project_po"));
+		mdl.setName(rs.getString("name"));
+		mdl.setDescription(rs.getString("description"));
+		mdl.setClientId(rs.getObject("client_id", UUID.class));
+		mdl.setClientName(rs.getString("client_name"));
+		mdl.setProjectType(ProjectType.valueOf(rs.getString("project_type")));
+		mdl.setContractValue(rs.getBigDecimal("contract_value"));
+		mdl.setLocation(rs.getString("location"));
+		mdl.setCompanyId(rs.getObject("company_id", UUID.class));
+		mdl.setCreatedAt(rs.getObject("created_at", OffsetDateTime.class));
+		mdl.setUpdatedAt(rs.getObject("updated_at", OffsetDateTime.class));
+		mdl.setUserId(rs.getObject("user_id", UUID.class));
+		mdl.setVatRate(rs.getBigDecimal("vat_rate"));
+		Date poDate = rs.getDate("po_date");
+		if (poDate != null) {
+			mdl.setPoDate(poDate.toLocalDate());
+		}
+		mdl.setTaxType(TaxType.valueOf(rs.getString("tax_type")));
+		mdl.setTotalTax(rs.getBigDecimal("total_tax"));
+		mdl.setTotalAmount(rs.getBigDecimal("total_amount"));
+		mdl.setDpp(rs.getBigDecimal("dpp"));
+		return mdl;
+	}
 
 }

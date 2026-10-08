@@ -23,4 +23,5 @@ public class ErpFinanceApplication {
 			System.out.println("Password Baru ku : " + pass);
 		};
 	}
+
 }

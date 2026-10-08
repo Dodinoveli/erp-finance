@@ -7,6 +7,6 @@ import lombok.Data;
 
 @Data
 public class ChartOfAccountsBatchRequest {
-    private UUID parentId;
-    private List<ChartOfAccounts> accounts;
+	private UUID parentId;
+	private List<ChartOfAccounts> accounts;
 }

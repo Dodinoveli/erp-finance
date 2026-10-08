@@ -1,399 +1,412 @@
-<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org" id="panel-Employees-Content">
-  <style>
-    /* Container untuk merapikan isi konten di bawah tab */
-    .tab-content-container {
-      border: 0px solid #dee2e6;
-      border-top: none;
-      background: #f5f5f5;
-    }
+<div th:fragment="mainContent" xmlns:th="http://www.thymeleaf.org"
+	id="panel-Employees-Content">
+	<style>
+/* Container untuk merapikan isi konten di bawah tab */
+.tab-content-container {
+	border: 0px solid #dee2e6;
+	border-top: none;
+	background: #f5f5f5;
+}
 
-    /* #formEmployee,
+/* #formEmployee,
         #view-input-employees {
             height: 100%;
             overflow: hidden;
         } */
+.container-fluid {
+	padding-left: 10px !important;
+	padding-right: 10px !important;
+}
 
-    .container-fluid {
-      padding-left: 10px !important;
-      padding-right: 10px !important;
-    }
+/* Garis tipis pemisah */
+.border-top {
+	border-top: 1px solid #eee !important;
+}
 
-    /* Garis tipis pemisah */
-    .border-top {
-      border-top: 1px solid #eee !important;
-    }
+/* untuk tombol export dll */
+/* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
+.dropdown-toggle::after {
+	vertical-align: middle;
+}
 
-    /* untuk tombol export dll */
-    /* Menghilangkan panah default bootstrap jika dirasa terlalu ramai */
-    .dropdown-toggle::after {
-      vertical-align: middle;
-    }
+/* Efek hover pada item dropdown */
+.dropdown-item:hover {
+	background-color: #f8f9fa;
+	color: #2b7de9;
+}
 
-    /* Efek hover pada item dropdown */
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-      color: #2b7de9;
-    }
+/* Memberikan warna ikon agar lebih informatif */
+.dropdown-item i {
+	width: 20px;
+	text-align: center;
+}
 
-    /* Memberikan warna ikon agar lebih informatif */
-    .dropdown-item i {
-      width: 20px;
-      text-align: center;
-    }
+.card-body-easyui {
+	padding: 15px !important;
+	border-radius: 0 0 4px 4px;
+}
+</style>
+	<ul class="nav nav-tabs custom-terminal-tabs">
+		<li class="nav-item">
+			<button class="nav-link text-light" id="btn-tab-list-employees"
+				onclick="employeeModel.switchTabEmployee('view-list-employees')">
+				<i class="fas fa-list me-1"></i>
+			</button>
+		</li>
 
-    .card-body-easyui {
-      padding: 15px !important;
-      border-radius: 0 0 4px 4px;
-    }
-  </style>
-  <ul class="nav nav-tabs custom-terminal-tabs">
-    <li class="nav-item">
-      <button class="nav-link text-light" id="btn-tab-list-employees"
-        onclick="employeeModel.switchTabEmployee('view-list-employees')">
-        <i class="fas fa-list me-1"></i>
-      </button>
-    </li>
+		<li class="nav-item">
+			<button class="nav-link active" id="btn-tab-input-employees"
+				onclick="employeeModel.switchTabEmployee('view-input-employees')">
+				<i class="fas fa-edit me-1" id="txtinput"></i> <span
+					id="text-label-employee">Data Baru</span>
+			</button>
+		</li>
 
-    <li class="nav-item">
-      <button class="nav-link active" id="btn-tab-input-employees"
-        onclick="employeeModel.switchTabEmployee('view-input-employees')">
-        <i class="fas fa-edit me-1" id="txtinput"></i>
-        <span id="text-label-employee">Data Baru</span>
-      </button>
-    </li>
+		<li class="nav-item" id="li-tab-detail-employees"
+			style="display: none">
+			<button class="nav-link text-light" id="btn-tab-detail-employees">
+				<i class="fas fa-id-card me-1"></i> Detail: <span
+					id="tab-label-client"></span> <span class="ms-2 badge bg-danger"
+					onclick="employeeModel.closeEdit(event)" style="cursor: pointer">×</span>
+			</button>
+		</li>
+	</ul>
 
-    <li class="nav-item" id="li-tab-detail-employees" style="display: none">
-      <button class="nav-link text-light" id="btn-tab-detail-employees">
-        <i class="fas fa-id-card me-1"></i> Detail:
-        <span id="tab-label-client"></span>
-        <span class="ms-2 badge bg-danger" onclick="employeeModel.closeEdit(event)" style="cursor: pointer">×</span>
-      </button>
-    </li>
-  </ul>
+	<div class="tab-content-container p-0">
+		<form id="formEmployee">
+			<div id="view-input-employees" style="display: block">
+				<div class="container-fluid py-2">
+					<div class="row g-3">
+						<div class="col-md-12">
+							<div class="card border-0 shadow-sm"
+								style="width: 100%; border-radius: 0px">
+								<div class="card-body card-body-easyui p-3">
+									<div class="row">
+										<input type="hidden" id="employee_id" name="employeeId" />
 
-  <div class="tab-content-container p-0">
-    <form id="formEmployee">
-      <div id="view-input-employees" style="display: block">
-        <div class="container-fluid py-2">
-          <div class="row g-3">
-            <div class="col-md-12">
-              <div class="card border-0 shadow-sm" style="width: 100%; border-radius: 0px">
-                <div class="card-body card-body-easyui p-3">
-                  <div class="row">
-                    <input type="hidden" id="employee_id" name="employeeId" />
+										<div class="col-md-6 pe-md-4">
+											<div class="accurate-form-group">
+												<label>Kode</label> <input type="text" id="employee_code"
+													name="employeeCode" readonly
+													class="form-control form-control-sm bg-light" />
+											</div>
 
-                    <div class="col-md-6 pe-md-4">
-                      <div class="accurate-form-group">
-                        <label>Kode</label>
-                        <input type="text" id="employee_code" name="employeeCode" readonly
-                          class="form-control form-control-sm bg-light" />
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nama Lengkap <span class="text-danger">*</span></label>
+												<div class="form-field">
+													<input type="text" id="employee_name" name="employeeName"
+														class="form-control form-control-sm"
+														placeholder="Paramita Rusadi" /> <small
+														class="text-danger" id="err-employeeName"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nama Lengkap
-                          <span class="text-danger">*</span></label>
-                        <div class="form-field">
-                          <input type="text" id="employee_name" name="employeeName" class="form-control form-control-sm"
-                            placeholder="Paramita Rusadi" />
-                          <small class="text-danger" id="err-employeeName"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nik</label>
+												<div class="form-field">
+													<input type="text" id="employee_nik" name="employeeNik"
+														class="form-control form-control-sm"
+														placeholder="Nomor Induk Kependudukan" /> <small
+														class="text-danger" id="err-employeeNik"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nik</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_nik" name="employeeNik" class="form-control form-control-sm"
-                            placeholder="Nomor Induk Kependudukan" />
-                          <small class="text-danger" id="err-employeeNik"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Npwp</label>
+												<div class="form-field">
+													<input type="text" id="employee_npwp" name="employeeNpwp"
+														class="form-control form-control-sm"
+														placeholder="Nomor Pokok Wajib Pajak" /> <small
+														class="text-danger" id="err-employeeNpwp"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Npwp</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_npwp" name="employeeNpwp" class="form-control form-control-sm"
-                            placeholder="Nomor Pokok Wajib Pajak" />
-                          <small class="text-danger" id="err-employeeNpwp"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Jenis Kelamin</label>
+												<div class="form-field">
+													<select id="employee_gender" name="employeeGender"
+														class="form-control form-control-sm">
+														<option selected disabled>-- Pilih Jenis Kelamin
+															--</option>
+														<option value="Pria">Pria</option>
+														<option value="Wanita">Wanita</option>
+													</select> <small class="text-danger" id="err-employeeGender"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Jenis Kelamin</label>
-                        <div class="form-field">
-                          <select id="employee_gender" name="employeeGender" class="form-control form-control-sm">
-                            <option selected disabled>
-                              -- Pilih Jenis Kelamin --
-                            </option>
-                            <option value="Pria">Pria</option>
-                            <option value="Wanita">Wanita</option>
-                          </select>
-                          <small class="text-danger" id="err-employeeGender"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Tanggal Lahir</label>
+												<div class="form-field">
+													<input type="date" name="employeeBirthDate"
+														id="employee_birth_date"
+														class="form-control form-control-sm" /> <small
+														class="text-danger" id="err-employeeBirthDate"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Tanggal Lahir</label>
-                        <div class="form-field">
-                          <input type="date" name="employeeBirthDate" id="employee_birth_date"
-                            class="form-control form-control-sm" />
-                          <small class="text-danger" id="err-employeeBirthDate"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Telp</label>
+												<div class="form-field">
+													<input type="text" id="employee_phone" name="employeePhone"
+														class="form-control form-control-sm" placeholder="08*****" />
+													<small class="text-danger" id="err-employeePhone"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Telp</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_phone" name="employeePhone"
-                            class="form-control form-control-sm" placeholder="08*****" />
-                          <small class="text-danger" id="err-employeePhone"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Email</label>
+												<div class="form-field">
+													<input type="email" id="employee_email"
+														name="employeeEmail" class="form-control form-control-sm"
+														placeholder="Email" /> <small class="text-danger"
+														id="err-employeeEmail"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Email</label>
-                        <div class="form-field">
-                          <input type="email" id="employee_email" name="employeeEmail"
-                            class="form-control form-control-sm" placeholder="Email" />
-                          <small class="text-danger" id="err-employeeEmail"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label style="padding-top: 5px">Alamat</label>
+												<div class="form-field">
+													<textarea id="employee_address" name="employeeAddress"
+														class="form-control form-control-sm" rows="3"
+														placeholder="Jl. Kuningan Persada Kavling 4, Setiabudi, Jakarta Selatan, 12950"></textarea>
+													<small class="text-danger" id="err-employeeAddress"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label style="padding-top: 5px">Alamat</label>
-                        <div class="form-field">
-                          <textarea id="employee_address" name="employeeAddress" class="form-control form-control-sm"
-                            rows="3"
-                            placeholder="Jl. Kuningan Persada Kavling 4, Setiabudi, Jakarta Selatan, 12950"></textarea>
-                          <small class="text-danger" id="err-employeeAddress"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>departemen</label>
+												<div class="form-field">
+													<input type="text" id="employee_department"
+														name="employeeDepartment"
+														class="form-control form-control-sm"
+														placeholder="Hrd/ Marketing/ Keuangan/ Operasional" /> <small
+														class="text-danger" id="err-employeeDepartment"></small>
+												</div>
+											</div>
+										</div>
 
-                      <div class="accurate-form-group">
-                        <label>departemen</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_department" name="employeeDepartment"
-                            class="form-control form-control-sm" placeholder="Hrd/ Marketing/ Keuangan/ Operasional" />
-                          <small class="text-danger" id="err-employeeDepartment"></small>
-                        </div>
-                      </div>
-                    </div>
+										<div class="col-md-6 ps-md-4">
+											<div class="accurate-form-group">
+												<label>Jabatan</label>
+												<div class="form-field">
+													<input type="text" id="employee_job_position"
+														name="employeeJobPosition"
+														class="form-control form-control-sm"
+														placeholder="Teknisi/ Pengawas/ Logistik" /> <small
+														class="text-danger" id="err-employeeJobPosition"></small>
+												</div>
+											</div>
 
-                    <div class="col-md-6 ps-md-4">
-                      <div class="accurate-form-group">
-                        <label>Jabatan</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_job_position" name="employeeJobPosition"
-                            class="form-control form-control-sm" placeholder="Teknisi/ Pengawas/ Logistik" />
-                          <small class="text-danger" id="err-employeeJobPosition"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Status</label>
+												<div class="form-field">
+													<select id="employee_employment_type"
+														name="employeeEmploymentType"
+														class="form-control form-control-sm">
+														<option selected disabled>--Pilih Status Karyawan
+															--</option>
+														<option value="Tetap">Tetap</option>
+														<option value="Kontrak">Kontrak</option>
+														<option value="Lepas">Lepas</option>
+													</select> <small class="text-danger" id="err-employeeEmploymentType"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Status</label>
-                        <div class="form-field">
-                          <select id="employee_employment_type" name="employeeEmploymentType"
-                            class="form-control form-control-sm">
-                            <option selected disabled>
-                              --Pilih Status Karyawan --
-                            </option>
-                            <option value="Tetap">Tetap</option>
-                            <option value="Kontrak">Kontrak</option>
-                            <option value="Lepas">Lepas</option>
-                          </select>
-                          <small class="text-danger" id="err-employeeEmploymentType"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Tanggal Join</label>
+												<div class="form-field">
+													<input type="date" id="employee_join_date"
+														name="employeeJoinDate"
+														class="form-control form-control-sm" /> <small
+														class="text-danger" id="err-employeeJoinDate"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Tanggal Join</label>
-                        <div class="form-field">
-                          <input type="date" id="employee_join_date" name="employeeJoinDate"
-                            class="form-control form-control-sm" />
-                          <small class="text-danger" id="err-employeeJoinDate"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Tipe Gaji</label>
+												<div class="form-field">
+													<select name="employeeSalaryType" id="employee_salary_type"
+														class="form-control form-control-sm">
+														<option selected disabled>-- Pilih Tipe Gaji --</option>
+														<option value="Harian">Harian</option>
+														<option value="Bulanan">Bulanan</option>
+													</select> <small class="text-danger" id="err-employeeSalaryType"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Tipe Gaji</label>
-                        <div class="form-field">
-                          <select name="employeeSalaryType" id="employee_salary_type"
-                            class="form-control form-control-sm">
-                            <option selected disabled>
-                              -- Pilih Tipe Gaji --
-                            </option>
-                            <option value="Harian">Harian</option>
-                            <option value="Bulanan">Bulanan</option>
-                          </select>
-                          <small class="text-danger" id="err-employeeSalaryType"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Gaji Pokok</label>
+												<div class="form-field">
+													<input type="number" id="employee_basic_salary"
+														name="employeeBasicSalary"
+														class="form-control form-control-sm"
+														placeholder="3.000.000" step="0.01" min="0" /> <small
+														class="text-danger" id="err-basicSalaryValid"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Gaji Pokok</label>
-                        <div class="form-field">
-                          <input type="number" id="employee_basic_salary" name="employeeBasicSalary"
-                            class="form-control form-control-sm" placeholder="3.000.000" step="0.01" min="0" />
-                          <small class="text-danger" id="err-basicSalaryValid"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Upah Harian</label>
+												<div class="form-field">
+													<input type="number" id="employee_daily_wage"
+														name="employeeDailyWage"
+														class="form-control form-control-sm" placeholder="120.000"
+														step="0.01" min="0" /> <small class="text-danger"
+														id="err-dailyWageValid"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Upah Harian</label>
-                        <div class="form-field">
-                          <input type="number" id="employee_daily_wage" name="employeeDailyWage"
-                            class="form-control form-control-sm" placeholder="120.000" step="0.01" min="0" />
-                          <small class="text-danger" id="err-dailyWageValid"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nama Bank</label>
+												<div class="form-field">
+													<input type="text" id="employee_bank_name"
+														name="employeeBankName"
+														class="form-control form-control-sm" placeholder="BNI" />
+													<small class="text-danger" id="err-employeeBankName"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nama Bank</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_bank_name" name="employeeBankName"
-                            class="form-control form-control-sm" placeholder="BNI" />
-                          <small class="text-danger" id="err-employeeBankName"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Nomor Rekening</label>
+												<div class="form-field">
+													<input type="text" id="employee_bank_account_number"
+														name="employeeBankAccountNumber"
+														class="form-control form-control-sm"
+														placeholder="12345678" /> <small class="text-danger"
+														id="err-employeeBankAccountNumber"></small>
+												</div>
+											</div>
 
-                      <div class="accurate-form-group">
-                        <label>Nomor Rekening</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_bank_account_number" name="employeeBankAccountNumber"
-                            class="form-control form-control-sm" placeholder="12345678" />
-                          <small class="text-danger" id="err-employeeBankAccountNumber"></small>
-                        </div>
-                      </div>
+											<div class="accurate-form-group">
+												<label>Pemilik Rekening</label>
+												<div class="form-field">
+													<input type="text" id="employee_bank_account_name"
+														name="employeeBankAccountName"
+														class="form-control form-control-sm"
+														placeholder="PT Jaya Maju Bersama" /> <small
+														class="text-danger" id="err-employeeBankAccountName"></small>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 
-                      <div class="accurate-form-group">
-                        <label>Pemilik Rekening</label>
-                        <div class="form-field">
-                          <input type="text" id="employee_bank_account_name" name="employeeBankAccountName"
-                            class="form-control form-control-sm" placeholder="PT Jaya Maju Bersama" />
-                          <small class="text-danger" id="err-employeeBankAccountName"></small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+							<div class="card mt-1 shadow-sm border-0">
+								<div class="card-body text-center">
+									<div class="d-flex justify-content-center gap-3">
+										<button type="submit" class="btn btn-primary px-4">
+											<i class="bi bi-floppy"></i> Simpan
+										</button>
+										<button type="button" class="btn btn-danger px-4"
+											id="btn-batal-employee">
+											<i class="bi bi-x-circle"></i> Batal
+										</button>
+									</div>
+								</div>
+							</div>
 
-              <div class="card mt-1 shadow-sm border-0">
-                <div class="card-body text-center">
-                  <div class="d-flex justify-content-center gap-3">
-                    <button type="submit" class="btn btn-primary px-4">
-                      <i class="bi bi-floppy"></i> Simpan
-                    </button>
-                    <button type="button" class="btn btn-danger px-4" id="btn-batal-employee">
-                      <i class="bi bi-x-circle"></i> Batal
-                    </button>
-                  </div>
-                </div>
-              </div>
+						</div>
+					</div>
 
-            </div>
-          </div>
+				</div>
+			</div>
+		</form>
 
-        </div>
-      </div>
-    </form>
+		<div id="view-list-employees" style="display: none; padding: 5px">
+			<div class="toolbar-easyui">
+				<div class="btn-separator"></div>
+				<button id="btn-tambah-employee" class="btn-tambah fw-bold">
+					<i class="fas fa-plus"></i> Tambah
+				</button>
+				<button id="btn-refresh-employee" class="btn-segarkan">
+					<i class="fas fa-sync-alt"></i> Refresh
+				</button>
 
-    <div id="view-list-employees" style="display: none; padding: 5px">
-      <div class="toolbar-easyui">
-        <div class="btn-separator"></div>
-        <button id="btn-tambah-employee" class="btn-tambah fw-bold">
-          <i class="fas fa-plus"></i> Tambah
-        </button>
-        <button id="btn-refresh-employee" class="btn-segarkan">
-          <i class="fas fa-sync-alt"></i> Refresh
-        </button>
+				<div class="dropdown d-inline-block" style="position: relative">
+					<button class="btn-excel dropdown-toggle" type="button"
+						onclick="employeeModel.toggleExcelMenu(event)">
+						<i class="fas fa-file-excel me-1"></i> Export
+					</button>
 
-        <div class="dropdown d-inline-block" style="position: relative">
-          <button class="btn-excel dropdown-toggle" type="button" onclick="employeeModel.toggleExcelMenu(event)">
-            <i class="fas fa-file-excel me-1"></i> Export
-          </button>
-
-          <ul class="dropdown-menu shadow border" id="menu-excel-client" style="
-              display: none;
-              position: absolute !important;
-              left: 0;
-              top: 100%;
-              z-index: 99999 !important;
-              min-width: 180px;
-              background: white;
-              list-style: none;
-              padding: 5px 0;
-              margin: 0;
-            ">
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/export">
-                <i class="fas fa-file-export me-2 text-success"></i> Export Ke
-                Excel
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="/api/v1/clients/template">
-                <i class="fas fa-download me-2 text-info"></i> Download Template
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" style="margin: 5px 0" />
-            </li>
-            <li>
-              <a class="dropdown-item p-2 d-block text-decoration-none text-dark" href="javascript:void(0)" onclick="
+					<ul class="dropdown-menu shadow border" id="menu-excel-client"
+						style="display: none; position: absolute !important; left: 0; top: 100%; z-index: 99999 !important; min-width: 180px; background: white; list-style: none; padding: 5px 0; margin: 0;">
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="/api/v1/clients/export"> <i
+								class="fas fa-file-export me-2 text-success"></i> Export Ke
+								Excel
+						</a></li>
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="/api/v1/clients/template"> <i
+								class="fas fa-download me-2 text-info"></i> Download Template
+						</a></li>
+						<li>
+							<hr class="dropdown-divider" style="margin: 5px 0" />
+						</li>
+						<li><a
+							class="dropdown-item p-2 d-block text-decoration-none text-dark"
+							href="javascript:void(0)"
+							onclick="
                   document.getElementById('menu-excel-client').style.display =
                     'none'
-                " data-bs-toggle="modal" data-bs-target="#importModal">
-                <i class="fas fa-file-upload me-2 text-warning"></i> Import
-                Excel
-              </a>
-            </li>
-          </ul>
-        </div>
-        <button class="btn-print"><i class="fas fa-print"> </i> Print</button>
+                "
+							data-bs-toggle="modal" data-bs-target="#importModal"> <i
+								class="fas fa-file-upload me-2 text-warning"></i> Import Excel
+						</a></li>
+					</ul>
+				</div>
+				<button class="btn-print">
+					<i class="fas fa-print"> </i> Print
+				</button>
 
-        <div style="display: flex; align-items: center; flex: 1; margin-right: 0px">
-          <div class="search-container-terminal me-2">
-            <input type="text" id="search-employee-input" placeholder="Search..." class="input-hugo-terminal" />
-          </div>
-          <button id="btn-search-employee" class="btn-cari">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
+				<div
+					style="display: flex; align-items: center; flex: 1; margin-right: 0px">
+					<div class="search-container-terminal me-2">
+						<input type="text" id="search-employee-input"
+							placeholder="Search..." class="input-hugo-terminal" />
+					</div>
+					<button id="btn-search-employee" class="btn-cari">
+						<i class="fas fa-search"></i>
+					</button>
+				</div>
+			</div>
 
-      <div class="table-wrapper table-wrapper-employee" id="employee-wrapper">
-        <table id="employee-table">
-          <thead>
-            <tr>
-              <th class="kolom-sticky-1 resizer">Kode</th>
-              <th class="kolom-sticky-2 resizer">Nama</th>
-              <th class="kolom-sticky-3 resizer">Npwp</th>
-              <th class="resizer" style="width: 150px">Nik</th>
-              <th class="resizer" style="width: 120px">Jenis Kelamin</th>
-              <th class="resizer" style="width: 120px">Tgl Lahir</th>
-              <th class="resizer" style="width: 120px">Telepon</th>
-              <th class="resizer" style="width: 150px">Email</th>
-              <th class="resizer" style="width: 250px">Alamat</th>
-              <th class="resizer" style="width: 120px">Departemen</th>
-              <th class="resizer" style="width: 110px">Jabatan</th>
-              <th class="resizer" style="width: 110px">Status</th>
-              <th class="resizer" style="width: 110px">Join</th>
-              <th class="resizer" style="width: 110px">Tipe Gaji</th>
-              <th class="resizer" style="width: 110px">Gapok</th>
-              <th class="resizer" style="width: 110px">Upah Harian</th>
-              <th class="resizer" style="width: 100px">Bank</th>
-              <th class="resizer" style="width: 120px">Rekening</th>
-              <th class="resizer" style="width: 150px">Pemilik</th>
-              <th class="resizer" style="width: 70px">Aktif</th>
-            </tr>
-          </thead>
-          <tbody id="employee-table-body"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+			<div class="table-wrapper table-wrapper-employee"
+				id="employee-wrapper">
+				<table id="employee-table">
+					<thead>
+						<tr>
+							<th class="kolom-sticky-1 resizer">Kode</th>
+							<th class="kolom-sticky-2 resizer">Nama</th>
+							<th class="kolom-sticky-3 resizer">Npwp</th>
+							<th class="resizer" style="width: 150px">Nik</th>
+							<th class="resizer" style="width: 120px">Jenis Kelamin</th>
+							<th class="resizer" style="width: 120px">Tgl Lahir</th>
+							<th class="resizer" style="width: 120px">Telepon</th>
+							<th class="resizer" style="width: 150px">Email</th>
+							<th class="resizer" style="width: 250px">Alamat</th>
+							<th class="resizer" style="width: 120px">Departemen</th>
+							<th class="resizer" style="width: 110px">Jabatan</th>
+							<th class="resizer" style="width: 110px">Status</th>
+							<th class="resizer" style="width: 110px">Join</th>
+							<th class="resizer" style="width: 110px">Tipe Gaji</th>
+							<th class="resizer" style="width: 110px">Gapok</th>
+							<th class="resizer" style="width: 110px">Upah Harian</th>
+							<th class="resizer" style="width: 100px">Bank</th>
+							<th class="resizer" style="width: 120px">Rekening</th>
+							<th class="resizer" style="width: 150px">Pemilik</th>
+							<th class="resizer" style="width: 70px">Aktif</th>
+						</tr>
+					</thead>
+					<tbody id="employee-table-body"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-  <script type="module" th:inline="javascript">
+	<script type="module" th:inline="javascript">
     const employeeModel = {
       cursorCreatedAt: null,
       cursorId: null,

@@ -1,4 +1,5 @@
 package com.logikaintermedia.erp.validation;
+
 import java.io.IOException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,95 +21,88 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class GlobalExceptionHandler {
-        private ErrorConfig errorConfig;
+	private ErrorConfig errorConfig;
 
-        //Handler spesifik untuk IllegalArgumentException
-        @ExceptionHandler(IllegalArgumentException.class)
-        public ResponseEntity<ApiResponse<?>> handleIllegalArgument(IllegalArgumentException ex) {
-                log.warn("IllegalArgument: {}", ex.getMessage());
-                
-                return ResponseEntity
-                .badRequest()
-                .body(ApiResponse.error(
-                        HttpStatus.BAD_REQUEST,
-                        ex.getMessage()  // Pesan error Anda
-                ));
-        }
+	// Handler spesifik untuk IllegalArgumentException
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ApiResponse<?>> handleIllegalArgument(IllegalArgumentException ex) {
+		log.warn("IllegalArgument: {}", ex.getMessage());
 
-        // =========================
-        // 1. VALIDATION ERROR (@Valid)
-        // =========================
-        @ExceptionHandler(MethodArgumentNotValidException.class)
-        public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
-                Map<String, String> errors = new HashMap<>();
-                ex.getBindingResult().getFieldErrors()
-                                .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
-                return ResponseEntity
-                                .badRequest()
-                                .body(ApiResponse.error(
-                                                HttpStatus.BAD_REQUEST,
-                                                "Data tidak valid. Silakan periksa kembali input Anda.",
-                                                errors));
-        }
+		return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST, ex.getMessage() // Pesan error
+																											// Anda
+		));
+	}
 
-        // 2. DATABASE UNIQUE CONSTRAINT (Versi Baru pakai YAML)
-        @SuppressWarnings("null")
-        @ExceptionHandler(DataIntegrityViolationException.class)
-        public ResponseEntity<ApiResponse<?>> handleDataIntegrity(DataIntegrityViolationException ex) {
-                String detail = ex.getMostSpecificCause().getMessage();
-                log.warn("Database Constraint Violated: {}", detail);
+	// =========================
+	// 1. VALIDATION ERROR (@Valid)
+	// =========================
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
+		ex.getBindingResult().getFieldErrors()
+				.forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
+		return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,
+				"Data yang dimasukkan tidak valid. Silakan periksa kembali.", errors));
+	}
 
-                String msg = errorConfig.getDatabase().getUniqueConstraints().entrySet().stream()
-                                .filter(entry -> detail.contains(entry.getKey()))
-                                .map(Map.Entry::getValue)
-                                .findFirst()
-                                .orElse(errorConfig.getDatabase().getDefaultUnique());
+	// 2. DATABASE UNIQUE CONSTRAINT (Versi Baru pakai YAML)
+	@SuppressWarnings("null")
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<ApiResponse<?>> handleDataIntegrity(DataIntegrityViolationException ex) {
+		String detail = ex.getMostSpecificCause().getMessage();
+		log.warn("Database Constraint Violated: {}", detail);
 
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                                .body(ApiResponse.error(HttpStatus.CONFLICT,
-                                                msg));
-        }
+		String msg = errorConfig.getDatabase().getUniqueConstraints().entrySet().stream()
+				.filter(entry -> detail.contains(entry.getKey())).map(Map.Entry::getValue).findFirst()
+				.orElse(errorConfig.getDatabase().getDefaultUnique());
 
-        // =========================
-        // 3. BUSINESS ERROR (throw manual)
-        // =========================
-        @ExceptionHandler(RuntimeException.class)
-        public ResponseEntity<?> handleRuntime(RuntimeException ex) {
-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST, ex.getMessage()));
-        }
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(ApiResponse.error(HttpStatus.CONFLICT, msg));
+	}
 
-        // =========================
-        // 4. GENERAL ERROR (SYSTEM ERROR)
-        // =========================
-        @ExceptionHandler(Exception.class)
-        public ResponseEntity<?> handleException(Exception ex) {
-                ex.printStackTrace(); // log untuk debug
+	// =========================
+	// 3. BUSINESS ERROR (throw manual)
+	// =========================
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<?> handleRuntime(RuntimeException ex) {
+		return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST, ex.getMessage()));
+	}
 
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                                .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi kesalahan sistem"));
-        }
+	// =========================
+	// 4. GENERAL ERROR (SYSTEM ERROR)
+	// =========================
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<?> handleException(Exception ex) {
+		ex.printStackTrace(); // log untuk debug
 
-        @ExceptionHandler(HttpMessageNotReadableException.class)
-        public ResponseEntity<ApiResponse<?>> handleHttpMessageNotReadable(
-                        HttpMessageNotReadableException ex) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ApiResponse
+				.error(HttpStatus.INTERNAL_SERVER_ERROR, "Terjadi kesalahan pada server. Silakan coba lagi."));
+	}
 
-                return ResponseEntity.badRequest().body(
-                                ApiResponse.builder()
-                                                .message("Format angka yang anda masukan tidak valid")
-                                                .build());
-        }
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<ApiResponse<?>> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
 
-        // kalau login tapi tidak punya role, misal role admin coba2 akses owner
-        @ExceptionHandler(AccessDeniedException.class)
-        public void handleAccessDenied(
-                HttpServletRequest request,
-                HttpServletResponse response) throws IOException {
+		return ResponseEntity.badRequest()
+				.body(ApiResponse.builder().message("Format angka yang di masukan tidak valid").build());
+	}
 
-        if ("true".equalsIgnoreCase(request.getHeader("HX-Request"))) {
-                response.setHeader("HX-Redirect", "/access-denied");
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-                response.sendRedirect("/access-denied");
-        }
-        }
+	// kalau login tapi tidak punya role, misal role admin coba2 akses owner
+	@ExceptionHandler(AccessDeniedException.class)
+	public void handleAccessDenied(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		if ("true".equalsIgnoreCase(request.getHeader("HX-Request"))) {
+			response.setHeader("HX-Redirect", "/access-denied");
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		} else {
+			response.sendRedirect("/access-denied");
+		}
+	}
+
+	// Data yang dimasukkan tidak valid. Silakan periksa kembali.
+	// Data berhasil disimpan.
+	// Data berhasil diperbarui.
+	// Gagal menyimpan data. Silakan coba lagi.
+	// Gagal memperbarui data. Silakan coba lagi.
+	// Data tidak ditemukan.
+	// Anda tidak memiliki akses untuk melakukan tindakan ini.
+	// Terjadi kesalahan pada server. Silakan coba lagi.
 }

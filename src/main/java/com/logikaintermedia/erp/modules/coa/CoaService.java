@@ -11,36 +11,36 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Service
 public class CoaService {
-    private CoaRepository coaRepository;
+	private CoaRepository coaRepository;
 
-    public List<CoaResponse> getCoaTree(UUID companyId) {
-        // 1. Ambil data flat murni dari Repository
-        List<Coa> flatList = coaRepository.fetchPage(companyId);
-        // System.out.println("=== DEBUG SERVICE ===");
-        // System.out.println("=== DEBUG COMPANY ID ===" + companyId);
-        // System.out.println("1. Jumlah data mentah dari DB: " + (flatList != null ?
-        // flatList.size() : "NULL"));
+	public List<CoaResponse> getCoaTree(UUID companyId) {
+		// 1. Ambil data flat murni dari Repository
+		List<Coa> flatList = coaRepository.fetchPage(companyId);
+		// System.out.println("=== DEBUG SERVICE ===");
+		// System.out.println("=== DEBUG COMPANY ID ===" + companyId);
+		// System.out.println("1. Jumlah data mentah dari DB: " + (flatList != null ?
+		// flatList.size() : "NULL"));
 
-        List<CoaResponse> rootNodes = new ArrayList<>();
-        Map<UUID, CoaResponse> nodeMap = new LinkedHashMap<>();
+		List<CoaResponse> rootNodes = new ArrayList<>();
+		Map<UUID, CoaResponse> nodeMap = new LinkedHashMap<>();
 
-        // 2. Langkah Pertama: Masukkan ke Map pembantu menggunakan CoaResponse
-        for (Coa coa : flatList) {
-            nodeMap.put(coa.getCoaId(), new CoaResponse(coa));
-        }
+		// 2. Langkah Pertama: Masukkan ke Map pembantu menggunakan CoaResponse
+		for (Coa coa : flatList) {
+			nodeMap.put(coa.getCoaId(), new CoaResponse(coa));
+		}
 
-        // 3. Langkah Kedua: Hubungkan struktur pohonnya (Induk -> Anak)
-        for (Coa coa : flatList) {
-            CoaResponse currentNode = nodeMap.get(coa.getCoaId());
-            UUID parentId = coa.getParentId();
+		// 3. Langkah Kedua: Hubungkan struktur pohonnya (Induk -> Anak)
+		for (Coa coa : flatList) {
+			CoaResponse currentNode = nodeMap.get(coa.getCoaId());
+			UUID parentId = coa.getParentId();
 
-            if (parentId != null && nodeMap.containsKey(parentId)) {
-                nodeMap.get(parentId).getChildren().add(currentNode);
-            } else {
-                rootNodes.add(currentNode);
-            }
-        }
+			if (parentId != null && nodeMap.containsKey(parentId)) {
+				nodeMap.get(parentId).getChildren().add(currentNode);
+			} else {
+				rootNodes.add(currentNode);
+			}
+		}
 
-        return rootNodes;
-    }
+		return rootNodes;
+	}
 }

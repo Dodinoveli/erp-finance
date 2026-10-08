@@ -15,24 +15,24 @@ import com.logikaintermedia.erp.utility.ApiResponse;
 @RequestMapping("/api/v1/accounts")
 public class ChartOfAccountsController {
 
-    private final ChartOfAccountsService service;
+	private final ChartOfAccountsService service;
 
-    public ChartOfAccountsController(ChartOfAccountsService service) {
-        this.service = service;
-    }
+	public ChartOfAccountsController(ChartOfAccountsService service) {
+		this.service = service;
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PostMapping("/install")
-    public ResponseEntity<ApiResponse<?>> initializeCompanyCoa(@AuthenticationPrincipal AuthUserPrincipal principal) {
-        int response = service.initializeCompanyCoa(principal.getCompanyId());
-        return ResponseEntity.ok(ApiResponse.success("success", response));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PostMapping("/install")
+	public ResponseEntity<ApiResponse<?>> initializeCompanyCoa(@AuthenticationPrincipal AuthUserPrincipal principal) {
+		int response = service.initializeCompanyCoa(principal.getCompanyId());
+		return ResponseEntity.ok(ApiResponse.success("success", response));
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/tree")
-    public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>> getFindAllByCompanyId(
-            @AuthenticationPrincipal AuthUserPrincipal principal) {
-        List<ChartOfAccountsResponse> response = service.findAllByCompanyId(principal.getCompanyId());
-        return ResponseEntity.ok(ApiResponse.success("success", response));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/tree")
+	public ResponseEntity<ApiResponse<List<ChartOfAccountsResponse>>> getFindAllByCompanyId(
+			@AuthenticationPrincipal AuthUserPrincipal principal) {
+		List<ChartOfAccountsResponse> response = service.findAllByCompanyId(principal.getCompanyId());
+		return ResponseEntity.ok(ApiResponse.success("success", response));
+	}
 }

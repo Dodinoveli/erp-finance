@@ -120,32 +120,43 @@ jwt:
   refresh-expiration: 604800000 # 7 hari
 
 # =============================================================
+# =============================================================
 # 11. LOGGING & DEBUGGING
 # =============================================================
 logging:
   level:
     root: INFO
+
     # Log internal aplikasi kamu
     com.logikaintermedia.erp: DEBUG
+
+    # Flyway
+    org.flywaydb: INFO
+
     # Thymeleaf
     org.thymeleaf: DEBUG
+
     # Spring Web
     org.springframework:
       web.servlet.view.InternalResourceViewResolver: DEBUG
+
       # JDBC
       jdbc.core: DEBUG
       jdbc.datasource: DEBUG
+
       # TRACE penting untuk melihat pesan "Committing" atau "Rolling back"
       transaction: TRACE
       transaction.interceptor: DEBUG
+
       # Tambahkan ini untuk cek kenapa JWT tiba-tiba gagal akses
       security: DEBUG
       context: DEBUG
       boot.web.embedded.tomcat: DEBUG
 
-      # DEBUG untuk memantau kebocoran koneksi (penyebab aplikasi macet)
+    # DEBUG untuk memantau kebocoran koneksi
     com.zaxxer.hikari: DEBUG
     org.hibernate.resource.transaction: DEBUG
+
 
 # =============================================================
 # 12. MONITORING (Actuator)

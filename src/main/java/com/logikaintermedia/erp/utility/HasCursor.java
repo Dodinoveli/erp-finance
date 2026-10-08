@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public interface HasCursor {
-    OffsetDateTime getCreatedAt();
+	OffsetDateTime getCreatedAt();
 
-    UUID getId();
+	UUID getId();
 }

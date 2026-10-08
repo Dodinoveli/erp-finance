@@ -26,74 +26,66 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/api/v1/clients")
 public class ClientController {
 
-    private final ClientService service;
+	private final ClientService service;
 
-    public ClientController(ClientService service) {
-        this.service = service;
-    }
+	public ClientController(ClientService service) {
+		this.service = service;
+	}
 
-    // @PreAuthorize("hasRole('Owner')")
-    // @GetMapping
-    // public ResponseEntity<ApiResponse<CursorResponse<ClientResponse>>> findById(
-    // @AuthenticationPrincipal AuthUserPrincipal user,
-    // @RequestParam(required = false) String keyword,
-    // @RequestParam(required = false) LocalDateTime lastCreatedAt,
-    // @RequestParam(required = false) UUID lastId,
-    // @RequestParam(defaultValue = "12") int limit) {
-    // UUID companyId = user.getCompanyId();
-    // System.out.println("keyword = " + keyword);
-    // System.out.println("lastCreatedAt = " + lastCreatedAt);
-    // System.out.println("lastId = " + lastId);
-    // System.out.println("companyId = " + companyId);
-    // CursorResponse<ClientResponse> response = service.findById(companyId,
-    // keyword, lastCreatedAt, lastId, limit);
+	// @PreAuthorize("hasRole('Owner')")
+	// @GetMapping
+	// public ResponseEntity<ApiResponse<CursorResponse<ClientResponse>>> findById(
+	// @AuthenticationPrincipal AuthUserPrincipal user,
+	// @RequestParam(required = false) String keyword,
+	// @RequestParam(required = false) LocalDateTime lastCreatedAt,
+	// @RequestParam(required = false) UUID lastId,
+	// @RequestParam(defaultValue = "12") int limit) {
+	// UUID companyId = user.getCompanyId();
+	// System.out.println("keyword = " + keyword);
+	// System.out.println("lastCreatedAt = " + lastCreatedAt);
+	// System.out.println("lastId = " + lastId);
+	// System.out.println("companyId = " + companyId);
+	// CursorResponse<ClientResponse> response = service.findById(companyId,
+	// keyword, lastCreatedAt, lastId, limit);
 
-    // return ResponseEntity.ok(ApiResponse.success("Berhasil", response));
-    // }
+	// return ResponseEntity.ok(ApiResponse.success("Berhasil", response));
+	// }
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping
-    public ResponseEntity<DataTableResponse<ClientResponse>> getClients(
-            @AuthenticationPrincipal AuthUserPrincipal user,
-            @RequestParam(defaultValue = "0") int draw,
-            @RequestParam(defaultValue = "0") int start,
-            @RequestParam(defaultValue = "10") int length,
-            @RequestParam(required = false) String keyword) {
-        System.out.println("KEYWORD = [" + keyword + "]");
-        DataTableResponse<ClientResponse> response = service.getClients(user.getCompanyId(), draw, start, length,
-                keyword);
-        return ResponseEntity.ok(response);
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping
+	public ResponseEntity<DataTableResponse<ClientResponse>> getClients(@AuthenticationPrincipal AuthUserPrincipal user,
+			@RequestParam(defaultValue = "0") int draw, @RequestParam(defaultValue = "0") int start,
+			@RequestParam(defaultValue = "10") int length, @RequestParam(required = false) String keyword) {
+		System.out.println("KEYWORD = [" + keyword + "]");
+		DataTableResponse<ClientResponse> response = service.getClients(user.getCompanyId(), draw, start, length,
+				keyword);
+		return ResponseEntity.ok(response);
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @GetMapping("/total-new")
-    public ResponseEntity<DataCountResponse<Client>> getTotal(
-            @AuthenticationPrincipal AuthUserPrincipal user) {
-        DataCountResponse<Client> response = service.getTotal(user.getCompanyId());
-        return ResponseEntity.ok(response);
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@GetMapping("/total-new")
+	public ResponseEntity<DataCountResponse<Client>> getTotal(@AuthenticationPrincipal AuthUserPrincipal user) {
+		DataCountResponse<Client> response = service.getTotal(user.getCompanyId());
+		return ResponseEntity.ok(response);
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PostMapping
-    public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody ClientRequest entity,
-            @AuthenticationPrincipal AuthUserPrincipal user) {
-        Client result = service.createClient(entity, user.getCompanyId(), user.getUserId());
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(ApiResponse.created("Data Client berhasil disimpan...", result));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PostMapping
+	public ResponseEntity<?> create(@Validated(OnCreate.class) @RequestBody ClientRequest entity,
+			@AuthenticationPrincipal AuthUserPrincipal user) {
+		Client result = service.createClient(entity, user.getCompanyId(), user.getUserId());
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(ApiResponse.created("Data Client berhasil disimpan...", result));
+	}
 
-    @PreAuthorize("hasRole('Owner') or hasRole('Admin')")
-    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody ClientRequest entity, @PathVariable UUID id,
-            @AuthenticationPrincipal AuthUserPrincipal user) {
-        Client data = Objects.requireNonNull(service.updateClient(entity, id, user.getCompanyId()));
-        // ClientResponse result = new ClientResponse();
-        // BeanUtils.copyProperties(data, result);
-        return ResponseEntity
-                .ok(ApiResponse.success(
-                        "Data Client berhasil diperbaharui...",
-                        data));
-    }
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PutMapping("/{id}")
+	public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody ClientRequest entity, @PathVariable UUID id,
+			@AuthenticationPrincipal AuthUserPrincipal user) {
+		Client data = Objects.requireNonNull(service.updateClient(entity, id, user.getCompanyId()));
+		// ClientResponse result = new ClientResponse();
+		// BeanUtils.copyProperties(data, result);
+		return ResponseEntity.ok(ApiResponse.success("Data Client berhasil diperbaharui...", data));
+	}
 
 }

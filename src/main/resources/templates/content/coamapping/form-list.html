@@ -1,170 +1,520 @@
 <!doctype html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layouts/main}">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/main}">
 <style>
-  /* Menyembunyikan kotak pencarian DataTables tapi tombol tambah tetap aman */
-  .dt-search {
-    display: none !important;
-  }
+/* Menyembunyikan kotak pencarian DataTables tapi tombol tambah tetap aman */
+.dt-search {
+	display: none !important;
+}
+
+.custom-tabs {
+	border-bottom: 1px solid #e5e7eb;
+	gap: 6px;
+}
+
+.custom-tabs .nav-link {
+	border: none;
+	border-radius: 8px 8px 0 0;
+	color: #6b7280;
+	font-weight: 500;
+	padding: 10px 16px;
+	transition: all .2s ease;
+}
+
+.custom-tabs .nav-link:hover {
+	color: #374151;
+	background: #f8fafc;
+}
+
+.custom-tabs .nav-link.active {
+	color: #111827;
+	background: #fff;
+	font-weight: 600;
+	box-shadow: inset 0 -2px 0 #6366f1;
+}
+
+.custom-tabs .nav-link i {
+	font-size: 15px;
+}
+
+.mapping-info {
+	display: flex;
+	gap: 40px;
+	padding: 12px 16px;
+	background: #f8fafc;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+}
+
+#mappingLineTableBody td {
+	border-color: #f1f1f1;
+	vertical-align: middle;
+}
+
+#mappingLineTableBody tr:hover {
+	background: #fafafa;
+}
 </style>
 
 <body>
-  <div layout:fragment="content" th:fragment="content">
-    <main class="main">
-      <div class="container-fluid py-1">
-        <div class="card border-0 shadow-sm">
-          <!-- Nav Tabs -->
-          <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="coamappingtab" data-bs-toggle="tab"
-                data-bs-target="#coamappingtab-pane" type="button" role="tab" aria-controls="coamappingtab-pane"
-                aria-selected="true">
-                Coa Mapping
-              </button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="tabel-tab" data-bs-toggle="tab" data-bs-target="#tabel-tab-pane"
-                type="button" role="tab" aria-controls="tabel-tab-pane" aria-selected="false">
-                Coa Mapping Line
-              </button>
-            </li>
-          </ul>
+	<div layout:fragment="content" th:fragment="content">
+		<main class="main">
+			<div class="container-fluid py-1">
+				<div class="card border-0 shadow-sm">
+					<!-- Nav Tabs -->
+					<ul class="nav nav-tabs custom-tabs mb-3" id="myTab" role="tablist">
+						<li class="nav-item" role="presentation">
+							<button class="nav-link active" id="coamappingtab"
+								data-bs-toggle="tab" data-bs-target="#coamappingtab-pane"
+								type="button" role="tab" aria-controls="coamappingtab-pane"
+								aria-selected="true">
+								<i class="bi bi-diagram-3 me-2"></i> Coa Mapping
+							</button>
+						</li>
+						<li class="nav-item" role="presentation">
+							<button class="nav-link" id="coa-mapping-line"
+								data-bs-toggle="tab" data-bs-target="#coa-mapping-line-pane"
+								type="button" role="tab" aria-controls="coa-mapping-line-pane"
+								aria-selected="false">
+								<i class="bi bi-list-check me-2"></i> Coa Mapping Line
+							</button>
+						</li>
+					</ul>
 
-          <!-- Tab Content -->
-          <div class="tab-content" id="myTabContent">
-            <!-- Tab 1: Form -->
-            <div class="tab-pane fade show active" id="coamappingtab-pane" role="tabpanel"
-              aria-labelledby="coamappingtab" tabindex="0">
-              <div class="card border-0 shadow-sm">
-                <div class="table-responsive">
-                  <table id="coamappingTable" class="table table-hover table-striped mb-0">
-                    <thead>
-                      <tr>
-                        <th>Jenis Transaksi</th>
-                        <th>Total</th>
-                        <th>Aksi</th>
-                      </tr>
-                    </thead>
-                    <tbody></tbody>
-                  </table>
-                </div>
-              </div>
+					<!-- Tab Content -->
+					<div class="tab-content" id="myTabContent">
+						<!-- Tab 1: Form -->
+						<div class="tab-pane fade show active" id="coamappingtab-pane"
+							role="tabpanel" aria-labelledby="coamappingtab" tabindex="0">
+							<div class="card border-0 shadow-sm">
+								<div class="table-responsive">
+									<table id="coamappingTable"
+										class="table table-hover table-striped mb-0">
+										<thead>
+											<tr>
+												<th>Jenis Transaksi</th>
+												<th>Total</th>
+												<th>Aksi</th>
+											</tr>
+										</thead>
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
 
-              <!-- Modal coamapping -->
-              <div class="modal fade" id="modalCoaMapping" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <form id="formCoaMappingNew" method="post">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5 lbl-normal" id="exampleModalLabel">Buat CoaMapping</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="row g-3">
-                          <input type="hidden" name="mappingId" id="mapping_id">
-                          <div class="col-md-6">
-                            <label class="lbl-normal">Jenis Transaksi</label>
-                            <div class="form-field">
-                              <select id="transaction_type" name="transactionType"
-                                class="form-select select-underline p-1" aria-label="Default select example">
-                                <option value="">-- Pilih Jenis Transaksi -- </option>
-                                <option value="PROJECT_DP">Project Dp</option>
-                                <option value="PROJECT_PROGRESS">Project Progress </option>
-                                <option value="PROJECT_PAYMENT">Project Payment</option>
-                                <option value="PURCHASE_MATERIAL">Purchase Material</option>
-                                <option value="EXPENSE">Expense</option>
-                                <option value="RETENTION">Retention</option>
-                              </select>
-                              <small class="text-danger" id="err-transactionType"></small>
-                            </div>
-                            <input type="hidden" name="accountType" />
-                          </div>
+							<!-- Modal coamapping -->
+							<div class="modal fade" id="modalCoaMapping" tabindex="-1"
+								aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<form id="formCoaMappingNew" method="post">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h1 class="modal-title fs-5 lbl-normal"
+													id="exampleModalLabel">Buat CoaMapping</h1>
+												<button type="button" class="btn-close"
+													data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<div class="row g-3">
+													<input type="hidden" name="mappingId" id="mapping_id">
+													<div class="col-md-6">
+														<label class="lbl-normal">Jenis Transaksi</label>
+														<div class="form-field">
+															<select id="transaction_type" name="transactionType"
+																class="form-select select-underline p-1"
+																aria-label="Default select example">
+																<option value="">-- Pilih --</option>
+																<option value="PROJECT_DP">Project Dp</option>
+																<option value="PROJECT_PROGRESS">Project
+																	Progress</option>
+																<option value="PURCHASE_MATERIAL">Purchase
+																	Material</option>
+																<option value="EXPENSE">Expense</option>
+																<option value="RETENTION">Retention</option>
+															</select> <small class="text-danger" id="err-transactionType"></small>
+														</div>
+														<input type="hidden" name="accountType" />
+													</div>
 
-                          <div class="col-md-6">
-                            <label class="lbl-normal">Jenis Pembayaran</label>
-                            <div class="form-field">
-                              <select id="payment_type" name="paymentType" class="form-select select-underline p-1"
-                                aria-label="Default select example">
-                                <option value="">-- Pilih Jenis Pembayaran -- </option>
-                                <option value="CASH">Cash</option>
-                                <option value="BANK">Bank</option>
-                                <option value="CREDIT">Credit</option>
-                              </select>
-                              <small class="text-danger" id="err-paymentType"></small>
-                            </div>
-                            <input type="hidden" name="accountType" />
-                          </div>
-                        </div>
-                        <div class="row g-3">
-                          <div class="col-md-12">
-                            <div class="mb-3">
-                              <label style="padding-top: 5px" class="lbl-normal">Keterangan
-                              </label>
-                              <div class="form-field">
-                                <textarea id="description" name="description" class="form-control input-underline"
-                                  rows="1" placeholder="Contoh : Pembelian material dibayar tunai"></textarea>
-                                <small class="text-danger" id="err-description"></small>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+													<div class="col-md-6">
+														<label class="lbl-normal">Jenis Pembayaran</label>
+														<div class="form-field">
+															<select id="payment_type" name="paymentType"
+																class="form-select select-underline p-1"
+																aria-label="Default select example">
+																<option value="">-- Pilih --</option>
+																<option value="CASH">Cash</option>
+																<option value="BANK">Bank</option>
+																<option value="CREDIT">Credit</option>
+															</select> <small class="text-danger" id="err-paymentType"></small>
+														</div>
+														<input type="hidden" name="accountType" />
+													</div>
+												</div>
+												<div class="row g-3">
+													<div class="col-md-12">
+														<div class="mb-3">
+															<label style="padding-top: 5px" class="lbl-normal">Keterangan
+															</label>
+															<div class="form-field">
+																<textarea id="description" name="description"
+																	class="form-control input-underline" rows="5"
+																	placeholder="Contoh : Pembelian material dibayar tunai"></textarea>
+																<small class="text-danger" id="err-description"></small>
+															</div>
+														</div>
+													</div>
+												</div>
 
-                      </div>
-                      <div class="modal-footer">
-                        <div class="detail-actions">
-                          <button type="submit" class="btn btn-simpan">
-                            <i class="bi bi-floppy"></i> Simpan
-                          </button>
-                          <button type="button" class="btn btn-batal" data-bs-dismiss="modal">
-                            <i class="bi bi-x-circle"></i> Batal
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <!-- Modal coamapping -->
-              <!-- Modal Detail -->
-              <div class="modal fade" id="detailModal" tabindex="-1">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                  <div class="modal-content">
+											</div>
+											<div class="modal-footer">
+												<div class="detail-actions">
+													<button type="submit" class="btn btn-simpan">
+														<i class="bi bi-floppy"></i> Simpan
+													</button>
+													<button type="button" class="btn btn-batal"
+														data-bs-dismiss="modal">
+														<i class="bi bi-x-circle"></i> Batal
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+							<!-- Modal coamapping -->
 
-                    <div class="modal-header">
-                      <h5 class="modal-title">
-                        Detail COA Mapping
-                      </h5>
+							<!-- Modal Detail -->
+							<div class="modal fade" id="detailModal" tabindex="-1">
+								<div class="modal-dialog modal-lg ">
+									<div class="modal-content">
 
-                      <button type="button" class="btn-close" data-bs-dismiss="modal">
-                      </button>
-                    </div>
+										<div class="modal-header">
+											<h5 class="modal-title">Detail COA</h5>
+											<button type="button" class="btn-close"
+												data-bs-dismiss="modal"></button>
+										</div>
 
-                    <div class="modal-body" id="detailModalContent">
+										<div class="modal-body" id="detailModalContent">
 
-                      <div class="text-center py-4">
-                        Memuat detail...
-                      </div>
+											<div class="text-center py-2"></div>
 
-                    </div>
+										</div>
 
-                  </div>
-                </div>
-              </div>
+									</div>
+								</div>
+							</div>
+						</div>
 
-            </div>
+						<!-- Tab 2: Tabel -->
+						<div class="tab-pane fade" id="coa-mapping-line-pane"
+							role="tabpanel" aria-labelledby="coa-mapping-line" tabindex="0">
+							<div class="card border-0 shadow-sm">
+								<div class="table-responsive">
+									<table id="coamappingTableLine"
+										class="table table-hover table-striped mb-0">
+										<thead>
+											<tr>
+												<th>Mapping</th>
+												<th>Coa</th>
+												<th>Posisi</th>
+												<!-- <th>Sumber Nominal</th> -->
+												<th>Urutan</th>
+												<th>Aksi</th>
+											</tr>
+										</thead>
+										<tbody></tbody>
+									</table>
+								</div>
+							</div>
 
-            <!-- Tab 2: Tabel -->
-            <div class="tab-pane fade" id="tabel-tab-pane" role="tabpanel" aria-labelledby="tabel-tab" tabindex="0">
-              <!-- isi tabel di sini -->
-              <h1>Hay sya tabel</h1>
-            </div>
+							<!-- Modal COA Mapping Line -->
+							<div class="modal fade" id="modalCoaMappingLine" tabindex="-1"
+								aria-labelledby="coaMappingLineModalLabel" aria-hidden="true">
 
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+								<div class="modal-dialog modal-lg modal-dialog-centered">
+
+									<div class="modal-content">
+
+										<!-- Header -->
+										<div class="modal-header">
+
+											<div>
+												<h5 class="modal-title fw-semibold"
+													id="coaMappingLineModalLabel">COA Mapping Line</h5>
+
+												<small class="text-muted"> PROJECT DP · BANK </small>
+											</div>
+
+											<button type="button" class="btn-close"
+												data-bs-dismiss="modal"></button>
+
+										</div>
+
+
+										<!-- Body -->
+										<div class="modal-body">
+
+											<!-- Mapping Info -->
+											<div class="mapping-info mb-3">
+
+												<div>
+													<small class="text-muted"> Transaction </small>
+
+													<div class="fw-semibold">PROJECT DP</div>
+												</div>
+
+												<div>
+													<small class="text-muted"> Payment </small>
+
+													<div class="fw-semibold">BANK</div>
+												</div>
+
+											</div>
+
+
+											<!-- Form tambah line -->
+											<form id="formCoaMappingLine">
+
+												<input type="hidden" name="mappingId" id="mapping_id">
+
+
+												<div class="row g-3">
+
+													<!-- COA -->
+													<div class="col-md-6">
+
+														<label for="coa_id" class="lbl-normal"> Akun COA </label>
+
+														<select id="coa_id" name="coaId"
+															class="form-select select-underline">
+
+															<option value="">-- Pilih Akun COA --</option>
+
+														</select> <small class="text-danger" id="err-coaId"> </small>
+
+													</div>
+
+
+													<!-- Position -->
+													<div class="col-md-3">
+
+														<label for="position" class="lbl-normal"> Posisi </label>
+
+														<select id="position" name="position"
+															class="form-select select-underline p-1">
+
+															<option value="">-- Pilih --</option>
+
+															<option value="DEBIT">Debit</option>
+
+															<option value="CREDIT">Credit</option>
+
+														</select> <small class="text-danger" id="err-position"> </small>
+
+													</div>
+
+
+													<!-- Order -->
+													<div class="col-md-3">
+
+														<label for="line_order" class="lbl-normal"> Urutan
+														</label> <input type="number" id="line_order" name="lineOrder"
+															class="form-control input-underline" min="1"
+															placeholder="1"> <small class="text-danger"
+															id="err-lineOrder"> </small>
+
+													</div>
+
+
+													<!-- Amount Type -->
+													<div class="col-md-9">
+
+														<label for="amount_type" class="lbl-normal">
+															Sumber Nilai </label> <select id="amount_type" name="amountType"
+															class="form-select select-underline">
+
+															<option value="">-- Pilih Sumber Nilai --</option>
+
+															<option value="TOTAL_AMOUNT">Total Amount</option>
+
+															<option value="DPP">DPP</option>
+
+															<option value="TAX">Tax</option>
+
+														</select> <small class="text-danger" id="err-amountType"> </small>
+
+													</div>
+
+
+													<!-- Active -->
+													<div class="col-md-3">
+
+														<label class="lbl-normal d-block"> Status </label>
+
+														<div class="form-check form-switch mt-2">
+
+															<input class="form-check-input" type="checkbox"
+																id="is_active" name="isActive" checked> <label
+																class="form-check-label" for="is_active"> Aktif
+															</label>
+
+														</div>
+
+													</div>
+
+												</div>
+
+
+												<!-- Button tambah -->
+												<div class="d-flex justify-content-end mt-3">
+
+													<button type="submit" class="btn btn-simpan">
+
+														<i class="bi bi-plus-lg me-1"></i> 
+
+													</button>
+
+												</div>
+
+											</form>
+
+
+											<hr class="my-4">
+
+
+											<!-- Existing Lines -->
+											<div
+												class="d-flex justify-content-between
+                    align-items-center mb-2">
+
+												<div>
+													<h6 class="mb-0 fw-semibold">Mapping Lines</h6>
+
+													<small class="text-muted"> Daftar akun yang
+														digunakan dalam jurnal </small>
+												</div>
+
+												<span class="badge bg-light text-dark" id="lineCount">
+													2 Line </span>
+
+											</div>
+
+
+											<div class="table-responsive">
+
+												<table class="table table-sm align-middle mb-0">
+
+													<thead>
+
+														<tr>
+															<th width="50">No</th>
+															<th>Akun COA</th>
+															<th>Posisi</th>
+															<th>Sumber Nilai</th>
+															<th width="80"></th>
+														</tr>
+
+													</thead>
+
+													<tbody id="mappingLineTableBody">
+
+														<tr>
+
+															<td>1</td>
+
+															<td>
+																<div class="fw-semibold">11201 - Bank BNI</div>
+															</td>
+
+															<td><span
+																class="badge bg-success-subtle text-success">
+																	DEBIT </span></td>
+
+															<td>Total Amount</td>
+
+															<td class="text-end">
+
+																<button class="btn btn-sm btn-light">
+																	<i class="bi bi-pencil"></i>
+																</button>
+
+																<button class="btn btn-sm btn-light text-danger">
+																	<i class="bi bi-trash"></i>
+																</button>
+
+															</td>
+
+														</tr>
+
+
+														<tr>
+
+															<td>2</td>
+
+															<td>
+																<div class="fw-semibold">41001 - Pendapatan Proyek
+																</div>
+															</td>
+
+															<td><span
+																class="badge bg-primary-subtle text-primary">
+																	CREDIT </span></td>
+
+															<td>Total Amount</td>
+
+															<td class="text-end">
+
+																<button class="btn btn-sm btn-light">
+																	<i class="bi bi-pencil"></i>
+																</button>
+
+																<button class="btn btn-sm btn-light text-danger">
+																	<i class="bi bi-trash"></i>
+																</button>
+
+															</td>
+
+														</tr>
+
+													</tbody>
+
+												</table>
+
+											</div>
+
+										</div>
+
+
+										<!-- Footer -->
+										<div class="modal-footer">
+
+											<button type="button" class="btn btn-batal"
+												data-bs-dismiss="modal">
+
+												<i class="bi bi-check-lg"></i> Selesai
+
+											</button>
+
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+						</div>
+
+					</div>
+					<!-- Batas Tab Content -->
+				</div>
+				<!--batas 	card border -->
+			</div>
+			<!--batas container-fluid  -->
+		</main>
+	</div>
 </body>
 
 </html>
