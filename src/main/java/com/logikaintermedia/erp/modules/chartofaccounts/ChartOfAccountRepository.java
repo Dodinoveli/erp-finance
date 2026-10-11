@@ -401,10 +401,7 @@ public class ChartOfAccountRepository {
 		return jdbcTemplate.batchUpdate(sql, SqlParameterSourceUtils.createBatch(account));
 	}
 
-	// INSERT INTO chart_of_accounts_templates (account_code, account_name,
-	// account_type, normal_balance, parent_template_id, account_level, is_header,
-	// is_postable) VALUES ('51301', 'Beban Sub Kontraktor', 'EXPENSE', 'DEBIT',
-	// 'cbc872d6-076a-4830-abf4-6a1cd3d5e1a2', 4, false, true);
+
 	public int[] saveBatch(@NonNull List<ChartOfAccounts> account) {
 		String sql = """
 				INSERT INTO public.chart_of_accounts(

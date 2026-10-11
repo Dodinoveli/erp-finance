@@ -32,6 +32,7 @@ public class CoaMappingController {
 		this.service = service;
 	}
 
+
 	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
 	@GetMapping
 	public ResponseEntity<DataTableResponse<CoaMappingResponse>> findCoaMappingById(

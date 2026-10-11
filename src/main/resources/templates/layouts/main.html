@@ -125,15 +125,15 @@ keyframes spin {to { transform:rotate(360deg);
 	<div th:replace="~{fragments/footer :: footer}"></div>
 	<script th:src="@{/js/utility/dashboard.js}" defer></script>
 	<script>
-    document.body.addEventListener("htmx:afterRequest", function (event) {
-      const title = event.detail.xhr.getResponseHeader("X-Page-Title");
+		document.body.addEventListener("htmx:afterRequest", function(event) {
+			const title = event.detail.xhr.getResponseHeader("X-Page-Title");
 
-      if (title) {
-        document.getElementById("page-title").textContent = title;
-        document.title = title + " - Kawal Laba";
-      }
-    });
-  </script>
+			if (title) {
+				document.getElementById("page-title").textContent = title;
+				document.title = title + " - Kawal Laba";
+			}
+		});
+	</script>
 
 	<script type="module" th:src="@{/js/app.js}"></script>
 </body>

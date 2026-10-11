@@ -35,7 +35,7 @@ public class ChartOfAccountsPageController {
 	@GetMapping("/coa")
 	public String coa(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
 			HttpServletResponse response) {
-		String title = "Chart of Accounts";
+		String title = "Daftar Akun ";
 		model.addAttribute("pageTitle", title);
 		if ("true".equals(hxRequest)) {
 			response.setHeader("X-Page-Title", title);
@@ -50,7 +50,7 @@ public class ChartOfAccountsPageController {
 			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
 		List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
 		ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-		String title = "Detail Chart Of Accounts";
+		String title = "Detail Daftar Akun ";
 		model.addAttribute("pageTitle", title);
 		model.addAttribute("accounts", accounts);
 		model.addAttribute("parent", parent);
@@ -68,7 +68,7 @@ public class ChartOfAccountsPageController {
 
 		List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
 		ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-		String title = "Edit Chart Of Accounts";
+		String title = "Edit Daftar Akun";
 		model.addAttribute("pageTitle", title);
 		model.addAttribute("accounts", accounts);
 		model.addAttribute("parent", parent);
@@ -91,7 +91,7 @@ public class ChartOfAccountsPageController {
 		List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
 		ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
 
-		String title = "Edit Chart Of Accounts";
+		String title = "Edit Daftar Akun";
 		model.addAttribute("pageTitle", title);
 		model.addAttribute("accounts", accounts);
 		model.addAttribute("parent", parent);
@@ -108,7 +108,7 @@ public class ChartOfAccountsPageController {
 			@RequestHeader(value = "HX-Request", required = false) String hxRequest, HttpServletResponse response) {
 		List<ChartOfAccounts> accounts = service.findByParentId(id, principal.getCompanyId());
 		ChartOfAccounts parent = service.findById(id, principal.getCompanyId());
-		String title = "Tambah Chart Of Accounts";
+		String title = "Tambah Daftar Akun";
 		model.addAttribute("pageTitle", title);
 		model.addAttribute("accounts", accounts);
 		model.addAttribute("parent", parent);
@@ -129,7 +129,7 @@ public class ChartOfAccountsPageController {
 		List<ChartOfAccounts> accounts = service.findByParentId(parentId, principal.getCompanyId());
 		ChartOfAccounts parent = service.findById(parentId, principal.getCompanyId());
 
-		String title = "Tambah Chart Of Accounts";
+		String title = "Tambah Daftar Akun";
 		model.addAttribute("pageTitle", title);
 		model.addAttribute("accounts", accounts);
 		model.addAttribute("parent", parent);

@@ -40,7 +40,9 @@ public class BankAccounstController {
 		return ResponseEntity.ok(ApiResponse.success("success", response));
 	}
 
-	// mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
+	/*
+	 * mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
+	 * */
 	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
 	@GetMapping("/find-cash-and-bank-accounts-by-company-id")
 	public ResponseEntity<?> findCashAndBankAccountsByCompanyId(@AuthenticationPrincipal AuthUserPrincipal principal) {
@@ -70,7 +72,7 @@ public class BankAccounstController {
 	}
 
 	@SuppressWarnings("null")
-	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")
+	@PreAuthorize("hasRole('Owner') or hasRole('Admin')")  
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Validated(OnUpdate.class) @RequestBody BankAccountsRequest entity,
 			@PathVariable UUID id, @AuthenticationPrincipal AuthUserPrincipal principal) {

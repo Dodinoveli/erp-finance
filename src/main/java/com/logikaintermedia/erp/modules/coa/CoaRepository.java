@@ -15,7 +15,6 @@ public class CoaRepository {
 	}
 
 	public List<Coa> fetchPage(UUID companyId) {
-
 		String sql = """
 				    SELECT coa_id, coa_code, name, account_category, parent_id, is_header, normal_balance
 				    FROM chart_of_accounts
@@ -25,6 +24,5 @@ public class CoaRepository {
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		params.addValue("companyId", companyId);
 		return namedParameterJdbcTemplate.query(sql, params, new CoaMapper());
-
 	}
 }

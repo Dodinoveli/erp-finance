@@ -148,8 +148,9 @@ public class BankAccountsRepository {
 		return namedParameterJdbcTemplate.queryForObject(sql, params, new BankAccountsMapper());
 	}
 
-	// mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id
-	// untuk form simpan
+	/**
+	 * mengambil dan menampilkan kategori akun Kas dan bank bedasarkan companies id untuk form simpan
+	 * */
 	public List<ChartOfAccounts> findCashAndBankAccountsByCompanyId(UUID id) {
 		String sql = """
 				SELECT

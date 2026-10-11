@@ -147,9 +147,9 @@ export function initCoaMappingList() {
 				data.forEach((item) => {
 					rows += `
                     <tr data-id="${item.mappingId}">
+						<td>${item.description}</td>
                         <td>${item.transactionType}</td>
                         <td>${item.paymentType}</td>
-                        <td>${item.description}</td>
                         <td>
                           <button type="button"
                               class="btn btn-sm btn-outline-primary"
@@ -164,14 +164,14 @@ export function initCoaMappingList() {
 				content.innerHTML = `
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead>
-                            <tr>
-                                <th>Jenis Transaksi</th>
-                                <th>Jenis Pembayaran</th>
-                                <th>Deskripsi</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
+					<thead>
+					    <tr>
+					        <th>Pemetaan Akun</th>
+					        <th>Jenis Transaksi</th>
+					        <th>Metode Pembayaran</th>
+					        <th>Aksi</th>
+					    </tr>
+					</thead>
                         <tbody>
                             ${rows}
                         </tbody>
@@ -195,7 +195,7 @@ export function initCoaMappingList() {
 
 		// const transactionType = row.children[0].textContent.trim();
 		// const paymentType = row.children[1].textContent.trim();
-		const description = row.children[2].textContent.trim();
+		const description = row.children[0].textContent.trim();
 
 		// row.children[0].innerHTML = `
 		//     <input type="text"
@@ -209,7 +209,7 @@ export function initCoaMappingList() {
 		//            value="${paymentType}">
 		// `;
 
-		row.children[2].innerHTML = `
+		row.children[0].innerHTML = `
         <input type="text"
                class="form-control form-control-sm"
                value="${description}">
@@ -227,7 +227,7 @@ export function initCoaMappingList() {
 	window.updateCoaMapping = async function(button) {
 		const row = button.closest("tr");
 		const mappingId = row.dataset.id;
-		const description = row.children[2].querySelector("input").value.trim();
+		const description = row.children[0].querySelector("input").value.trim();
 		Toast.loading("Sedang menyimpan perubahan...");
 		const data = {
 			description: description,
@@ -250,7 +250,7 @@ export function initCoaMappingList() {
 			const result = await response.json();
 
 			// tampilkan kembali sebagai text
-			row.children[2].textContent = result.data.description;
+			row.children[0].textContent = result.data.description;
 
 			// ubah tombol kembali menjadi Edit
 			button.outerHTML = `

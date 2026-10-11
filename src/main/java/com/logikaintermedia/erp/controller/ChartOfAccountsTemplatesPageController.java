@@ -14,7 +14,7 @@ public class ChartOfAccountsTemplatesPageController {
 	@GetMapping("/coatemplates")
 	public String accountTemplates(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
 			HttpServletResponse response) {
-		String title = "Chart of Accounts (COA) Templates";
+		String title = "Daftar Akun Template";
 		model.addAttribute("pageTitle", title);
 		if ("true".equals(hxRequest)) {
 			response.setHeader("X-Page-Title", title);

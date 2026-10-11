@@ -71,6 +71,7 @@ import { initCoaMappingList } from "./pages/coamapping/list-coa-mapping.js"
  * 7. coamapping line
 */
 import { InitCoaMappingLine } from "./pages/coamapping/list-coa-mappingline.js"
+import{initNewCoaMappingLines} from"./pages/coamapping/new-coa-mapping-line.js"
 
 /**
  * GLOBAL HTMX LOADING
@@ -154,6 +155,11 @@ function initPage() {
 	//7. coa mapping line
 	if (document.querySelector("#coamappingTableLine")) {
 		InitCoaMappingLine();
+	}
+	
+	if(document.querySelector("#formCoaMappingLine")){
+		console.log("Inisialisasi COA Mapping Lines");
+		initNewCoaMappingLines();
 	}
 
 }

@@ -126,4 +126,7 @@ export function InitCoaMappingLine() {
 	table.on("draw", function() {
 		htmx.process(document.querySelector("#coamappingTableLine tbody"));
 	});
+
 }
+
+

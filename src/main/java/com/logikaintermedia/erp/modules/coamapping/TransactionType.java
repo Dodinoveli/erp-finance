@@ -1,19 +1,5 @@
 package com.logikaintermedia.erp.modules.coamapping;
 
-public enum TransactionType {
-	PROJECT_DP, PROJECT_PROGRESS, PURCHASE_MATERIAL, EXPENSE, RETENTION;
-
-	public boolean isPaymentTypeAllowed(PaymentType paymentType) {
-		return switch (this) {
-		case PROJECT_DP, PROJECT_PROGRESS, RETENTION ->
-			paymentType == PaymentType.CASH || paymentType == PaymentType.BANK;
-		case PURCHASE_MATERIAL, EXPENSE -> true;
-		};
-
-	}
-
-}
-
 /**
  * PROJECT_DP = Uang muka proyek PROJECT_PROGRESS = Pembayaran progres/termin
  * proyek PURCHASE_MATERIAL = Pembelian material proyek EXPENSE =
@@ -36,3 +22,16 @@ public enum TransactionType {
  * 
  * 10. TAX_PAYMENT Pembayaran kewajiban pajak
  */
+public enum TransactionType {
+	PROJECT_DP, PROJECT_PROGRESS, PURCHASE_MATERIAL, EXPENSE, RETENTION;
+
+	public boolean isPaymentTypeAllowed(PaymentType paymentType) {
+		return switch (this) {
+		case PROJECT_DP, PROJECT_PROGRESS, RETENTION ->
+			paymentType == PaymentType.CASH || paymentType == PaymentType.BANK;
+		case PURCHASE_MATERIAL, EXPENSE -> true;
+		};
+
+	}
+
+}

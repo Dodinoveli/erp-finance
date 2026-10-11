@@ -3,12 +3,12 @@
 	margin: 0;
 	padding: 0
 }
-
+	/*--card:#F15A24;*/
 :root {
 	--p: #2563eb;
 	--soft: #eff6ff;
 	--bg: #f5f7fb;
-	--card: #fff;
+	--card:#ffff;
 	--text: #172033;
 	--muted: #8993a5;
 	--line: #e9edf3;
@@ -226,6 +226,7 @@ small {
 
 .crumb b {
 	color: var(--text)
+	/*color : white;*/
 }
 
 .right {

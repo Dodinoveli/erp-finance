@@ -69,7 +69,7 @@
 								data-bs-toggle="tab" data-bs-target="#coamappingtab-pane"
 								type="button" role="tab" aria-controls="coamappingtab-pane"
 								aria-selected="true">
-								<i class="bi bi-diagram-3 me-2"></i> Coa Mapping
+								<i class="bi bi-diagram-3 me-2"></i> Daftar Pemetaan Akun 
 							</button>
 						</li>
 						<li class="nav-item" role="presentation">
@@ -77,7 +77,7 @@
 								data-bs-toggle="tab" data-bs-target="#coa-mapping-line-pane"
 								type="button" role="tab" aria-controls="coa-mapping-line-pane"
 								aria-selected="false">
-								<i class="bi bi-list-check me-2"></i> Coa Mapping Line
+								<i class="bi bi-list-check me-2"></i> Detail Jurnal
 							</button>
 						</li>
 					</ul>
@@ -111,13 +111,13 @@
 										<div class="modal-content">
 											<div class="modal-header">
 												<h1 class="modal-title fs-5 lbl-normal"
-													id="exampleModalLabel">Buat CoaMapping</h1>
+													id="exampleModalLabel">Buat Pemetaan Akun</h1>
 												<button type="button" class="btn-close"
 													data-bs-dismiss="modal" aria-label="Close"></button>
 											</div>
 											<div class="modal-body">
 												<div class="row g-3">
-													<input type="hidden" name="mappingId" id="mapping_id">
+													<!-- <input type="hidden" name="mappingId" id="mapping_id"> -->
 													<div class="col-md-6">
 														<label class="lbl-normal">Jenis Transaksi</label>
 														<div class="form-field">
@@ -138,7 +138,7 @@
 													</div>
 
 													<div class="col-md-6">
-														<label class="lbl-normal">Jenis Pembayaran</label>
+														<label class="lbl-normal">Metode Pembayaran</label>
 														<div class="form-field">
 															<select id="payment_type" name="paymentType"
 																class="form-select select-underline p-1"
@@ -191,7 +191,7 @@
 									<div class="modal-content">
 
 										<div class="modal-header">
-											<h5 class="modal-title">Detail COA</h5>
+											<h5 class="modal-title">Detail Pemetaan Akun</h5>
 											<button type="button" class="btn-close"
 												data-bs-dismiss="modal"></button>
 										</div>
@@ -232,281 +232,127 @@
 							<!-- Modal COA Mapping Line -->
 							<div class="modal fade" id="modalCoaMappingLine" tabindex="-1"
 								aria-labelledby="coaMappingLineModalLabel" aria-hidden="true">
-
 								<div class="modal-dialog modal-lg modal-dialog-centered">
-
 									<div class="modal-content">
-
 										<!-- Header -->
 										<div class="modal-header">
-
 											<div>
 												<h5 class="modal-title fw-semibold"
-													id="coaMappingLineModalLabel">COA Mapping Line</h5>
-
-												<small class="text-muted"> PROJECT DP · BANK </small>
+													id="coaMappingLineModalLabel">Buat detail jurnal</h5>
 											</div>
-
 											<button type="button" class="btn-close"
 												data-bs-dismiss="modal"></button>
-
 										</div>
-
-
 										<!-- Body -->
 										<div class="modal-body">
-
-											<!-- Mapping Info -->
-											<div class="mapping-info mb-3">
-
-												<div>
-													<small class="text-muted"> Transaction </small>
-
-													<div class="fw-semibold">PROJECT DP</div>
-												</div>
-
-												<div>
-													<small class="text-muted"> Payment </small>
-
-													<div class="fw-semibold">BANK</div>
-												</div>
-
-											</div>
-
-
 											<!-- Form tambah line -->
 											<form id="formCoaMappingLine">
-
-												<input type="hidden" name="mappingId" id="mapping_id">
-
-
-												<div class="row g-3">
-
-													<!-- COA -->
-													<div class="col-md-6">
-
-														<label for="coa_id" class="lbl-normal"> Akun COA </label>
-
-														<select id="coa_id" name="coaId"
-															class="form-select select-underline">
-
-															<option value="">-- Pilih Akun COA --</option>
-
-														</select> <small class="text-danger" id="err-coaId"> </small>
-
+												<div class="row g-3 mb-2">
+													<div class="col-md-12">
+														<label class="lbl-normal">Jenis Transaksi</label>
+														<div class="form-field">
+															<select id="mapping_id" name="mappingId"
+																class="form-select select-underline p-1"
+																aria-label="Default select example">
+															</select> <small class="text-danger" id="err-mappingId"></small>
+														</div>
 													</div>
-
+												</div>
+												<!-- COA -->
+												<div class="row g-3 mb-2">
+													<div class="col-md-9">
+														<label for="account_id" class="lbl-normal"> Akun </label>
+														 <select id="account_id" name="accountId"
+															class="form-select select-underline p-1">
+															<option value="">-- Pilih Akun  --</option>
+														</select> <small class="text-danger" id="account_id"> </small>
+													</div>
 
 													<!-- Position -->
 													<div class="col-md-3">
-
 														<label for="position" class="lbl-normal"> Posisi </label>
-
 														<select id="position" name="position"
 															class="form-select select-underline p-1">
-
 															<option value="">-- Pilih --</option>
-
 															<option value="DEBIT">Debit</option>
-
 															<option value="CREDIT">Credit</option>
-
 														</select> <small class="text-danger" id="err-position"> </small>
-
 													</div>
-
-
-													<!-- Order -->
-													<div class="col-md-3">
-
-														<label for="line_order" class="lbl-normal"> Urutan
-														</label> <input type="number" id="line_order" name="lineOrder"
-															class="form-control input-underline" min="1"
-															placeholder="1"> <small class="text-danger"
-															id="err-lineOrder"> </small>
-
-													</div>
-
-
-													<!-- Amount Type -->
+												</div>
+												<!-- Amount Type -->
+												<div class="row g-3">
 													<div class="col-md-9">
-
 														<label for="amount_type" class="lbl-normal">
-															Sumber Nilai </label> <select id="amount_type" name="amountType"
-															class="form-select select-underline">
-
-															<option value="">-- Pilih Sumber Nilai --</option>
-
-															<option value="TOTAL_AMOUNT">Total Amount</option>
-
-															<option value="DPP">DPP</option>
-
-															<option value="TAX">Tax</option>
-
-														</select> <small class="text-danger" id="err-amountType"> </small>
-
+															Sumber Nominal </label> <select id="amount_type"
+															name="amountType"
+															class="form-select select-underline p-1">
+															<option value="">-- Pilih Sumber Nominal --</option>
+															<option value="SUBTOTAL">Subtotal — Nominal sebelum pajak</option>
+															<option value="TAX">Pajak — Nominal pajak transaksi</option>
+															<option value="TOTAL">Total — Nominal keseluruhan setelah pajak</option>
+														</select> <small class="text-danger" id="err-amountType"></small>
 													</div>
-
-
 													<!-- Active -->
 													<div class="col-md-3">
-
 														<label class="lbl-normal d-block"> Status </label>
-
 														<div class="form-check form-switch mt-2">
-
 															<input class="form-check-input" type="checkbox"
 																id="is_active" name="isActive" checked> <label
 																class="form-check-label" for="is_active"> Aktif
 															</label>
-
 														</div>
-
 													</div>
-
 												</div>
-
-
 												<!-- Button tambah -->
 												<div class="d-flex justify-content-end mt-3">
-
-													<button type="submit" class="btn btn-simpan">
-
-														<i class="bi bi-plus-lg me-1"></i> 
-
+													<button type="button" id="tambah-detail-jurnal" class="btn btn-primary btn-sm ms-2 d-inline-flex align-items-center justify-content-center btn-add">
+														<i class="bi bi-plus-lg"></i>
 													</button>
-
 												</div>
-
 											</form>
-
 
 											<hr class="my-4">
 
-
 											<!-- Existing Lines -->
 											<div
-												class="d-flex justify-content-between
-                    align-items-center mb-2">
-
+												class="d-flex justify-content-between align-items-center mb-2">
 												<div>
-													<h6 class="mb-0 fw-semibold">Mapping Lines</h6>
-
+													<h6 class="mb-0 fw-semibold">Detail Jurnal</h6>
 													<small class="text-muted"> Daftar akun yang
 														digunakan dalam jurnal </small>
 												</div>
-
-												<span class="badge bg-light text-dark" id="lineCount">
-													2 Line </span>
-
+											
 											</div>
-
 
 											<div class="table-responsive">
-
 												<table class="table table-sm align-middle mb-0">
-
 													<thead>
-
 														<tr>
-															<th width="50">No</th>
 															<th>Akun COA</th>
 															<th>Posisi</th>
-															<th>Sumber Nilai</th>
+															<th>Sumber Nominal</th>
+															<th>Status </th>
 															<th width="80"></th>
 														</tr>
-
 													</thead>
 
-													<tbody id="mappingLineTableBody">
-
-														<tr>
-
-															<td>1</td>
-
-															<td>
-																<div class="fw-semibold">11201 - Bank BNI</div>
-															</td>
-
-															<td><span
-																class="badge bg-success-subtle text-success">
-																	DEBIT </span></td>
-
-															<td>Total Amount</td>
-
-															<td class="text-end">
-
-																<button class="btn btn-sm btn-light">
-																	<i class="bi bi-pencil"></i>
-																</button>
-
-																<button class="btn btn-sm btn-light text-danger">
-																	<i class="bi bi-trash"></i>
-																</button>
-
-															</td>
-
-														</tr>
-
-
-														<tr>
-
-															<td>2</td>
-
-															<td>
-																<div class="fw-semibold">41001 - Pendapatan Proyek
-																</div>
-															</td>
-
-															<td><span
-																class="badge bg-primary-subtle text-primary">
-																	CREDIT </span></td>
-
-															<td>Total Amount</td>
-
-															<td class="text-end">
-
-																<button class="btn btn-sm btn-light">
-																	<i class="bi bi-pencil"></i>
-																</button>
-
-																<button class="btn btn-sm btn-light text-danger">
-																	<i class="bi bi-trash"></i>
-																</button>
-
-															</td>
-
-														</tr>
-
+													<tbody id="detailJurnalTableBody">
+													
 													</tbody>
-
 												</table>
-
 											</div>
-
 										</div>
-
 
 										<!-- Footer -->
 										<div class="modal-footer">
-
-											<button type="button" class="btn btn-batal"
-												data-bs-dismiss="modal">
-
+											<button type="button" id="btn-simpan" class="btn btn-batal">
 												<i class="bi bi-check-lg"></i> Selesai
-
 											</button>
-
 										</div>
-
 									</div>
-
 								</div>
-
 							</div>
-
 						</div>
-
 					</div>
 					<!-- Batas Tab Content -->
 				</div>

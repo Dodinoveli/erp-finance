@@ -31,22 +31,6 @@ public class ChartOfAccountsResponse {
 
 	private List<ChartOfAccountsResponse> children = new ArrayList<>();
 
-	// public ChartOfAccountsResponse(ChartOfAccounts coa) {
-	// this.accountId = coa.getAccountId();
-	// this.accountCode = coa.getAccountCode();
-	// this.accountName = coa.getAccountName();
-	// this.accountType = coa.getAccountType();
-	// this.normalBalance = coa.getNormalBalance();
-	// // this.parentTemplateId = coa.getParentTemplateId();
-	// this.accountLevel = coa.getAccountLevel();
-	// this.isHeader = coa.getIsHeader();
-	// this.isPostable = coa.getIsPostable();
-	// this.description = coa.getDescription();
-	// this.sortOrder = coa.getSortOrder();
-	// this.createdAt = coa.getCreatedAt();
-	// this.updatedAt = coa.getUpdatedAt();
-	// }
-
 	public ChartOfAccountsResponse(ChartOfAccounts coa) {
 		this.accountCode = coa.getAccountCode();
 		this.accountName = coa.getAccountName();
@@ -76,4 +60,11 @@ public class ChartOfAccountsResponse {
 		return children;
 	}
 
+	public static ChartOfAccountsResponse  comboFrom(ChartOfAccounts accounts) {
+		ChartOfAccountsResponse response = new ChartOfAccountsResponse();
+		response.setAccountId(accounts.getAccountId());
+		response.setAccountCode(accounts.getAccountCode());
+		response.setAccountName(accounts.getAccountName());
+		return response;
+	}
 }

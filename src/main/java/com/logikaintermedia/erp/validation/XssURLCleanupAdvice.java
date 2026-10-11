@@ -1,7 +1,6 @@
 package com.logikaintermedia.erp.validation;
 
 import java.beans.PropertyEditorSupport;
-
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 import org.springframework.web.bind.WebDataBinder;

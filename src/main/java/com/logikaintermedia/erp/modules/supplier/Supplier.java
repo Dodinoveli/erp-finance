@@ -38,7 +38,6 @@ public class Supplier {
 
 	/**
 	 * Membuat Supplier baru dari SupplierRequest.
-	 * 
 	 * @param request   data Supplier
 	 * @param code      kode Supplier
 	 * @param companyId ID perusahaan

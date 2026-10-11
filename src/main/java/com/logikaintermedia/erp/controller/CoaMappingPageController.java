@@ -14,7 +14,7 @@ public class CoaMappingPageController {
 	@GetMapping("/coamapping")
 	public String coamapping(Model model, @RequestHeader(value = "HX-Request", required = false) String hxRequest,
 			HttpServletResponse response) {
-		String title = "Coa Mapping";
+		String title = "Pemetaan Akun Transaksi";
 		model.addAttribute("pageTitle", title);
 		if ("true".equals(hxRequest)) {
 			response.setHeader("X-Page-Title", title);

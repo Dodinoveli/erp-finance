@@ -26,4 +26,14 @@ public class CoaMappingResponse {
 		response.setTotal(mapping.getTotal());
 		return response;
 	}
+
+	public static CoaMappingResponse comboFrom(CoaMapping mapping) {
+		CoaMappingResponse response = new CoaMappingResponse();
+		response.setMappingId(mapping.getMappingId());
+		response.setTransactionType(mapping.getTransactionType());
+		response.setPaymentType(mapping.getPaymentType());
+		response.setDescription(mapping.getDescription());
+		return response;
+	}
+
 }
